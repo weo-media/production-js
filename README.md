@@ -1,2 +1,2 @@
-# Test-js
+# WEO-Test-js
 JS files for WEO Media web project testing
