@@ -57,18 +57,32 @@
     `;
     }
 
+    // site card
+    const SiteCard = (props) => {
+      return html`
+        <div class="siteCard">
+          <img src="/tpnis/c/C256/img/${props.img}" />
+        </div>
+      `;
+    }
+
     // filter sort component
     const FilterSort = (props) => {
+      const input = JSON.parse(document.querySelector('.TPfilter-sort-input').innerText);
+      const sites = input.map((site, idx) => html`<${SiteCard} img="${site.img}" key="${idx}" />`);
+
       return html`
     <div>
+    
       <${FilterButton} key="${props.filterName}">filter button</>
         <${Counter} />
         hello
+        ${sites}
     </div>
     `;
     };
 
     // Renders html
-    render(html`<${FilterSort} />`, document.body);
+    render(html`<${FilterSort} />`, document.querySelector('.TPfilter-sort-output'));
   }
 })();
