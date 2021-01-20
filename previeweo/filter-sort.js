@@ -35,6 +35,9 @@
       useState = preact.useState,
       useCallback = preact.useCallback;
 
+    const input = JSON.parse(document.querySelector('.TPfilter-sort-input').innerText);
+    const selected = "";
+
     // demo
     function Counter() {
       const [value, setValue] = useState(0);
@@ -68,8 +71,7 @@
 
     // filter sort component
     const FilterSort = (props) => {
-      const input = JSON.parse(document.querySelector('.TPfilter-sort-input').innerText);
-      const sites = input.map((site, idx) => html`<${SiteCard} img="${site.img}" key="${idx}" />`);
+      const sites = !selected ? input.map((site, idx) => html`<${SiteCard} img="${site.img}" key="${idx}" />`) : selected.map((site, idx) => html`<${SiteCard} img="${site.img}" key="${idx}" />`);
 
       return html`
     <div>
