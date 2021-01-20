@@ -35,6 +35,9 @@
       useState = preact.useState,
       useCallback = preact.useCallback;
 
+    const input = JSON.parse(document.querySelector('.TPfilter-sort-input').innerText);
+    const selected = "";
+
     // demo
     function Counter() {
       const [value, setValue] = useState(0);
@@ -57,18 +60,31 @@
     `;
     }
 
+    // site card
+    const SiteCard = (props) => {
+      return html`
+        <div class="siteCard">
+          <img src="/tpnis/c/C256/img/${props.img}" />
+        </div>
+      `;
+    }
+
     // filter sort component
     const FilterSort = (props) => {
+      const sites = !selected ? input.map((site, idx) => html`<${SiteCard} img="${site.img}" key="${idx}" />`) : selected.map((site, idx) => html`<${SiteCard} img="${site.img}" key="${idx}" />`);
+
       return html`
     <div>
+    
       <${FilterButton} key="${props.filterName}">filter button</>
         <${Counter} />
         hello
+        ${sites}
     </div>
     `;
     };
 
     // Renders html
-    render(html`<${FilterSort} />`, document.body);
+    render(html`<${FilterSort} />`, document.querySelector('.TPfilter-sort-output'));
   }
 })();
