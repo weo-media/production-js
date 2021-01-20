@@ -35,20 +35,11 @@
       useState = preact.useState,
       useCallback = preact.useCallback;
 
-    // demo
-    function Counter() {
-      const [value, setValue] = useState(0);
-      const increment = useCallback(() => {
-        setValue(value + 1);
-      }, [value]);
+    const input = JSON.parse(document.querySelector('.TPfilter-sort-input').innerText);
+    const selected = "";
 
-      return html`
-      <div>
-        Counter: ${value}
-        <button onClick=${increment}>Increment</button>
-      </div>
-    `;
-    }
+    // get tags from input and remove duplicates by creating a Set then converting it to an array
+    const tags = [...new Set(input.map((site) => [...site.tags].map(tag => tag.trim())).reduce((acc, cur) => [...acc, ...cur]))];
 
     // filter button
     const FilterButton = (props) => {
@@ -57,18 +48,30 @@
     `;
     }
 
+    // site card
+    const SiteCard = (props) => {
+      return html`
+        <div class="siteCard">
+          <img src="/tpnis/c/C256/img/${props.img}" />
+        </div>
+      `;
+    }
+
     // filter sort component
     const FilterSort = (props) => {
+      const sites = !selected ? input.map((site, idx) => html`<${SiteCard} img="${site.img}" key="${idx}" />`) : selected.map((site, idx) => html`<${SiteCard} img="${site.img}" key="${idx}" />`);
+
       return html`
-    <div>
-      <${FilterButton} key="${props.filterName}">filter button</>
-        <${Counter} />
-        hello
+    <div class="filterSort">
+      <div class="filterButtons"></div>
+      <div class="filteredSites">
+        ${sites}
+      </div>
     </div>
     `;
     };
 
     // Renders html
-    render(html`<${FilterSort} />`, document.body);
+    render(html`<${FilterSort} />`, document.querySelector('.TPfilter-sort-output'));
   }
 })();
