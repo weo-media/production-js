@@ -52,6 +52,9 @@
       </div>
     `;
     }
+    // get tags from input and remove duplicates by creating a Set then converting it to an array
+    const tags = [...new Set(input.map((site) => [...site.tags].map(tag => tag.trim())).reduce((acc, cur) => [...acc, ...cur]))];
+    console.log(tags);
 
     // filter button
     const FilterButton = (props) => {
