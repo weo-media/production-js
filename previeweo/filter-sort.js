@@ -44,13 +44,14 @@
     // filter button
     const FilterButton = (props) => {
       onClick = event => {
-        selected = [];
-        input.map((site) => {
-          if (site.tags.includes(event.target.name)) {
-            selected.push(site);
+        selected = [];                                  // clear selected array
+        input.map((site) => {                           // check each site
+          if (site.tags.includes(event.target.name)) {  // for the tag indicated by the button pressed
+            selected.push(site);                        // add to selected sites array if matched
           }
         });
-        // Renders html
+        
+        // re-renders html
         render(html`<${FilterSort} />`, document.querySelector('.TPfilter-sort-output'));
       }
 
@@ -70,6 +71,7 @@
 
     // filter sort component
     const FilterSort = (props) => {
+      // check "selected" array for entries. if no entries, use "input" array to display all site cards else display site cards in "selected" array
       const sites = (!Array.isArray(selected) || !selected.length) ? input.map((site, idx) => html`<${SiteCard} img="${site.img}" key="${idx}" />`) : selected.map((site, idx) => html`<${SiteCard} img="${site.img}" key="${idx}" />`);
 
       return html`
