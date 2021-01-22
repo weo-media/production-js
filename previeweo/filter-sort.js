@@ -36,31 +36,27 @@
       useCallback = preact.useCallback;
 
     const input = JSON.parse(document.querySelector('.TPfilter-sort-input').innerText);
-    const selected = "";
+    let selected = [];
 
-    // demo
-    function Counter() {
-      const [value, setValue] = useState(0);
-      const increment = useCallback(() => {
-        setValue(value + 1);
-      }, [value]);
-
-      return html`
-      <div>
-        Counter: ${value}
-        <button onClick=${increment}>Increment</button>
-      </div>
-    `;
-    }
     // get tags from input and remove duplicates by creating a Set then converting it to an array
     const tags = [...new Set(input.map((site) => [...site.tags].map(tag => tag.trim())).reduce((acc, cur) => [...acc, ...cur]))];
-    console.log(tags);
 
     // filter button
     const FilterButton = (props) => {
-      return html`
-      <button class="filter-button" name="${props.filterName}" active="${props.active}">${props.children}</button>
-    `;
+      onClick = event => {
+        selected = [];
+        input.map((site) => {
+          if (site.tags.includes(event.target.name)) {
+            selected.push(site);
+          }
+        });
+        // Renders html
+        render(html`<${FilterSort} />`, document.querySelector('.TPfilter-sort-output'));
+      }
+
+      return tags.map((tag) => html`
+        <button class="filter-button" name="${tag}" active="${tag.active}" onClick=${this.onClick}>${tag}</button>
+        `);
     }
 
     // site card
@@ -74,15 +70,14 @@
 
     // filter sort component
     const FilterSort = (props) => {
-      const sites = !selected ? input.map((site, idx) => html`<${SiteCard} img="${site.img}" key="${idx}" />`) : selected.map((site, idx) => html`<${SiteCard} img="${site.img}" key="${idx}" />`);
+      const sites = (!Array.isArray(selected) || !selected.length) ? input.map((site, idx) => html`<${SiteCard} img="${site.img}" key="${idx}" />`) : selected.map((site, idx) => html`<${SiteCard} img="${site.img}" key="${idx}" />`);
 
       return html`
-    <div>
-    
-      <${FilterButton} key="${props.filterName}">filter button</>
-        <${Counter} />
-        hello
+    <div class="filterSort">
+      <div class="filterButtons"><${FilterButton} /></div>
+      <div class="filteredSites">
         ${sites}
+      </div>
     </div>
     `;
     };
