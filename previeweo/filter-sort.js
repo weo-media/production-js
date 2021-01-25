@@ -52,7 +52,6 @@
         if (e.target.checked === false) {
           return props.state.selectedTags.some(tag => tag === e.target.name) && props.setState({ selectedTags: [...props.state.selectedTags.filter(tag => tag !== e.target.name)] });
         }
-        console.log(e.target.checked);
       }
 
       return html`
