@@ -94,6 +94,6 @@
     };
 
     // Renders html
-    render(html`<${FilterSort} selected="none" />`, document.querySelector('.TPfilter-sort-output'));
+    render(html`<${FilterSort} />`, document.querySelector('.TPfilter-sort-output'));
   }
 })();
