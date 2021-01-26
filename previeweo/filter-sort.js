@@ -66,7 +66,7 @@
     // site card
     const SiteCard = (props) => {
       return html`
-        <div class="siteCard">
+        <div class="siteCard TPcol-xs-6">
           <img loading="lazy" src="/tpnis/c/C256/img/${props.img}" />
         </div>
       `;
@@ -87,7 +87,7 @@
       return html`
     <div class="filterSort">
       <div class="filterButtons">${filterButtons}</div>
-      <div class="filteredSites">
+      <div class="filteredSites TProw">
         ${sites}
       </div>
     </div>
