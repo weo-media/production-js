@@ -33,8 +33,7 @@
     // get preact functions
     const html = preact.html,
       render = preact.render,
-      useState = preact.useState,
-      useCallback = preact.useCallback;
+      useState = preact.useState;
 
     const input = JSON.parse(document.querySelector('.TPfilter-sort-input').innerText);
 
