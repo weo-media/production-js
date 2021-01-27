@@ -11,9 +11,9 @@ in the end, if the key looks like:
 [[[script:weo-github|||repo/folder/file.js]]]
 
 and your url looks like this:
-https://www.weomedia.com/p/dental-marketing-QL-Designs-2021-Test-page-p18450.asp?Preview=1&devops=1&branch=20210126-branch
+https://www.weomedia.com/p/dental-marketing-QL-Designs-2021-Test-page-p18450.asp?Preview=1&devops=1&branch=***20210126-branch***
 
-you will get the 20210126-branch version
+you will get the ***20210126-branch version***
 
 -----------------------------------------
 
@@ -23,7 +23,7 @@ if the key looks like:
 and your url looks like this:
 https://www.weomedia.com/p/dental-marketing-QL-Designs-2021-Test-page-p18450.asp?Preview=1&devops=1&branch=20210126-branch
 
-you will get nothing
+you will get ***nothing***
 
 -------------------------------------------
 
@@ -33,7 +33,7 @@ if the key looks like:
 and your url looks like this:
 https://www.weomedia.com/p/dental-marketing-QL-Designs-2021-Test-page-p18450.asp?Preview=1&devops=1&branch=20210126-branch
 
-you will get an error
+you will get an ***error***
 
 -------------------------------------------
 
@@ -43,7 +43,7 @@ if the key looks like:
 and your url looks like this:
 https://www.weomedia.com/p/dental-marketing-QL-Designs-2021-Test-page-p18450.asp?Preview=1
 
-you will get the client folder version
+you will get the ***client folder version***
 
 -------------------------------------------
 
@@ -53,7 +53,7 @@ if the key looks like:
 and your url looks like this:
 https://www.weomedia.com/p/dental-marketing-QL-Designs-2021-Test-page-p18450.asp?Preview=1
 
-you will get the client folder version
+you will get the ***client folder version***
 
 -------------------------------------------
 
@@ -61,8 +61,8 @@ if the key looks like:
 [[[script:weo-github|||repo/folder/file.js]]]
 
 and your url looks like this:
-https://www.weomedia.com/p/dental-marketing-QL-Designs-2021-Test-page-p18450.asp?Preview=1&devops=1
+https://www.weomedia.com/p/dental-marketing-QL-Designs-2021-Test-page-p18450.asp?Preview=1&***devops=1***
 
-you will get the main/master branch version
+you will get the ***main/master branch version***
 
 -------------------------------------------
