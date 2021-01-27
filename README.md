@@ -6,7 +6,7 @@ if &devops=1 and &repo=repo@branchName then branch github => https://cdn.jsdeliv
 else js file in client folder
 
 in the end the key looks like:
-[[[script:weo-test-js]]]
+[[[script:weo-github]]]
 
 and your url looks like this:
 https://www.weomedia.com/p/dental-marketing-QL-Designs-2021-Test-page-p18450.asp?Preview=1&devops=1&repo=weo-test-js@20210126-branch
