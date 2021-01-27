@@ -57,7 +57,6 @@
             <label for="checkbox-${props.name}" onInput=${toggle} class="filter-button">
               <input id="checkbox-${props.name}" type="checkbox" name="${props.name}" />
               ${props.name}
-            
             </label>
         `;
     }
