@@ -65,7 +65,7 @@
     const SiteCard = (props) => {
       return html`
         <div class="siteCard TPcol-xs-6">
-          <img loading="lazy" src="/tpnis/c/C256/img/${props.img}" />
+          <img loading="lazy" class="TPimg-responsive" src="/tpnis/c/C256/img/${props.img}" />
         </div>
       `;
     }
