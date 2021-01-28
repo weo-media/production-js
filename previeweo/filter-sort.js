@@ -56,7 +56,7 @@
       return html`
             <label for="checkbox-${props.name}" onInput=${toggle} class="filter-button">
               <input id="checkbox-${props.name}" type="checkbox" name="${props.name}" />
-              ${props.name}
+              ${props.name.replace(/TPtag-/, '').split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
             </label>
         `;
     }
