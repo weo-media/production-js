@@ -30,16 +30,21 @@
   };
 
   function App() {
+    const colorSwap = document.querySelector('#color-swap') ? document.querySelector('#color-swap') : document.createElement('div');
+    colorSwap.id = 'color-swap';
+    document.querySelector('body').insertAdjacentElement("beforeend", colorSwap);
 
     // get preact functions
     const html = preact.html,
       render = preact.render,
-      useState = preact.useState;
+      useState = preact.useState,
+      useRef = preact.useRef,
+      Fragment = preact.fragment;
 
 
 
     // get document stylesheets, map only the weo stylesheets and get rid of the rest. then get the css text and the selector text for those style sheets and join them together into one array.
-    const originalStyles = [...document.styleSheets].map(stysh => {
+    const originalStyles = [...document.styleSheets].map((stysh, idx) => {
       try {
         return stysh.cssRules.length > 0
           ? [...stysh.cssRules].map(rule => (
@@ -51,64 +56,76 @@
           ))
           : null
       } catch (e) {
-        console.error('skipping css because of error:', e);
+        console.error('skipping css:', document.styleSheets[idx], e);
         return null
       }
     }).filter(res => res !== null).reduce((acc, cur) =>
-      acc && typeof acc[Symbol.iterator] === 'function'
-        ? [...acc, cur]
-        : acc && [acc, cur]
+      acc
+        ? [...acc, ...cur]
+        : console.log({ acc })
     );
 
     // get rgb and rgba colors used more than once
     let processedStyles = {};
 
     originalStyles.filter(style =>
-      style.cssText && style.cssText.match(/color:/)
-    ).map(sty =>
-      sty.cssText.match(/color:(\s?)+(((<?rgba?)\([^\)]+\)))/)
-        ? sty.cssText.match(/color:(\s?)+(((<?rgba?)\([^\)]+\)))/)[2]
-        : ''
-    ).reduce((acc, cur) => {
-      if (typeof acc !== "object") { return acc = [cur] };
-      return acc.some(sty => sty === cur)
-        ? processedStyles[cur]++
-        : processedStyles[cur] = 1
+      style.cssText && style.cssText.match(/((<?rgb)\([^\)]+\))/)
+    ).map(sty => ({
+      color: sty.cssText.match(/((<?rgb)\([^\)]+\))/)[1],
+      count: 1,
+      cssText: [sty.cssText]
+    })
+    ).forEach((style) => {
+
+      // distill style matches and get css text to overwrite later
+      if (typeof style === "object") {
+        if (typeof processedStyles[style.color] === 'object' && processedStyles[style.color] !== undefined) {
+          processedStyles[style.color].count++;
+          if (processedStyles[style.color].cssText.length > 1) {
+            processedStyles[style.color].cssText = [...processedStyles[style.color].cssText, style.cssText];
+          } else if (processedStyles[style.color].cssText.length <= 1) {
+            processedStyles[style.color].cssText = [processedStyles[style.color].cssText[0], style.cssText];
+          }
+        } else if (processedStyles[style.color] === undefined) {
+          const { r, g, b } = rgb(style.color);
+          processedStyles[style.color] = {
+            originalColor: style.color,
+            color: style.color,
+            count: 1,
+            cssText: [style.cssText],
+            id: ["Color " + ((Object.keys(processedStyles).length) + 1) + '-' + style.color],
+            hexColor: rgb2Hex(r, g, b)
+          }
+        }
+
+      };
     });
-
-    // get the styles mentioned more than once
-    const repeatedRgbStyles = Object.keys(processedStyles).map(color =>
-      processedStyles[color] <= 0
-        ? null
-        : color
-    ).filter(res =>
-      res !== null
-    );
-
-    // get all styles
-    const rgbStyles = Object.keys(processedStyles).filter(style => style !== '');
 
     // make a color box
     const Box = (props) => {
 
       const textColor = () => {
-        const { r, g, b } = rgb(props.color);
+        const { red: r, green: g, blue: b } = hex2rgb(props.state.styles[props.id.toString().split('-')[1]].hexColor);
         if (Number(r) + Number(g) + Number(b) < 400) {
           return '#ffffff'
         } else {
           return '#000000'
         }
       };
-      const initialHexcode = () => {
-        const { r, g, b } = rgb(props.color);
-        return rgb2Hex(r, g, b);
-      };
 
       const handleColorChange = e => {
+        const colorId = e.target.id.toString().split('-')[1];
         const hexValue = e.target.value;
-        const rgbValue = "rgb(" + hex2rgb(hexValue).red + ", " + hex2rgb(hexValue).green + ", " + hex2rgb(hexValue).blue + ")";
 
-        props.setState({ ...props.state, ...{ [e.target.id]: hexValue } });
+        props.setState(prevState => ({
+          styles: {
+            ...prevState.styles,
+            [colorId]: {
+              ...prevState.styles[colorId],
+              hexColor: hexValue
+            }
+          }
+        }));
       }
 
       return (
@@ -121,14 +138,14 @@
             padding: '.5em',
             margin: '.5em',
             display: "block",
-            background: props.state[props.id] ? props.state[props.id] : initialHexcode(),
+            background: props.state.styles[props.id.toString().split('-')[1]].hexColor,
             color: textColor()
           }}
             >
               <input
                 type="color" 
                 id="${props.id}" 
-                value=${props.state[props.id] ? props.state[props.id] : initialHexcode()}
+                value=${props.state.styles[props.id.toString().split('-')[1]].hexColor}
                 onInput=${handleColorChange}
                 />
                 ${props.children}
@@ -138,38 +155,63 @@
       )
     }
 
+    const ColorStyle = (props) => {
+      return (
+        html`
+            ${props.children}
+            ${props.color}
+        ` )
+    }
+
+    const ReColorStyles = (props) => {
+
+      const allStyles = Object.values(props.state.styles).map(color => {
+        // console.log(color.cssText.join(' '));
+        const lines = color.cssText.join(' ').split(color.originalColor);
+        return lines.map((line, idx) =>
+          html`<${ColorStyle}
+            key="${color.id}-ref${idx}"
+            color=${(idx + 1) === lines.length
+              ? ''
+              : props.state.styles[color.originalColor].hexColor}
+            >
+              ${line}
+            </${ColorStyle}>`);
+      });
+
+      return (html`
+        <style>
+          ${allStyles}
+        </style>
+      `)
+    }
+
 
     const ColorSwapWidget = (props) => {
-      const colors = () => {
-        const { r, g, b } = rgb(color);
-        return repeatedRgbStyles.map(color => ({
-          ["color" + (idx + 1)]: rgb2Hex(r, g, b)
-        }));
-      }
-      const [state, setState] = useState({ ...colors });
 
-      const closeModal = () => {
+      const [state, setState] = useState({ styles: processedStyles });
+
+
+      const closeColorSwap = () => {
         document.querySelector('.color-swap-widget').style.display = 'none';
         document.querySelector('.color-swap-pop-button').style.display = 'inline-block';
       }
-      const popModal = () => {
+      const popColorSwap = () => {
         document.querySelector('.color-swap-widget').style.display = 'block';
         document.querySelector('.color-swap-pop-button').style.display = 'none';
       }
 
-      const boxes = repeatedRgbStyles.map((color, idx) => {
+      console.log(state);
+      const boxes = Object.keys(state.styles).map((color, idx) => {
         return html`
         <${Box} 
           state=${state} 
           setState=${setState} 
-          key="color${idx + 1}" 
-          id="color${idx + 1}" 
-          color=${state["color" + (idx + 1)]
-            ? state.id
-            : color}
+          key=${state.styles[color].id}
+          id=${state.styles[color].id}
+          color=${state.styles[color].hexColor}
         >
-          Color ${idx + 1}
-          ${console.log(state)}
+          ${state.styles[color].id.toString().replace(/-rgb.*$/, '')}
         </${Box}>
         `
       });
@@ -179,7 +221,7 @@
         html`
           <div>
             <button 
-              onClick=${popModal}
+              onClick=${popColorSwap}
               class="color-swap-pop-button"
               style=${{
             display: 'inline-block',
@@ -214,8 +256,8 @@
             position: 'relative'
           }}>
                 <a 
-                  class="close-modal" 
-                  onClick=${closeModal} 
+                  class="close-color-swap" 
+                  onClick=${closeColorSwap} 
                   style=${{
             position: 'absolute',
             top: '7px',
@@ -238,11 +280,12 @@
                 </div>
               ${boxes}
             </div>
+            <${ReColorStyles} state=${state}/>
           </div>
     `)
     }
 
-    const rgb = (rgbColor) => {
+    function rgb(rgbColor) {
       const r = rgbColor && rgbColor.match(/rgb\((\d{1,3}),\s\d{1,3},\s\d{1,3}\)/)
         ? rgbColor.match(/rgb\((\d{1,3}),\s\d{1,3},\s\d{1,3}\)/)[1]
         : 0;
@@ -268,6 +311,6 @@
     // Renders html
     render(html`
     <${ColorSwapWidget} />
-    `, document.body);
+    `, document.querySelector('#color-swap'));
   }
 })();
