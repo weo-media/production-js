@@ -132,7 +132,7 @@
         html`
           <div>
             <label
-              style=${{
+              .style=${{
             minWidth: '50px',
             minHeight: '50px',
             padding: '.5em',
@@ -223,7 +223,7 @@
             <button 
               onClick=${popColorSwap}
               class="color-swap-pop-button"
-              style=${{
+              .style=${{
             display: 'inline-block',
             padding: '1em',
             position: 'fixed',
@@ -236,7 +236,7 @@
             </button>
             <div
               class="color-swap-widget"
-              style=${{
+              .style=${{
             display: 'none',
             minWidth: '200px',
             maxHeight: '400px',
@@ -258,19 +258,19 @@
                 <a 
                   class="close-color-swap" 
                   onClick=${closeColorSwap} 
-                  style=${{
+                  .style=${{
             position: 'absolute',
             top: '7px',
             right: '18px',
             zIndex: '1'
           }}>
-                <div style=${{
+                <div .style=${{
             transform: 'rotate(45deg)',
             position: 'absolute',
             border: 'solid 1px #000',
             width: '12px'
           }}></div>
-                <div style=${{
+                <div .style=${{
             transform: 'rotate(-45deg)',
             position: 'absolute',
             border: 'solid 1px #333',
