@@ -250,7 +250,8 @@
             zIndex: '1000'
           }}
             >
-              <div class="widget-top-bar" style=${{
+              <div class="widget-top-bar" 
+              .style=${{
             minHeight: '18px',
             background: '#ddd',
             position: 'relative'
