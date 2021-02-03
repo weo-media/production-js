@@ -132,7 +132,7 @@
         html`
           <div>
             <label
-              .style=${{
+              style=${{
             minWidth: '50px',
             minHeight: '50px',
             padding: '.5em',
