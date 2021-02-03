@@ -66,7 +66,7 @@
         && props.link.match(/^http/)
         && props.link
         || `https://${props.link}`
-      return html`
+      return (html`
         <div class="TPcol-xs-6">
           <a href=${link} class="siteCard">
             <div class="TPcard-hover">
@@ -79,7 +79,7 @@
             <p>${props.details}</p>
           </div>
         </div>
-      `;
+      `);
     }
 
     // filter sort component
@@ -111,14 +111,14 @@
       // make a filter checkbox for each tag mentioned from across all sites
       const filterButtons = tags.map((tag) => html`<${FilterButton} name="${tag}" state=${state} setState=${setState}></${FilterButton}>`);
 
-      return html`
+      return (html`
     <div class="filterSort">
       <div class="filterButtons">${filterButtons}</div>
       <div class="filteredSites TProw">
         ${sites}
       </div>
     </div>
-    `;
+    `)
     };
 
     // Renders html
