@@ -101,7 +101,7 @@
               explore=${site.explore} 
               detailsHeader=${site.detailsHeader} 
               details=${site.details} 
-              link=${site.link} />`)
+              link=${site.link}><//>`)
         : selected.map((site) =>
           html`
             <${SiteCard} 
@@ -110,7 +110,7 @@
               explore=${site.explore} 
               detailsHeader=${site.detailsHeader} 
               details=${site.details} 
-              link=${site.link} />`);
+              link=${site.link}><//>`);
 
       // make a filter checkbox for each tag mentioned from across all sites
       const filterButtons = tags.map((tag) => html`<${FilterButton} name="${tag}" state=${state} setState=${setState}></${FilterButton}>`);
