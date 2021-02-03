@@ -68,7 +68,6 @@
         || `https://${props.link}`;
 
       return (html`
-        <>
           <a href=${link} class="siteCard">
             <div class="TPcard-hover">
               <p><small>Explore</small><br> ${props.explore}</p>
@@ -79,7 +78,6 @@
             <h4>${props.detailsHeader}</h4>
             <p>${props.details}</p>
           </div>
-          </>
       `);
     }
 
@@ -89,7 +87,7 @@
 
       // check state for array of selected tags for entries. if no tags, use "input" array to display all site cards else display only sites with matching tags
       const selected = input.map(site => state.selectedTags.every(tag => site.tags.includes(tag)) ? site : null).filter(site => site !== null);
-      const sites = state.selectedTags === []
+      const Sites = state.selectedTags === []
         ? input.map((site) =>
         (html`
           <div class="TPcol-md-6">
@@ -120,7 +118,7 @@
     <div class="filterSort">
       <div class="filterButtons">${filterButtons}</div>
       <div class="filteredSites TProw">
-        ${sites}
+        <${Sites} />
       </div>
     </div>
     `)
