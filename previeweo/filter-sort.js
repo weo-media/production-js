@@ -67,7 +67,8 @@
         && props.link
         || `https://${props.link}`;
 
-      return (html`<div class="TPcol-md-6">
+      return (html`
+        <div class="TPcol-md-6">
           <a href=${link} class="siteCard">
             <div class="TPcard-hover">
               <p><small>Explore</small><br> ${props.explore}</p>
