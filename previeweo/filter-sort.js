@@ -68,7 +68,7 @@
         || `https://${props.link}`;
 
       return (html`
-        
+        <>
           <a href=${link} class="siteCard">
             <div class="TPcard-hover">
               <p><small>Explore</small><br> ${props.explore}</p>
@@ -79,6 +79,7 @@
             <h4>${props.detailsHeader}</h4>
             <p>${props.details}</p>
           </div>
+          </>
       `);
     }
 
