@@ -67,6 +67,9 @@
         && props.link
         || `https://${props.link}`
       return (html`
+      
+        <div>
+           
           <a href=${link} class="siteCard">
             <div class="TPcard-hover">
               <p><small>Explore</small><br> ${props.explore}</p>
@@ -77,6 +80,9 @@
             <h4>${props.detailsHeader}</h4>
             <p>${props.details}</p>
           </div>
+        
+        </div>
+
       `);
     }
 
@@ -88,23 +94,23 @@
       const selected = input.map(site => state.selectedTags.every(tag => site.tags.includes(tag)) ? site : null).filter(site => site !== null);
       const sites = state.selectedTags === []
         ? input.map((site) =>
-          html`
+        (html`
             <${SiteCard} 
               img="${site.img}" 
               key="${site.explore}" 
               explore=${site.explore} 
               detailsHeader=${site.detailsHeader} 
               details=${site.details} 
-              link=${site.link}><//>`)
+              link=${site.link}><//>`))
         : selected.map((site) =>
-          html`
+        (html`
             <${SiteCard} 
               img="${site.img}" 
               key="${site.explore}" 
               explore=${site.explore} 
               detailsHeader=${site.detailsHeader} 
               details=${site.details} 
-              link=${site.link}><//>`);
+              link=${site.link}><//>`));
 
       // make a filter checkbox for each tag mentioned from across all sites
       const filterButtons = tags.map((tag) => html`<${FilterButton} name="${tag}" state=${state} setState=${setState}></${FilterButton}>`);
