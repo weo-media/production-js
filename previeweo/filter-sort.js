@@ -52,7 +52,6 @@
           return props.state.selectedTags.some(tag => tag === e.target.name) && props.setState({ selectedTags: [...props.state.selectedTags.filter(tag => tag !== e.target.name)] });
         }
       }
-
       return html`
             <label for="checkbox-${props.name}" onInput=${toggle} class="filter-button">
               <input id="checkbox-${props.name}" type="checkbox" name="${props.name}" />
@@ -63,9 +62,27 @@
 
     // site card
     const SiteCard = (props) => {
+      const link = () => {
+        if (props.link) {
+          if (props.link.matches(/^http/)) {
+            return props.link
+          } else {
+            return `https://${props.link}`
+          }
+        }
+      }
       return html`
-        <div class="siteCard TPcol-xs-6">
-          <img loading="lazy" class="TPimg-responsive" src="/tpnis/c/C256/img/${props.img}" />
+        <div class="TPcol-xs-6">
+          <a href=${link} class="siteCard">
+            <div class="TPcard-hover">
+              <p><small>Explore</small><br> ${props.explore}</p>
+            </div>
+            <img loading="lazy" class="TPimg-responsive" src="/tpnis/c/C256/img/${props.img}" />
+          </a>
+          <div class="TPcard-details">
+            <h4>${props.detailsHeader}</h4>
+            <p>${props.details}</p>
+          </div>
         </div>
       `;
     }
@@ -76,8 +93,25 @@
 
       // check state for array of selected tags for entries. if no tags, use "input" array to display all site cards else display only sites with matching tags
       const selected = input.map(site => state.selectedTags.every(tag => site.tags.includes(tag)) ? site : null).filter(site => site !== null);
-      const sites = state.selectedTags === [] ? input.map((site) => html`<${SiteCard} img="${site.img}" key="${site.img.replace(/\..*/, '')}" />`) : selected.map((site) => html`<${SiteCard} img="${site.img}" key="${site.img.replace(/\..*/, '')}" />`);
-      console.log(sites)
+      const sites = state.selectedTags === []
+        ? input.map((site) =>
+          html`
+            <${SiteCard} 
+              img="${site.img}" 
+              key="${site.explore}" 
+              explore=${site.explore} 
+              detailsHeader=${site.detailsHeader} 
+              details=${site.details} 
+              link=${site.link} />`)
+        : selected.map((site) =>
+          html`
+            <${SiteCard} 
+              img="${site.img}" 
+              key="${site.explore}" 
+              explore=${site.explore} 
+              detailsHeader=${site.detailsHeader} 
+              details=${site.details} 
+              link=${site.link} />`);
 
       // make a filter checkbox for each tag mentioned from across all sites
       const filterButtons = tags.map((tag) => html`<${FilterButton} name="${tag}" state=${state} setState=${setState}></${FilterButton}>`);
@@ -96,3 +130,4 @@
     render(html`<${FilterSort} />`, document.querySelector('.TPfilter-sort-output'));
   }
 })();
+
