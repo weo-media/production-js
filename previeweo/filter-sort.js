@@ -71,7 +71,7 @@
         <>
           <a href=${link} class="siteCard">
             <div class="TPcard-hover">
-              <p><small>Explore</small><br> ${props.explore}</p>
+              <p><small>Explore</small><br /> ${props.explore}</p>
             </div>
             <img loading="lazy" class="TPimg-responsive" src="/tpnis/c/C256/img/${props.img}" />
           </a>
