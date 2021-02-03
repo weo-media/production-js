@@ -62,15 +62,10 @@
 
     // site card
     const SiteCard = (props) => {
-      const link = () => {
-        if (props.link) {
-          if (props.link.matches(/^http/)) {
-            return props.link
-          } else {
-            return `https://${props.link}`
-          }
-        }
-      }
+      const link = props.link
+        && props.link.match(/^http/)
+        && props.link
+        || `https://${props.link}`
       return html`
         <div class="TPcol-xs-6">
           <a href=${link()} class="siteCard">
