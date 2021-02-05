@@ -100,7 +100,7 @@
               details=${site.details} 
               link=${site.link}><//>
           `))
-        : selected.map((site) =>
+        : selected.length === 0 && (html`<div className="TPcol-xs-12"><div class="oops"><h4>Ooops. Try again.</h4><p>Couldn't find a match for that tag combination.</p></div></div>`) || selected.map((site) =>
         (html`
             <${SiteCard} 
               img="${site.img}" 
