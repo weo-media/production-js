@@ -94,7 +94,8 @@
             count: 1,
             cssText: [style.cssText],
             id: ["Color " + ((Object.keys(processedStyles).length) + 1) + '-' + style.color],
-            hexColor: rgb2Hex(r, g, b)
+            hexColor: rgb2Hex(r, g, b),
+            alpha: "100"
           }
         }
 
@@ -102,7 +103,7 @@
     });
 
     // make a color box
-    const Box = (props) => {
+    const ColorSelectorBox = (props) => {
 
       const textColor = () => {
         const { red: r, green: g, blue: b } = hex2rgb(props.state.styles[props.id.toString().split('-')[1]].hexColor);
@@ -112,6 +113,8 @@
           return '#000000'
         }
       };
+
+      const backgroundColor = () => colorAndAlpha2rgbaHex(props.state.styles[props.id.toString().split('-')[1]].hexColor, props.state.styles[props.id.toString().split('-')[1]].alpha);
 
       const handleColorChange = e => {
         const colorId = e.target.id.toString().split('-')[1];
@@ -127,6 +130,21 @@
           }
         }));
       }
+      const handleAlphaChange = e => {
+        const colorId = e.target.id.toString().split('-')[1];
+        const alphaValue = e.target.value;
+
+        props.setState(prevState => ({
+          styles: {
+            ...prevState.styles,
+            [colorId]: {
+              ...prevState.styles[colorId],
+              alpha: alphaValue,
+              hexAndAlpha: colorAndAlpha2rgbaHex(props.state.styles[props.id.toString().split('-')[1]].hexColor, alphaValue)
+            }
+          }
+        }));
+      }
 
       return (
         html`
@@ -138,7 +156,7 @@
             padding: '.5em',
             margin: '.5em',
             display: "block",
-            background: props.state.styles[props.id.toString().split('-')[1]].hexColor,
+            background: (props.state.styles[props.id.toString().split('-')[1]].hexColor),
             color: textColor()
           }}
             >
@@ -147,8 +165,30 @@
                 id="${props.id}" 
                 value=${props.state.styles[props.id.toString().split('-')[1]].hexColor}
                 onInput=${handleColorChange}
-                />
-                ${props.children}
+              />
+              ${props.children}
+            </label>
+            <label
+              style=${{
+            minWidth: '50px',
+            minHeight: '50px',
+            padding: '.5em',
+            margin: '.5em',
+            display: "block",
+            background: backgroundColor(),
+            color: textColor()
+          }}
+            >
+              <input
+                type="range"
+                id="${props.id}-alpha"
+                name="${props.id}-alpha"
+                min="0"
+                max="100"
+                value=${props.state.styles[props.id.toString().split('-')[1]].alpha}
+                onInput=${handleAlphaChange}
+              />
+              Alpha Transparency
             </label>
           </div>
         `
@@ -173,7 +213,7 @@
             key="${color.id}-ref${idx}"
             color=${(idx + 1) === lines.length
               ? ''
-              : props.state.styles[color.originalColor].hexColor}
+              : props.state.styles[color.originalColor].hexAndAlpha}
             >
               ${line}
             </${ColorStyle}>`);
@@ -204,7 +244,7 @@
       console.log(state);
       const boxes = Object.keys(state.styles).map((color, idx) => {
         return html`
-        <${Box} 
+        <${ColorSelectorBox} 
           state=${state} 
           setState=${setState} 
           key=${state.styles[color].id}
@@ -212,7 +252,7 @@
           color=${state.styles[color].hexColor}
         >
           ${state.styles[color].id.toString().replace(/-rgb.*$/, '')}
-        </${Box}>
+        </${ColorSelectorBox}>
         `
       });
 
@@ -285,6 +325,7 @@
     `)
     }
 
+    // color functions
     function rgb(rgbColor) {
       const r = rgbColor && rgbColor.match(/rgb\((\d{1,3}),\s\d{1,3},\s\d{1,3}\)/)
         ? rgbColor.match(/rgb\((\d{1,3}),\s\d{1,3},\s\d{1,3}\)/)[1]
@@ -298,14 +339,27 @@
       return { r: r, g: g, b: b }
     };
 
-    function rgb2Hex(r, g, b) {
+    function rgb2Hex(r, g, b, a) {
+      if (a) {
+        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b) + componentToHex(((typeof a === "string" ? a = Number(a) : a) / 100) * 255);
+      }
       return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-
       function componentToHex(c) {
         typeof c === "string" ? c = Number(c) : c;
         var hex = c.toString(16);
         return hex.length === 1 ? "0" + hex : hex;
       }
+    }
+
+    function colorAndAlpha2rgba(hex, alpha) {
+      const { red: r, green: g, blue: b } = hex2rgb(hex);
+      const alphaPercent = Number(alpha) / 100;
+      return `rgba(${r}, ${g} ${b}, ${alphaPercent})`;
+    }
+
+    function colorAndAlpha2rgbaHex(hex, alpha) {
+      const { red: r, green: g, blue: b } = hex2rgb(hex);
+      return rgb2Hex(r, g, b, alpha);
     }
 
     // Renders html
