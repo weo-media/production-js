@@ -46,7 +46,7 @@
     // get document stylesheets, map only the weo stylesheets and get rid of the rest. then get the css text and the selector text for those style sheets and join them together into one array.
     const originalStyles = [...document.styleSheets].map((stysh, idx) => {
       try {
-        return stysh.cssRules.length > 0
+        return stysh.cssRules.length > 0 && stysh.href.match(/webpage\.css\?vers/)
           ? [...stysh.cssRules].map(rule => (
             {
               cssText: rule.cssText,
