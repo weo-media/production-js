@@ -211,7 +211,6 @@
                 name="${props.id}-alpha"
                 min="0"
                 max="100"
-                step="10"
                 value=${props.state.styles[props.id.toString().split('-')[1]].alpha}
                 onInput=${handleAlphaChange}
               />
@@ -371,7 +370,7 @@
 
     function rgb2Hex(r, g, b, a) {
       if (a) {
-        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b) + componentToHex(((typeof a === "string" ? a = Number(a) : a) / 100) * 255);
+        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b) + componentToHex(Math.floor((+a / 100) * 255));
       }
       return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
       function componentToHex(c) {
@@ -384,7 +383,7 @@
     function colorAndAlpha2rgba(hex, alpha) {
       const { red: r, green: g, blue: b } = hex2rgb(hex);
       const alphaPercent = Number(alpha) / 100;
-      return `rgba(${r}, ${g} ${b}, ${Math.floor(alphaPercent)})`;
+      return `rgba(${r}, ${g} ${b}, ${alphaPercent})`;
     }
 
     function colorAndAlpha2rgbaHex(hex, alpha) {
