@@ -211,6 +211,7 @@
                 name="${props.id}-alpha"
                 min="0"
                 max="100"
+                step="10"
                 value=${props.state.styles[props.id.toString().split('-')[1]].alpha}
                 onInput=${handleAlphaChange}
               />
