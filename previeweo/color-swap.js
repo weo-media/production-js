@@ -37,9 +37,7 @@
     // get preact functions
     const html = preact.html,
       render = preact.render,
-      useState = preact.useState,
-      useRef = preact.useRef,
-      Fragment = preact.fragment;
+      useState = preact.useState;
 
 
 
@@ -48,10 +46,10 @@
       try {
         return stysh.cssRules.length > 0 && stysh.href.match(/webpage\.css\?vers/)
           ? [...stysh.cssRules].map(rule => (
+            // get back all the color styles used in css
             {
               cssText: rule.cssText,
-              selectorText: rule.selectorText,
-              style: rule.style
+              selectorText: rule.selectorText
             }
           ))
           : null
@@ -60,18 +58,46 @@
         return null
       }
     }).filter(res => res !== null).reduce((acc, cur) =>
+      // flatten map into one array of cssStyleRules
       acc
         ? [...acc, ...cur]
         : console.log({ acc })
     );
 
+    const themeColors = [...document.styleSheets].map(stysh =>
+      stysh.href
+      && stysh.href.match(/webpage\.css\?vers/)
+      && stysh.cssRules
+      && [...stysh.cssRules].filter(sf =>
+        sf !== null
+        && sf.cssText.match(/TPweoc\d{1,}-?\d{0,}.*((<?rgba?)\([^\)]+\))/)
+      )
+    ).filter(arr =>
+      // filter out null results
+      arr !== null
+    ).reduce((acc, cur) =>
+      // flatten map into one array of cssStyleRules
+      acc
+        ? [...acc, ...cur]
+        : console.log({ acc })
+    ).map((cssStyRule, idx) => {
+      const themeColor = cssStyRule.cssText.match(/TPweoc\d{1,}-?\d{0,}.*((<?rgba?)\([^\)]+\))/)[1];
+      // get back just the colors
+      return {
+        cssText: cssStyRule.cssText,
+        originalColor: themeColor,
+        id: `Color ${idx + 1}-${themeColor}`
+      }
+    });
+
+
     // get rgb and rgba colors used more than once
     let processedStyles = {};
 
     originalStyles.filter(style =>
-      style.cssText && style.cssText.match(/((<?rgb)\([^\)]+\))/)
+      style.cssText && style.cssText.match(/((<?rgba?)\([^\)]+\))/)
     ).map(sty => ({
-      color: sty.cssText.match(/((<?rgb)\([^\)]+\))/)[1],
+      color: sty.cssText.match(/((<?rgba?)\([^\)]+\))/)[1],
       count: 1,
       cssText: [sty.cssText]
     })
@@ -87,7 +113,7 @@
             processedStyles[style.color].cssText = [processedStyles[style.color].cssText[0], style.cssText];
           }
         } else if (processedStyles[style.color] === undefined) {
-          const { r, g, b } = rgb(style.color);
+          const { r, g, b, a } = rgba(style.color);
           processedStyles[style.color] = {
             originalColor: style.color,
             color: style.color,
@@ -95,7 +121,7 @@
             cssText: [style.cssText],
             id: ["Color " + ((Object.keys(processedStyles).length) + 1) + '-' + style.color],
             hexColor: rgb2Hex(r, g, b),
-            alpha: "100"
+            alpha: a * 100
           }
         }
 
@@ -326,17 +352,20 @@
     }
 
     // color functions
-    function rgb(rgbColor) {
-      const r = rgbColor && rgbColor.match(/rgb\((\d{1,3}),\s\d{1,3},\s\d{1,3}\)/)
-        ? rgbColor.match(/rgb\((\d{1,3}),\s\d{1,3},\s\d{1,3}\)/)[1]
+    function rgba(rgbColor) {
+      const r = rgbColor && rgbColor.match(/rgba?\((\d{1,3}),\s\d{1,3},\s\d{1,3}\)/)
+        ? rgbColor.match(/rgba?\((\d{1,3}),\s\d{1,3},\s\d{1,3}\)/)[1]
         : 0;
-      const g = rgbColor && rgbColor.match(/rgb\(\d{1,3},\s(\d{1,3}),\s\d{1,3}\)/)
-        ? rgbColor.match(/rgb\(\d{1,3},\s(\d{1,3}),\s\d{1,3}\)/)[1]
+      const g = rgbColor && rgbColor.match(/rgba?\(\d{1,3},\s(\d{1,3}),\s\d{1,3}\)/)
+        ? rgbColor.match(/rgba?\(\d{1,3},\s(\d{1,3}),\s\d{1,3}\)/)[1]
         : 0;
-      const b = rgbColor && rgbColor.match(/rgb\(\d{1,3},\s\d{1,3},\s(\d{1,3})\)/)
-        ? rgbColor.match(/rgb\(\d{1,3},\s\d{1,3},\s(\d{1,3})\)/)[1]
+      const b = rgbColor && rgbColor.match(/rgba?\(\d{1,3},\s\d{1,3},\s(\d{1,3})\)/)
+        ? rgbColor.match(/rgba?\(\d{1,3},\s\d{1,3},\s(\d{1,3})\)/)[1]
         : 0;
-      return { r: r, g: g, b: b }
+      const a = rgbColor && rgbColor.match(/rgba?\(\d{1,3},\s\d{1,3},\s\d{1,3},\s(\d{0,}\.?\d{0,})\)/)
+        ? rgbColor.match(/rgba?\(\d{1,3},\s\d{1,3},\s\d{1,3},\s(\d{0,}\.?\d{0,})\)/)[1]
+        : 1;
+      return { r: r, g: g, b: b, a: a }
     };
 
     function rgb2Hex(r, g, b, a) {
