@@ -95,9 +95,9 @@
     let processedStyles = {};
 
     originalStyles.filter(style =>
-      style.cssText && style.cssText.match(/((<?rgba?)\([^\)]+\))/)
+      style.cssText && style.cssText.match(/((<?rgba)\([^\)]+\))/)
     ).map(sty => ({
-      color: sty.cssText.match(/((<?rgba?)\([^\)]+\))/)[1],
+      color: sty.cssText.match(/((<?rgba)\([^\)]+\))/)[1],
       count: 1,
       cssText: [sty.cssText]
     })
