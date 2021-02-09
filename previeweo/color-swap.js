@@ -384,7 +384,7 @@
     function colorAndAlpha2rgba(hex, alpha) {
       const { red: r, green: g, blue: b } = hex2rgb(hex);
       const alphaPercent = Number(alpha) / 100;
-      return `rgba(${r}, ${g} ${b}, ${alphaPercent})`;
+      return `rgba(${r}, ${g} ${b}, ${Math.floor(alphaPercent)})`;
     }
 
     function colorAndAlpha2rgbaHex(hex, alpha) {
