@@ -44,14 +44,21 @@
     // get document stylesheets, map only the weo stylesheets and get rid of the rest. then get the css text and the selector text for those style sheets and join them together into one array.
     const originalStyles = [...document.styleSheets].map((stysh, idx) => {
       try {
-        return stysh.cssRules.length > 0 && stysh.href.match(/webpage\.css\?vers/)
-          ? [...stysh.cssRules].map(rule => (
-            // get back all the color styles used in css
-            {
-              cssText: rule.cssText,
-              selectorText: rule.selectorText
-            }
-          ))
+        return stysh.cssRules.length > 0
+          && stysh.href.match(/webpage\.css\?vers/)
+          ? [...stysh.cssRules].map(rule =>
+            rule.cssText.match(/rgb/)
+            && (
+              // get back all the color styles used in css
+              {
+                cssText: rule.cssText,
+                selectorText: rule.selectorText
+              }
+            )
+            || null).filter(res =>
+              // filter out null responses
+              res !== null
+            )
           : null
       } catch (e) {
         console.error('skipping css:', document.styleSheets[idx], e);
@@ -64,83 +71,113 @@
         : console.log({ acc })
     );
 
-    const themeColors = [...document.styleSheets].map(stysh =>
+    const themeColors = [...[...document.styleSheets].filter(stysh =>
       stysh.href
-      && stysh.href.match(/webpage\.css\?vers/)
-      && stysh.cssRules
-      && [...stysh.cssRules].filter(sf =>
-        sf !== null
-        && sf.cssText.match(/TPweoc\d{1,}-?\d{0,}.*((<?rgba?)\([^\)]+\))/)
-      )
-    ).filter(arr =>
-      // filter out null results
-      arr !== null
-    ).reduce((acc, cur) =>
-      // flatten map into one array of cssStyleRules
-      acc
-        ? [...acc, ...cur]
-        : console.log({ acc })
+      && stysh.href.match(/webpage\.css\?vers/) !== null
+    )[0].cssRules].filter(rule =>
+      rule.cssText.match(/TPweoc\d{1,}-?\d{0,}.*((<?rgba?)\([^\)]+\))/) !== null
     ).map((cssStyRule, idx) => {
       const themeColor = cssStyRule.cssText.match(/TPweoc\d{1,}-?\d{0,}.*((<?rgba?)\([^\)]+\))/)[1];
-      // get back just the colors
+      const { r, g, b, a } = rgba(themeColor);
+      const colorRegExp = new RegExp(themeColor.replace('(', '\\(').replace(')', '\\)'));
+      const cssStyles = originalStyles.filter(style => style.cssText.match(colorRegExp) !== null).map(style => style.cssText);
+      const colorRules = cssStyles.map(cSty => {
+        const selector = cSty.split('{')[0];
+        const rules = cSty.split('{')[1].split(';');
+        const colorRule = rules.filter(rule =>
+          rule.match(colorRegExp)
+        ).map(rule =>
+          selector + '{' + rule + '}'
+        ).join(' ');
+        return colorRule;
+      });
+
+      // get back just the colors in css syntax
       return {
-        cssText: cssStyRule.cssText,
+        cssText: cssStyles,
+        colorRules: colorRules,
         originalColor: themeColor,
-        id: `Color ${idx + 1}-${themeColor}`
+        id: `Color ${idx + 1}-${themeColor}`,
+        hexColor: rgbToHex(r, g, b),
+        alpha: a * 100,
+        hexAndAlpha: colorAndAlpha2rgbaHex(rgbToHex(r, g, b), a * 100)
       }
     });
-
 
     // get rgb and rgba colors used more than once
     let processedStyles = {};
 
-    originalStyles.filter(style =>
-      style.cssText && style.cssText.match(/((<?rgba)\([^\)]+\))/)
-    ).map(sty => ({
-      color: sty.cssText.match(/((<?rgba)\([^\)]+\))/)[1],
-      count: 1,
-      cssText: [sty.cssText]
-    })
-    ).forEach((style) => {
+    // originalStyles.filter(style =>
+    //   style.cssText && style.cssText.match(/((<?rgba)\([^\)]+\))/) !== null
+    // ).map(sty => {
+    //   const themeColor = sty.cssText.match(/((<?rgba)\([^\)]+\))/)[1];
+    //   const { r, g, b, a } = rgba(themeColor);
+    //   const colorRegExp = new RegExp(themeColor.replace('(', '\\(').replace(')', '\\)'));
+    //   const cssStyles = originalStyles.filter(style => style.cssText.match(colorRegExp) !== null).map(style => style.cssText);
+    //   const colorRules = cssStyles.map(cSty => {
+    //     const selector = cSty.split('{')[0];
+    //     const rules = cSty.split('{')[1].split(';');
+    //     const colorRule = rules.filter(rule =>
+    //       rule.match(colorRegExp)
+    //     ).map(rule =>
+    //       selector + '{' + rule + '}'
+    //     ).join(' ');
+    //     return colorRule;
+    //   });
 
-      // distill style matches and get css text to overwrite later
-      if (typeof style === "object") {
-        if (typeof processedStyles[style.color] === 'object' && processedStyles[style.color] !== undefined) {
-          processedStyles[style.color].count++;
-          if (processedStyles[style.color].cssText.length > 1) {
-            processedStyles[style.color].cssText = [...processedStyles[style.color].cssText, style.cssText];
-          } else if (processedStyles[style.color].cssText.length <= 1) {
-            processedStyles[style.color].cssText = [processedStyles[style.color].cssText[0], style.cssText];
-          }
-        } else if (processedStyles[style.color] === undefined) {
-          const { r, g, b, a } = rgba(style.color);
-          processedStyles[style.color] = {
-            originalColor: style.color,
-            color: style.color,
-            count: 1,
-            cssText: [style.cssText],
-            id: ["Color " + ((Object.keys(processedStyles).length) + 1) + '-' + style.color],
-            hexColor: rgb2Hex(r, g, b),
-            alpha: a * 100
-          }
-        }
+    //   return {
+    //     color: themeColor,
+    //     count: 1,
+    //     cssText: [sty.cssText],
+    //     colorRules: colorRules
+    //   }
+    // }).forEach((style) => {
 
-      };
-    });
+    //   // distill style matches and get css text to overwrite later
+    //   if (typeof style === "object") {
+    //     if (typeof processedStyles[style.color] === 'object' && processedStyles[style.color] !== undefined) {
+    //       processedStyles[style.color].count++;
+    //       if (processedStyles[style.color].cssText.length > 1) {
+    //         processedStyles[style.color].cssText = [...processedStyles[style.color].cssText, style.cssText];
+    //       } else if (processedStyles[style.color].cssText.length <= 1) {
+    //         processedStyles[style.color].cssText = [processedStyles[style.color].cssText[0], style.cssText];
+    //       }
+    //     } else if (processedStyles[style.color] === undefined) {
+    //       const { r, g, b, a } = rgba(style.color);
+    //       processedStyles[style.color] = {
+    //         originalColor: style.color,
+    //         count: 1,
+    //         cssText: [style.cssText],
+    //         id: ["Color " + ((Object.keys(processedStyles).length) + 1) + '-' + style.color],
+    //         hexColor: rgbToHex(r, g, b),
+    //         alpha: a * 100
+    //       }
+    //     }
+
+    //   };
+    // });
+
+    themeColors.forEach(color => { processedStyles[color.originalColor] = color });
 
     // make a color box
     const ColorSelectorBox = (props) => {
 
       const textColor = () => {
-        const { red: r, green: g, blue: b } = hex2rgb(props.state.styles[props.id.toString().split('-')[1]].hexColor);
+        const { red: r, green: g, blue: b } = hexToRgba(props.state.styles[props.id.toString().split('-')[1]].hexColor);
         if (Number(r) + Number(g) + Number(b) < 400) {
           return '#ffffff'
         } else {
           return '#000000'
         }
       };
-
-      const backgroundColor = () => colorAndAlpha2rgbaHex(props.state.styles[props.id.toString().split('-')[1]].hexColor, props.state.styles[props.id.toString().split('-')[1]].alpha);
+      const textShadowColor = () => {
+        const { red: r, green: g, blue: b } = hexToRgba(props.state.styles[props.id.toString().split('-')[1]].hexColor);
+        if (Number(r) + Number(g) + Number(b) < 400) {
+          return '#000000 0px 0px 6px'
+        } else {
+          return '#ffffff 0px 0px 6px'
+        }
+      };
 
       const handleColorChange = e => {
         const colorId = e.target.id.toString().split('-')[1];
@@ -151,7 +188,8 @@
             ...prevState.styles,
             [colorId]: {
               ...prevState.styles[colorId],
-              hexColor: hexValue
+              hexColor: hexValue,
+              hexAndAlpha: colorAndAlpha2rgbaHex(hexValue, prevState.styles[colorId].alpha)
             }
           }
         }));
@@ -182,7 +220,7 @@
             padding: '.5em',
             margin: '.5em',
             display: "block",
-            background: (props.state.styles[props.id.toString().split('-')[1]].hexColor),
+            background: (props.state.styles[props.id.toString().split('-')[1]].hexAndAlpha),
             color: textColor()
           }}
             >
@@ -201,8 +239,9 @@
             padding: '.5em',
             margin: '.5em',
             display: "block",
-            background: backgroundColor(),
-            color: textColor()
+            background: props.state.styles[props.id.toString().split('-')[1]].hexAndAlpha,
+            color: textColor(),
+            textShadow: textShadowColor(),
           }}
             >
               <input
@@ -232,8 +271,9 @@
     const ReColorStyles = (props) => {
 
       const allStyles = Object.values(props.state.styles).map(color => {
-        // console.log(color.cssText.join(' '));
-        const lines = color.cssText.join(' ').split(color.originalColor);
+        const colorReg = new RegExp(color.originalColor.replace('(', '\\(').replace(')', '\\)'));
+
+        const lines = color.colorRules.join(' ').split(color.originalColor);
         return lines.map((line, idx) =>
           html`<${ColorStyle}
             key="${color.id}-ref${idx}"
@@ -267,7 +307,7 @@
         document.querySelector('.color-swap-pop-button').style.display = 'none';
       }
 
-      console.log(state);
+      // console.log(state);
       const boxes = Object.keys(state.styles).map((color, idx) => {
         return html`
         <${ColorSelectorBox} 
@@ -347,6 +387,7 @@
               ${boxes}
             </div>
             <${ReColorStyles} state=${state}/>
+            ${console.log(state)}
           </div>
     `)
     }
@@ -362,18 +403,21 @@
       const b = rgbColor && rgbColor.match(/rgba?\(\d{1,3},\s\d{1,3},\s(\d{1,3})\)/)
         ? rgbColor.match(/rgba?\(\d{1,3},\s\d{1,3},\s(\d{1,3})\)/)[1]
         : 0;
-      const a = rgbColor && rgbColor.match(/rgba?\(\d{1,3},\s\d{1,3},\s\d{1,3},\s(\d{0,}\.?\d{0,})\)/)
-        ? rgbColor.match(/rgba?\(\d{1,3},\s\d{1,3},\s\d{1,3},\s(\d{0,}\.?\d{0,})\)/)[1]
+      const a = rgbColor && rgbColor.match(/rgba\(\d{1,3},\s\d{1,3},\s\d{1,3},\s([\d\.]{1,})\)/)
+        ? rgbColor.match(/rgba?\(\d{1,3},\s\d{1,3},\s\d{1,3},\s([\d\.]{1,})\)/)[1]
         : 1;
       return { r: r, g: g, b: b, a: a }
     };
 
-    function rgb2Hex(r, g, b, a) {
+    function rgbToHex(r, g, b, a) {
       if (a) {
         return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b) + componentToHex(Math.floor((+a / 100) * 255));
       }
       return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
       function componentToHex(c) {
+        if (c === undefined || c === null) {
+          c = 0;
+        }
         typeof c === "string" ? c = Number(c) : c;
         var hex = c.toString(16);
         return hex.length === 1 ? "0" + hex : hex;
@@ -381,14 +425,24 @@
     }
 
     function colorAndAlpha2rgba(hex, alpha) {
-      const { red: r, green: g, blue: b } = hex2rgb(hex);
+      const { red: r, green: g, blue: b } = hexToRgba(hex);
       const alphaPercent = Number(alpha) / 100;
       return `rgba(${r}, ${g} ${b}, ${alphaPercent})`;
     }
 
     function colorAndAlpha2rgbaHex(hex, alpha) {
-      const { red: r, green: g, blue: b } = hex2rgb(hex);
-      return rgb2Hex(r, g, b, alpha);
+      const { red: r, green: g, blue: b } = hexToRgba(hex);
+      return rgbToHex(r, g, b, alpha);
+    }
+
+    function hexToRgba(hex) {
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{0,2})$/.exec(hex);
+      return result ? {
+        red: parseInt(result[1], 16),
+        green: parseInt(result[2], 16),
+        blue: parseInt(result[3], 16),
+        alpha: parseInt(result[4], 16)
+      } : null;
     }
 
     // Renders html
