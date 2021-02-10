@@ -39,9 +39,7 @@
       render = preact.render,
       useState = preact.useState;
 
-
-
-    // get document stylesheets, map only the weo stylesheets and get rid of the rest. then get the css text and the selector text for those style sheets and join them together into one array.
+    // get document stylesheets, map only the weo webpage stylesheet and get rid of the rest. then get the css text and the selector text for those style sheets and join them together into one array.
     const originalStyles = [...document.styleSheets].map((stysh, idx) => {
       try {
         return stysh.cssRules.length > 0
@@ -71,6 +69,8 @@
         : console.log({ acc })
     );
 
+    // create an object to store original theme color and associated styles where that color shows up, as well as an id and hex/rgba versions. 
+    // Gets put into state later.
     const themeColors = [...[...document.styleSheets].filter(stysh =>
       stysh.href
       && stysh.href.match(/webpage\.css\?vers/) !== null
@@ -92,7 +92,7 @@
         return colorRule;
       });
 
-      // get back just the colors in css syntax
+      // get back just the theme colors and put in css syntax
       return {
         cssText: cssStyles,
         colorRules: colorRules,
@@ -104,64 +104,13 @@
       }
     });
 
-    // get rgb and rgba colors used more than once
+    // put theme colors into an object so you can call it with the rgb original color
     let processedStyles = {};
-
-    // originalStyles.filter(style =>
-    //   style.cssText && style.cssText.match(/((<?rgba)\([^\)]+\))/) !== null
-    // ).map(sty => {
-    //   const themeColor = sty.cssText.match(/((<?rgba)\([^\)]+\))/)[1];
-    //   const { r, g, b, a } = rgba(themeColor);
-    //   const colorRegExp = new RegExp(themeColor.replace('(', '\\(').replace(')', '\\)'));
-    //   const cssStyles = originalStyles.filter(style => style.cssText.match(colorRegExp) !== null).map(style => style.cssText);
-    //   const colorRules = cssStyles.map(cSty => {
-    //     const selector = cSty.split('{')[0];
-    //     const rules = cSty.split('{')[1].split(';');
-    //     const colorRule = rules.filter(rule =>
-    //       rule.match(colorRegExp)
-    //     ).map(rule =>
-    //       selector + '{' + rule + '}'
-    //     ).join(' ');
-    //     return colorRule;
-    //   });
-
-    //   return {
-    //     color: themeColor,
-    //     count: 1,
-    //     cssText: [sty.cssText],
-    //     colorRules: colorRules
-    //   }
-    // }).forEach((style) => {
-
-    //   // distill style matches and get css text to overwrite later
-    //   if (typeof style === "object") {
-    //     if (typeof processedStyles[style.color] === 'object' && processedStyles[style.color] !== undefined) {
-    //       processedStyles[style.color].count++;
-    //       if (processedStyles[style.color].cssText.length > 1) {
-    //         processedStyles[style.color].cssText = [...processedStyles[style.color].cssText, style.cssText];
-    //       } else if (processedStyles[style.color].cssText.length <= 1) {
-    //         processedStyles[style.color].cssText = [processedStyles[style.color].cssText[0], style.cssText];
-    //       }
-    //     } else if (processedStyles[style.color] === undefined) {
-    //       const { r, g, b, a } = rgba(style.color);
-    //       processedStyles[style.color] = {
-    //         originalColor: style.color,
-    //         count: 1,
-    //         cssText: [style.cssText],
-    //         id: ["Color " + ((Object.keys(processedStyles).length) + 1) + '-' + style.color],
-    //         hexColor: rgbToHex(r, g, b),
-    //         alpha: a * 100
-    //       }
-    //     }
-
-    //   };
-    // });
-
     themeColors.forEach(color => { processedStyles[color.originalColor] = color });
 
+    // start the components
     // make a color box
     const ColorSelectorBox = (props) => {
-
       const textColor = () => {
         const { red: r, green: g, blue: b } = hexToRgba(props.state.styles[props.id.toString().split('-')[1]].hexColor);
         if (Number(r) + Number(g) + Number(b) < 400) {
@@ -178,11 +127,9 @@
           return '#ffffff 0px 0px 6px'
         }
       };
-
       const handleColorChange = e => {
         const colorId = e.target.id.toString().split('-')[1];
         const hexValue = e.target.value;
-
         props.setState(prevState => ({
           styles: {
             ...prevState.styles,
@@ -197,7 +144,6 @@
       const handleAlphaChange = e => {
         const colorId = e.target.id.toString().split('-')[1];
         const alphaValue = e.target.value;
-
         props.setState(prevState => ({
           styles: {
             ...prevState.styles,
@@ -269,10 +215,8 @@
     }
 
     const ReColorStyles = (props) => {
-
       const allStyles = Object.values(props.state.styles).map(color => {
         const colorReg = new RegExp(color.originalColor.replace('(', '\\(').replace(')', '\\)'));
-
         const lines = color.colorRules.join(' ').split(color.originalColor);
         return lines.map((line, idx) =>
           html`<${ColorStyle}
@@ -294,10 +238,7 @@
 
 
     const ColorSwapWidget = (props) => {
-
       const [state, setState] = useState({ styles: processedStyles });
-
-
       const closeColorSwap = () => {
         document.querySelector('.color-swap-widget').style.display = 'none';
         document.querySelector('.color-swap-pop-button').style.display = 'inline-block';
@@ -306,8 +247,6 @@
         document.querySelector('.color-swap-widget').style.display = 'block';
         document.querySelector('.color-swap-pop-button').style.display = 'none';
       }
-
-      // console.log(state);
       const boxes = Object.keys(state.styles).map((color, idx) => {
         return html`
         <${ColorSelectorBox} 
@@ -408,7 +347,6 @@
         : 1;
       return { r: r, g: g, b: b, a: a }
     };
-
     function rgbToHex(r, g, b, a) {
       if (a) {
         return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b) + componentToHex(Math.floor((+a / 100) * 255));
@@ -423,18 +361,15 @@
         return hex.length === 1 ? "0" + hex : hex;
       }
     }
-
     function colorAndAlpha2rgba(hex, alpha) {
       const { red: r, green: g, blue: b } = hexToRgba(hex);
       const alphaPercent = Number(alpha) / 100;
       return `rgba(${r}, ${g} ${b}, ${alphaPercent})`;
     }
-
     function colorAndAlpha2rgbaHex(hex, alpha) {
       const { red: r, green: g, blue: b } = hexToRgba(hex);
       return rgbToHex(r, g, b, alpha);
     }
-
     function hexToRgba(hex) {
       var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{0,2})$/.exec(hex);
       return result ? {
