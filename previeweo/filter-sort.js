@@ -8,7 +8,7 @@
 
   function loadPreact(cb) {
     let s = document.createElement('script');
-    s.src = "https://www.weo2.com/tpn/c/C777/docs/htm-preact-standalone.js";
+    s.src = "http://www.online-dds.com/tpn/c/C777/docs/htm-preact-standalone.js";
     s.async = true;
     document.body.appendChild(s);
     if (s.readyState) {
