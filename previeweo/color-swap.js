@@ -37,7 +37,8 @@
     // get preact functions
     const html = preact.html,
       render = preact.render,
-      useState = preact.useState;
+      useState = preact.useState,
+      useRef = preact.useRef;
 
     // get document stylesheets, map only the weo webpage stylesheet and get rid of the rest. then get the css text and the selector text for those style sheets and join them together into one array.
     const originalStyles = [...document.styleSheets].map((stysh, idx) => {
@@ -59,7 +60,7 @@
             )
           : null
       } catch (e) {
-        console.error('skipping css:', document.styleSheets[idx], e);
+        console.error('skipping css');
         return null
       }
     }).filter(res => res !== null).reduce((acc, cur) =>
@@ -91,7 +92,6 @@
         ).join(' ');
         return colorRule;
       });
-
       // get back just the theme colors and put in css syntax
       return {
         cssText: cssStyles,
@@ -155,7 +155,6 @@
           }
         }));
       }
-
       return (
         html`
           <div>
@@ -228,14 +227,12 @@
               ${line}
             </${ColorStyle}>`);
       });
-
       return (html`
         <style>
           ${allStyles}
         </style>
       `)
     }
-
 
     const ColorSwapWidget = (props) => {
       const [state, setState] = useState({ styles: processedStyles });
@@ -260,38 +257,30 @@
         </${ColorSelectorBox}>
         `
       });
-
       // color swap pop up widget
       return (
         html`
           <div>
             <button 
               onClick=${popColorSwap}
-              class="color-swap-pop-button"
-              style=${{
-            display: 'inline-block',
-            padding: '1em',
-            position: 'fixed',
-            bottom: '10px',
-            right: '10px',
-            zIndex: '1000'
-          }}
+              class="color-swap-pop-button btn TPbtn TPmargin-5"
             >
-              Color Themes
+              Customize Color
             </button>
             <div
               class="color-swap-widget"
               style=${{
             display: 'none',
             minWidth: '200px',
-            maxHeight: '400px',
+            maxHeight: '80vh',
             background: '#fff',
             border: 'solid 3px #ddd',
             padding: '0',
             position: 'fixed',
-            bottom: '0',
-            right: '0',
-            overflowY: 'scroll',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            overflowY: 'auto',
             zIndex: '1000'
           }}
             >
@@ -326,9 +315,84 @@
               ${boxes}
             </div>
             <${ReColorStyles} state=${state}/>
-            ${console.log(state)}
           </div>
     `)
+    }
+
+    const LogoUpload = (props) => {
+      const fileElem = useRef(null);
+      const handleClick = () => {
+        fileElem.current.click();
+      }
+      const handleUpload = () => {
+        const fileSrc = URL.createObjectURL(fileElem.current.files[0]);
+        const img = document.createElement("img");
+        img.src = fileSrc;
+        img.style = { width: '0', height: '0', overflow: 'hidden' };
+        img.onload = function () {
+          URL.revokeObjectURL(fileSrc);
+        }
+        document.body.appendChild(img);
+        document.querySelector('.TPnavbar-brand img').src = fileSrc;
+      }
+      return (html`
+        <div class="LogoUpload">
+          <input 
+            ref=${fileElem}
+            onChange=${handleUpload}
+            type="file" 
+            id="fileElem" 
+            accept="image/*" 
+            style=${{
+          display: 'none',
+          position: 'absolute',
+          height: '1px',
+          width: '1px',
+          overflow: 'hidden',
+          clip: 'rect(1px, 1px, 1px, 1px)'
+        }}
+          />
+           <button
+            class="btn TPbtn TPmargin-5"
+            onClick=${handleClick}
+           >Upload Logo</button>
+        </div>
+      `)
+    }
+
+    const InsertBandComponent = (props) => {
+      return (html`
+        <div class="InsertBandComponent">
+          <button
+            class="btn TPbtn TPmargin-5"
+          >Insert Band Component</button>
+        </div>
+      `)
+    }
+
+    const CustomizeWidget = (props) => {
+      return (html`
+        <div 
+          class="CustomizeWidget"
+          style=${{
+          display: 'flex',
+          flexFlow: 'column nowrap',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '20px',
+          position: 'fixed',
+          bottom: '15px',
+          right: '15px',
+          zIndex: '1000',
+          background: 'rgba(255,255,255,.8)',
+          boxShadow: '4px 4px 14px rgba(0,0,0,.5)'
+        }}
+        >
+          <${ColorSwapWidget} />
+          <${LogoUpload} />
+          <${InsertBandComponent} />
+        </div>
+      `)
     }
 
     // color functions
@@ -382,7 +446,7 @@
 
     // Renders html
     render(html`
-    <${ColorSwapWidget} />
+    <${CustomizeWidget} />
     `, document.querySelector('#color-swap'));
   }
 })();
