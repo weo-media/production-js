@@ -76,11 +76,28 @@
       stysh.href
       && stysh.href.match(/webpage\.css\?vers/) !== null
     )[0].cssRules].filter(rule =>
-      rule.cssText.match(/TPweoc\d{1,}-?\d{0,}.*((<?rgba?)\([^\)]+\))/) !== null
+      rule.cssText.match(/TPweoc\d{1,}-?\d{0,}/) !== null
     ).map((cssStyRule, idx) => {
-      const themeColor = cssStyRule.cssText.match(/TPweoc\d{1,}-?\d{0,}.*((<?rgba?)\([^\)]+\))/)[1];
-      const { r, g, b, a } = rgba(themeColor);
-      const colorRegExp = new RegExp(themeColor.replace('(', '\\(').replace(')', '\\)'));
+      const preSelectedColors = cssStyRule.cssText.split('content:')[1].split(';').filter(tcolor => {
+        return tcolor.match(/((<?rgba?)\([^\)]+\))/) !== null || tcolor.match(/((<?#)[\da-f]{3,8})/i) !== null
+      }).map(tcolor => {
+        if (tcolor.match(/((<?rgba?)\([^\)]+\))/) !== null) {
+          return tcolor.match(/((<?rgba?)\([^\)]+\))/)[1]
+        }
+        if (tcolor.match(/((<?#)[\da-f]{3,8})/i) !== null) {
+          const { red, green, blue, alpha } = hexToRgba(tcolor.match(/((<?#)[\da-f]{3,8})/i)[1]);
+          return alpha !== NaN
+            ? `rgb(${red}, ${green}, ${blue})`
+            : `rgb(${red}, ${green}, ${blue}, ${alpha})`
+        }
+        return null
+      });
+      if (preSelectedColors === []) {
+        return null
+      }
+      const mainThemeColor = preSelectedColors[0];
+      const { r, g, b, a } = rgba(mainThemeColor);
+      const colorRegExp = new RegExp(mainThemeColor.replace('(', '\\(').replace(')', '\\)'));
       const cssStyles = originalStyles.filter(style => style.cssText.match(colorRegExp) !== null).map(style => style.cssText);
       const colorRules = cssStyles.map(cSty => {
         const selector = cSty.split('{')[0];
@@ -96,14 +113,14 @@
       return {
         cssText: cssStyles,
         colorRules: colorRules,
-        originalColor: themeColor,
-        id: `Color ${idx + 1}-${themeColor}`,
+        originalColor: mainThemeColor,
+        preSelectedColors: preSelectedColors,
+        id: `Color ${idx + 1}-${mainThemeColor}`,
         hexColor: rgbToHex(r, g, b),
         alpha: a * 100,
         hexAndAlpha: colorAndAlpha2rgbaHex(rgbToHex(r, g, b), a * 100)
       }
-    });
-
+    }).filter(theColorObj => theColorObj !== null);
     // put theme colors into an object so you can call it with the rgb original color
     let processedStyles = {};
     themeColors.forEach(color => { processedStyles[color.originalColor] = color });
@@ -215,7 +232,6 @@
 
     const ReColorStyles = (props) => {
       const allStyles = Object.values(props.state.styles).map(color => {
-        const colorReg = new RegExp(color.originalColor.replace('(', '\\(').replace(')', '\\)'));
         const lines = color.colorRules.join(' ').split(color.originalColor);
         return lines.map((line, idx) =>
           html`<${ColorStyle}
@@ -234,8 +250,53 @@
       `)
     }
 
+    const themeTrigger = (props) => {
+      const trigger = useRef(null);
+      const setNewTheme = () => {
+        console.log({ theme: trigger.current.attributes.theme.nodeValue });
+        const theme = trigger.current.attributes.theme.nodeValue;
+        props.setState(prevState => ({
+          ...prevState,
+          theme: theme
+        }));
+        Object.values(props.state.styles).forEach(color => {
+          props.setState(prevState => ({
+            styles: {
+              ...prevState.styles,
+              [color.originalColor]: {
+                ...prevState.styles[color.originalColor],
+                hexColor: (() => {
+                  const { r, g, b } = rgba(props.state.styles[color.originalColor].preSelectedColors[theme]);
+                  return rgbToHex(r, g, b);
+                })(),
+                // alpha: (() => {
+                //   const { a } = rgba(props.state.styles[color.originalColor].preSelectedColors[theme]);
+                //   return a;
+                // })(),
+                hexAndAlpha: (() => {
+                  const { r, g, b, a } = rgba(props.state.styles[color.originalColor].preSelectedColors[theme]);
+                  return colorAndAlpha2rgbaHex(rgbToHex(r, g, b), a * 100);
+                })()
+              }
+            }
+          }))
+        });
+      }
+      return (html`
+        <button
+          ref=${trigger}
+          theme=${props.theme}
+          class="btn TPbtn TPmargin-5"
+          onClick=${setNewTheme}
+          style=${{
+
+        }}
+        >Theme ${props.theme}</button>
+      `)
+    }
+
     const ColorSwapWidget = (props) => {
-      const [state, setState] = useState({ styles: processedStyles });
+      const [state, setState] = useState({ styles: processedStyles, theme: '0' });
       const closeColorSwap = () => {
         document.querySelector('.color-swap-widget').style.display = 'none';
         document.querySelector('.color-swap-pop-button').style.display = 'inline-block';
@@ -244,17 +305,26 @@
         document.querySelector('.color-swap-widget').style.display = 'block';
         document.querySelector('.color-swap-pop-button').style.display = 'none';
       }
-      const boxes = Object.keys(state.styles).map((color, idx) => {
+      const boxes = Object.keys(state.styles).map((color) => {
         return html`
         <${ColorSelectorBox} 
           state=${state} 
           setState=${setState} 
           key=${state.styles[color].id}
           id=${state.styles[color].id}
-          color=${state.styles[color].hexColor}
         >
           ${state.styles[color].id.toString().replace(/-rgb.*$/, '')}
         </${ColorSelectorBox}>
+        `
+      });
+      const themeTriggers = Object.values(state.styles)[0].preSelectedColors.map((color, idx) => {
+        return html`
+        <${themeTrigger} 
+          state=${state} 
+          setState=${setState} 
+          key='theme-${idx}'
+          theme=${idx}
+        ><//>
         `
       });
       // color swap pop up widget
@@ -312,6 +382,7 @@
           }}></div>
               </a>
                 </div>
+              ${themeTriggers}
               ${boxes}
             </div>
             <${ReColorStyles} state=${state}/>
@@ -397,16 +468,16 @@
 
     // color functions
     function rgba(rgbColor) {
-      const r = rgbColor && rgbColor.match(/rgba?\((\d{1,3}),\s\d{1,3},\s\d{1,3}\)/)
+      const r = rgbColor && rgbColor.match(/rgba?\((\d{1,3}),\s\d{1,3},\s\d{1,3}(,\s[\d\.]{1,})?\)/) !== null
         ? rgbColor.match(/rgba?\((\d{1,3}),\s\d{1,3},\s\d{1,3}\)/)[1]
         : 0;
-      const g = rgbColor && rgbColor.match(/rgba?\(\d{1,3},\s(\d{1,3}),\s\d{1,3}\)/)
+      const g = rgbColor && rgbColor.match(/rgba?\(\d{1,3},\s(\d{1,3}),\s\d{1,3}(,\s[\d\.]{1,})?\)/) !== null
         ? rgbColor.match(/rgba?\(\d{1,3},\s(\d{1,3}),\s\d{1,3}\)/)[1]
         : 0;
-      const b = rgbColor && rgbColor.match(/rgba?\(\d{1,3},\s\d{1,3},\s(\d{1,3})\)/)
+      const b = rgbColor && rgbColor.match(/rgba?\(\d{1,3},\s\d{1,3},\s(\d{1,3})(,\s[\d\.]{1,})?\)/) !== null
         ? rgbColor.match(/rgba?\(\d{1,3},\s\d{1,3},\s(\d{1,3})\)/)[1]
         : 0;
-      const a = rgbColor && rgbColor.match(/rgba\(\d{1,3},\s\d{1,3},\s\d{1,3},\s([\d\.]{1,})\)/)
+      const a = rgbColor && rgbColor.match(/rgba\(\d{1,3},\s\d{1,3},\s\d{1,3},\s([\d\.]{1,})\)/) !== null
         ? rgbColor.match(/rgba?\(\d{1,3},\s\d{1,3},\s\d{1,3},\s([\d\.]{1,})\)/)[1]
         : 1;
       return { r: r, g: g, b: b, a: a }
@@ -435,7 +506,7 @@
       return rgbToHex(r, g, b, alpha);
     }
     function hexToRgba(hex) {
-      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{0,2})$/.exec(hex);
+      var result = /#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{0,2})$/i.exec(hex);
       return result ? {
         red: parseInt(result[1], 16),
         green: parseInt(result[2], 16),
