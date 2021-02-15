@@ -118,7 +118,9 @@
         id: `Color ${idx + 1}-${mainThemeColor}`,
         hexColor: rgbToHex(r, g, b),
         alpha: a * 100,
-        hexAndAlpha: colorAndAlpha2rgbaHex(rgbToHex(r, g, b), a * 100)
+        hexAndAlpha: colorAndAlpha2rgbaHex(rgbToHex(r, g, b), a * 100),
+        textHexAndAlpha: colorAndAlpha2rgbaHex(rgbToHex(r, g, b), a * 100),
+        textHexColor: rgbToHex(r, g, b)
       }
     }).filter(theColorObj => theColorObj !== null);
     // put theme colors into an object so you can call it with the rgb original color
@@ -128,8 +130,9 @@
     // start the components
     // make a color box
     const ColorSelectorBox = (props) => {
+      const theColorObj = props.state.styles[props.id.toString().split('-')[1]];
       const textColor = () => {
-        const { red: r, green: g, blue: b } = hexToRgba(props.state.styles[props.id.toString().split('-')[1]].hexColor);
+        const { red: r, green: g, blue: b } = hexToRgba(theColorObj.hexColor);
         if (Number(r) + Number(g) + Number(b) < 400) {
           return '#ffffff'
         } else {
@@ -137,7 +140,7 @@
         }
       };
       const textShadowColor = () => {
-        const { red: r, green: g, blue: b } = hexToRgba(props.state.styles[props.id.toString().split('-')[1]].hexColor);
+        const { red: r, green: g, blue: b } = hexToRgba(theColorObj.hexColor);
         if (Number(r) + Number(g) + Number(b) < 400) {
           return '#000000 0px 0px 6px'
         } else {
@@ -158,6 +161,20 @@
           }
         }));
       }
+      const handleTextColorChange = e => {
+        const colorId = e.target.id.toString().split('-')[1];
+        const hexValue = e.target.value;
+        props.setState(prevState => ({
+          styles: {
+            ...prevState.styles,
+            [colorId]: {
+              ...prevState.styles[colorId],
+              textHexColor: hexValue,
+              textHexAndAlpha: colorAndAlpha2rgbaHex(hexValue, prevState.styles[colorId].alpha)
+            }
+          }
+        }));
+      }
       const handleAlphaChange = e => {
         const colorId = e.target.id.toString().split('-')[1];
         const alphaValue = e.target.value;
@@ -167,7 +184,7 @@
             [colorId]: {
               ...prevState.styles[colorId],
               alpha: alphaValue,
-              hexAndAlpha: colorAndAlpha2rgbaHex(props.state.styles[props.id.toString().split('-')[1]].hexColor, alphaValue)
+              hexAndAlpha: colorAndAlpha2rgbaHex(theColorObj.hexColor, alphaValue)
             }
           }
         }));
@@ -181,18 +198,37 @@
             minHeight: '50px',
             padding: '.5em',
             margin: '.5em',
-            display: "block",
-            background: (props.state.styles[props.id.toString().split('-')[1]].hexAndAlpha),
-            color: textColor()
+            display: "inline-block",
+            background: (theColorObj.hexAndAlpha),
+            border: `3px solid ${textColor()}`
           }}
             >
+              <p style=${{ color: textColor(), fontSize: '16px', fontWeight: 'normal' }}>${props.children} Non Text</p>
               <input
                 type="color" 
                 id="${props.id}" 
-                value=${props.state.styles[props.id.toString().split('-')[1]].hexColor}
+                value=${theColorObj.hexColor}
                 onInput=${handleColorChange}
               />
-              ${props.children}
+            </label>
+            <label
+              style=${{
+            minWidth: '50px',
+            minHeight: '50px',
+            padding: '.5em',
+            margin: '.5em',
+            display: "inline-block",
+            background: (theColorObj.textHexAndAlpha),
+            border: `3px solid ${textColor()}`
+          }}
+            >
+            <p style=${{ color: textColor(), fontSize: '16px', fontWeight: 'normal' }}>${props.children} Text</p>
+              <input
+                type="color" 
+                id="${props.id}" 
+                value=${theColorObj.textHexColor}
+                onInput=${handleTextColorChange}
+              />
             </label>
             <label
               style=${{
@@ -201,9 +237,9 @@
             padding: '.5em',
             margin: '.5em',
             display: "block",
-            background: props.state.styles[props.id.toString().split('-')[1]].hexAndAlpha,
-            color: textColor(),
+            background: theColorObj.hexAndAlpha,
             textShadow: textShadowColor(),
+            border: `3px solid ${textColor()}`
           }}
             >
               <input
@@ -212,10 +248,10 @@
                 name="${props.id}-alpha"
                 min="0"
                 max="100"
-                value=${props.state.styles[props.id.toString().split('-')[1]].alpha}
+                value=${theColorObj.alpha}
                 onInput=${handleAlphaChange}
               />
-              Alpha Transparency
+              <p style=${{ color: textColor(), fontSize: '16px', fontWeight: 'normal' }}>Alpha Transparency</p>
             </label>
           </div>
         `
@@ -233,15 +269,20 @@
     const ReColorStyles = (props) => {
       const allStyles = Object.values(props.state.styles).map(color => {
         const lines = color.colorRules.join(' ').split(color.originalColor);
-        return lines.map((line, idx) =>
-          html`<${ColorStyle}
+        return lines.map((line, idx) => {
+          // set either for css {color: ''} or everything besides css {color: ''}
+          const isTextOnly = line.match(/{\s?[^-]?color:/) !== null
+            ? props.state.styles[color.originalColor].textHexAndAlpha
+            : props.state.styles[color.originalColor].hexAndAlpha;
+          return (html`<${ColorStyle}
             key="${color.id}-ref${idx}"
             color=${(idx + 1) === lines.length
               ? ''
-              : props.state.styles[color.originalColor].hexAndAlpha}
+              : isTextOnly}
             >
               ${line}
-            </${ColorStyle}>`);
+            </${ColorStyle}>`)
+        });
       });
       return (html`
         <style>
@@ -250,6 +291,7 @@
       `)
     }
 
+    // button at the top of color customizer that reset colors to theme colors
     const themeTrigger = (props) => {
       const trigger = useRef(null);
       const setNewTheme = () => {
@@ -269,14 +311,18 @@
                   const { r, g, b } = rgba(props.state.styles[color.originalColor].preSelectedColors[theme]);
                   return rgbToHex(r, g, b);
                 })(),
-                // alpha: (() => {
-                //   const { a } = rgba(props.state.styles[color.originalColor].preSelectedColors[theme]);
-                //   return a;
-                // })(),
                 hexAndAlpha: (() => {
                   const { r, g, b, a } = rgba(props.state.styles[color.originalColor].preSelectedColors[theme]);
                   return colorAndAlpha2rgbaHex(rgbToHex(r, g, b), a * 100);
-                })()
+                })(),
+                textHexColor: (() => {
+                  const { r, g, b } = rgba(props.state.styles[color.originalColor].preSelectedColors[theme]);
+                  return rgbToHex(r, g, b);
+                })(),
+                textHexAndAlpha: (() => {
+                  const { r, g, b, a } = rgba(props.state.styles[color.originalColor].preSelectedColors[theme]);
+                  return colorAndAlpha2rgbaHex(rgbToHex(r, g, b), a * 100);
+                })(),
               }
             }
           }))
@@ -295,6 +341,7 @@
       `)
     }
 
+    // the panel that houses the color customizer, the image upload, and the component additions
     const ColorSwapWidget = (props) => {
       const [state, setState] = useState({ styles: processedStyles, theme: '0' });
       const closeColorSwap = () => {
