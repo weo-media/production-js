@@ -38,7 +38,9 @@
     const html = preact.html,
       render = preact.render,
       useState = preact.useState,
-      useRef = preact.useRef;
+      useRef = preact.useRef,
+      useCallback = preact.useCallback,
+      useEffect = preact.useEffect;
 
     // get document stylesheets, map only the weo webpage stylesheet and get rid of the rest. then get the css text and the selector text for those style sheets and join them together into one array.
     const originalStyles = [...document.styleSheets].map((stysh, idx) => {
@@ -78,19 +80,24 @@
     )[0].cssRules].filter(rule =>
       rule.cssText.match(/TPweoc\d{1,}-?\d{0,}/) !== null
     ).map((cssStyRule, idx) => {
+      if (idx === 4) {
+        console.log(cssStyRule);
+      }
       const preSelectedColors = cssStyRule.cssText.split('content:')[1].split(';').filter(tcolor => {
         return tcolor.match(/((<?rgba?)\([^\)]+\))/) !== null || tcolor.match(/((<?#)[\da-f]{3,8})/i) !== null
       }).map(tcolor => {
         if (tcolor.match(/((<?rgba?)\([^\)]+\))/) !== null) {
-          return tcolor.match(/((<?rgba?)\([^\)]+\))/)[1]
+          const { r, g, b, a } = rgba(tcolor.match(/((<?rgba?)\([^\)]+\))/)[1]);
+          return `rgba(${r}, ${g}, ${b}, ${a})`
         }
         if (tcolor.match(/((<?#)[\da-f]{3,8})/i) !== null) {
           const { red, green, blue, alpha } = hexToRgba(tcolor.match(/((<?#)[\da-f]{3,8})/i)[1]);
-          return alpha !== NaN
+          const res = !alpha
             ? `rgb(${red}, ${green}, ${blue})`
-            : `rgb(${red}, ${green}, ${blue}, ${alpha})`
+            : `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+          return res
         }
-        return null
+        console.log('problem with:,', tcolor);
       });
       if (preSelectedColors === []) {
         return null
@@ -117,20 +124,21 @@
         preSelectedColors: preSelectedColors,
         id: `Color ${idx + 1}-${mainThemeColor}`,
         hexColor: rgbToHex(r, g, b),
-        alpha: a * 100,
-        hexAndAlpha: colorAndAlpha2rgbaHex(rgbToHex(r, g, b), a * 100),
-        textHexAndAlpha: colorAndAlpha2rgbaHex(rgbToHex(r, g, b), a * 100),
+        alpha: Number(a) * 100,
+        hexAndAlpha: colorAndAlpha2rgbaHex(rgbToHex(r, g, b), Number(a) * 100),
+        textHexAndAlpha: colorAndAlpha2rgbaHex(rgbToHex(r, g, b), Number(a) * 100),
         textHexColor: rgbToHex(r, g, b)
       }
     }).filter(theColorObj => theColorObj !== null);
+
     // put theme colors into an object so you can call it with the rgb original color
     let processedStyles = {};
-    themeColors.forEach(color => { processedStyles[color.originalColor] = color });
+    themeColors.forEach(color => { processedStyles[color.id] = color });
 
     // start the components
     // make a color box
     const ColorSelectorBox = (props) => {
-      const theColorObj = props.state.styles[props.id.toString().split('-')[1]];
+      const theColorObj = props.state.styles[props.id];
       const textColor = () => {
         const { red: r, green: g, blue: b } = hexToRgba(theColorObj.hexColor);
         if (Number(r) + Number(g) + Number(b) < 400) {
@@ -148,7 +156,7 @@
         }
       };
       const handleColorChange = e => {
-        const colorId = e.target.id.toString().split('-')[1];
+        const colorId = e.target.id;
         const hexValue = e.target.value;
         props.setState(prevState => ({
           styles: {
@@ -162,7 +170,7 @@
         }));
       }
       const handleTextColorChange = e => {
-        const colorId = e.target.id.toString().split('-')[1];
+        const colorId = e.target.id;
         const hexValue = e.target.value;
         props.setState(prevState => ({
           styles: {
@@ -176,7 +184,7 @@
         }));
       }
       const handleAlphaChange = e => {
-        const colorId = e.target.id.toString().split('-')[1];
+        const colorId = e.target.id;
         const alphaValue = e.target.value;
         props.setState(prevState => ({
           styles: {
@@ -199,7 +207,7 @@
             padding: '.5em',
             margin: '.5em',
             display: "inline-block",
-            background: (theColorObj.hexAndAlpha),
+            background: theColorObj.hexAndAlpha,
             border: `3px solid ${textColor()}`
           }}
             >
@@ -218,7 +226,7 @@
             padding: '.5em',
             margin: '.5em',
             display: "inline-block",
-            background: (theColorObj.textHexAndAlpha),
+            background: theColorObj.textHexAndAlpha,
             border: `3px solid ${textColor()}`
           }}
             >
@@ -272,8 +280,8 @@
         return lines.map((line, idx) => {
           // set either for css {color: ''} or everything besides css {color: ''}
           const isTextOnly = line.match(/{\s?[^-]?color:/) !== null
-            ? props.state.styles[color.originalColor].textHexAndAlpha
-            : props.state.styles[color.originalColor].hexAndAlpha;
+            ? props.state.styles[color.id].textHexAndAlpha
+            : props.state.styles[color.id].hexAndAlpha;
           return (html`<${ColorStyle}
             key="${color.id}-ref${idx}"
             color=${(idx + 1) === lines.length
@@ -295,7 +303,6 @@
     const themeTrigger = (props) => {
       const trigger = useRef(null);
       const setNewTheme = () => {
-        console.log({ theme: trigger.current.attributes.theme.nodeValue });
         const theme = trigger.current.attributes.theme.nodeValue;
         props.setState(prevState => ({
           ...prevState,
@@ -305,23 +312,23 @@
           props.setState(prevState => ({
             styles: {
               ...prevState.styles,
-              [color.originalColor]: {
-                ...prevState.styles[color.originalColor],
+              [color.id]: {
+                ...prevState.styles[color.id],
                 hexColor: (() => {
-                  const { r, g, b } = rgba(props.state.styles[color.originalColor].preSelectedColors[theme]);
+                  const { r, g, b } = rgba(props.state.styles[color.id].preSelectedColors[theme]);
                   return rgbToHex(r, g, b);
                 })(),
                 hexAndAlpha: (() => {
-                  const { r, g, b, a } = rgba(props.state.styles[color.originalColor].preSelectedColors[theme]);
-                  return colorAndAlpha2rgbaHex(rgbToHex(r, g, b), a * 100);
+                  const { r, g, b, a } = rgba(props.state.styles[color.id].preSelectedColors[theme]);
+                  return colorAndAlpha2rgbaHex(rgbToHex(r, g, b), Number(a) * 100);
                 })(),
                 textHexColor: (() => {
-                  const { r, g, b } = rgba(props.state.styles[color.originalColor].preSelectedColors[theme]);
+                  const { r, g, b } = rgba(props.state.styles[color.id].preSelectedColors[theme]);
                   return rgbToHex(r, g, b);
                 })(),
                 textHexAndAlpha: (() => {
-                  const { r, g, b, a } = rgba(props.state.styles[color.originalColor].preSelectedColors[theme]);
-                  return colorAndAlpha2rgbaHex(rgbToHex(r, g, b), a * 100);
+                  const { r, g, b, a } = rgba(props.state.styles[color.id].preSelectedColors[theme]);
+                  return colorAndAlpha2rgbaHex(rgbToHex(r, g, b), Number(a) * 100);
                 })(),
               }
             }
@@ -344,6 +351,19 @@
     // the panel that houses the color customizer, the image upload, and the component additions
     const ColorSwapWidget = (props) => {
       const [state, setState] = useState({ styles: processedStyles, theme: '0' });
+      const escFunction = useCallback((event) => {
+        if (event.keyCode === 27) {
+          closeColorSwap();
+        }
+      }, []);
+
+      useEffect(() => {
+        document.addEventListener("keydown", escFunction, false);
+
+        return () => {
+          document.removeEventListener("keydown", escFunction, false);
+        };
+      }, []);
       const closeColorSwap = () => {
         document.querySelector('.color-swap-widget').style.display = 'none';
         document.querySelector('.color-swap-pop-button').style.display = 'inline-block';
@@ -352,15 +372,15 @@
         document.querySelector('.color-swap-widget').style.display = 'block';
         document.querySelector('.color-swap-pop-button').style.display = 'none';
       }
-      const boxes = Object.keys(state.styles).map((color) => {
+      const boxes = Object.values(state.styles).map((color) => {
         return html`
         <${ColorSelectorBox} 
           state=${state} 
           setState=${setState} 
-          key=${state.styles[color].id}
-          id=${state.styles[color].id}
+          key=${state.styles[color.id].id}
+          id=${state.styles[color.id].id}
         >
-          ${state.styles[color].id.toString().replace(/-rgb.*$/, '')}
+          ${state.styles[color.id].id.toString().replace(/-rgba?.*$/, '')}
         </${ColorSelectorBox}>
         `
       });
@@ -451,7 +471,9 @@
           URL.revokeObjectURL(fileSrc);
         }
         document.body.appendChild(img);
-        document.querySelector('.TPnavbar-brand img').src = fileSrc;
+        props.mobile
+          ? document.querySelector('.TPnavbar-brand-alt img').src = fileSrc
+          : document.querySelector('.TPnavbar-brand img').src = fileSrc;
       }
       return (html`
         <div class="LogoUpload">
@@ -473,7 +495,7 @@
            <button
             class="btn TPbtn TPmargin-5"
             onClick=${handleClick}
-           >Upload Logo</button>
+           >Upload ${props.mobile ? 'Mobile' : 'Desktop'} Logo</button>
         </div>
       `)
     }
@@ -508,6 +530,7 @@
         >
           <${ColorSwapWidget} />
           <${LogoUpload} />
+          <${LogoUpload} mobile />
           <${InsertBandComponent} />
         </div>
       `)
@@ -515,19 +538,20 @@
 
     // color functions
     function rgba(rgbColor) {
-      const r = rgbColor && rgbColor.match(/rgba?\((\d{1,3}),\s\d{1,3},\s\d{1,3}(,\s[\d\.]{1,})?\)/) !== null
-        ? rgbColor.match(/rgba?\((\d{1,3}),\s\d{1,3},\s\d{1,3}\)/)[1]
+      const r = rgbColor && rgbColor.match(/rgba?\((\d{1,3}),\s?\d{1,3},\s?\d{1,3}(,\s?[\d\.]{1,})?\)/) !== null
+        ? rgbColor.match(/rgba?\((\d{1,3}),\s?\d{1,3},\s?\d{1,3}(,\s?[\d\.]{1,})?\)/)[1]
         : 0;
-      const g = rgbColor && rgbColor.match(/rgba?\(\d{1,3},\s(\d{1,3}),\s\d{1,3}(,\s[\d\.]{1,})?\)/) !== null
-        ? rgbColor.match(/rgba?\(\d{1,3},\s(\d{1,3}),\s\d{1,3}\)/)[1]
+      const g = rgbColor && rgbColor.match(/rgba?\(\d{1,3},\s?(\d{1,3}),\s?\d{1,3}(,\s?[\d\.]{1,})?\)/) !== null
+        ? rgbColor.match(/rgba?\(\d{1,3},\s?(\d{1,3}),\s?\d{1,3}(,\s?[\d\.]{1,})?\)/)[1]
         : 0;
-      const b = rgbColor && rgbColor.match(/rgba?\(\d{1,3},\s\d{1,3},\s(\d{1,3})(,\s[\d\.]{1,})?\)/) !== null
-        ? rgbColor.match(/rgba?\(\d{1,3},\s\d{1,3},\s(\d{1,3})\)/)[1]
+      const b = rgbColor && rgbColor.match(/rgba?\(\d{1,3},\s?\d{1,3},\s?(\d{1,3})(,\s?[\d\.]{1,})?\)/) !== null
+        ? rgbColor.match(/rgba?\(\d{1,3},\s?\d{1,3},\s?(\d{1,3})(,\s?[\d\.]{1,})?\)/)[1]
         : 0;
-      const a = rgbColor && rgbColor.match(/rgba\(\d{1,3},\s\d{1,3},\s\d{1,3},\s([\d\.]{1,})\)/) !== null
-        ? rgbColor.match(/rgba?\(\d{1,3},\s\d{1,3},\s\d{1,3},\s([\d\.]{1,})\)/)[1]
+      const a = rgbColor && rgbColor.match(/rgba\(\d{1,3},\s?\d{1,3},\s?\d{1,3},\s?([\d\.]{1,})\)/) !== null
+        ? rgbColor.match(/rgba\(\d{1,3},\s?\d{1,3},\s?\d{1,3},\s?([\d\.]{1,})\)/)[1]
         : 1;
-      return { r: r, g: g, b: b, a: a }
+      const aRes = a.toString().match(/^\s?\./) && a.toString().match(/^\s?\./)[0] !== null ? `0${a}` : a;
+      return { r: r, g: g, b: b, a: aRes }
     };
     function rgbToHex(r, g, b, a) {
       if (a) {
