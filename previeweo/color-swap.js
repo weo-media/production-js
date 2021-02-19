@@ -504,9 +504,13 @@
 ${colorObj.id.toString().replace(/-rgba?.*$/, '')} non text: ${colorObj.alpha < 100 ? colorAndAlpha2rgba(colorObj.hexColor, colorObj.alpha) : colorObj.hexColor}
 ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 ? colorAndAlpha2rgba(colorObj.textHexColor, colorObj.alpha) : colorObj.textHexColor}
 `).join('');
-      const handleClick = () => {
+      const handleClick = (e) => {
         copyElem.current.select();
         document.execCommand("copy");
+        e.target.classList.add('btn-success');
+        setTimeout(() => {
+          e.target.classList.remove('btn-success');
+        }, 1500);
       }
       return (html`
         <div class="CopyStylesToClipboard">
