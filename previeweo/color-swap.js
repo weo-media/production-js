@@ -80,9 +80,6 @@
     )[0].cssRules].filter(rule =>
       rule.cssText.match(/TPweoc\d{1,}-?\d{0,}/) !== null
     ).map((cssStyRule, idx) => {
-      if (idx === 4) {
-        console.log(cssStyRule);
-      }
       const preSelectedColors = cssStyRule.cssText.split('content:')[1].split(';').filter(tcolor => {
         return tcolor.match(/((<?rgba?)\([^\)]+\))/) !== null || tcolor.match(/((<?#)[\da-f]{3,8})/i) !== null
       }).map(tcolor => {
@@ -350,7 +347,8 @@
 
     // the panel that houses the color customizer, the image upload, and the component additions
     const ColorSwapWidget = (props) => {
-      const [state, setState] = useState({ styles: processedStyles, theme: '0' });
+      const state = props.state;
+      const setState = props.setState;
       const escFunction = useCallback((event) => {
         if (event.keyCode === 27) {
           closeColorSwap();
@@ -500,17 +498,41 @@
       `)
     }
 
-    const InsertBandComponent = (props) => {
+    const CopyStylesToClipboard = (props) => {
+      const copyElem = useRef(null);
+      const colorsForCopy = Object.values(props.state.styles).map(colorObj => `
+${colorObj.id.toString().replace(/-rgba?.*$/, '')} non text: ${colorObj.alpha < 100 ? colorAndAlpha2rgba(colorObj.hexColor, colorObj.alpha) : colorObj.hexColor}
+${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 ? colorAndAlpha2rgba(colorObj.textHexColor, colorObj.alpha) : colorObj.textHexColor}
+`).join('');
+      const handleClick = () => {
+        copyElem.current.select();
+        document.execCommand("copy");
+      }
       return (html`
-        <div class="InsertBandComponent">
-          <button
+        <div class="CopyStylesToClipboard">
+          <textarea
+              ref=${copyElem}
+              type="text"
+              id="copyElem"
+              value=${colorsForCopy}
+              style=${{
+          position: 'fixed',
+          bottom: '-60px',
+          // height: '1px',
+          // width: '1px',
+          // overflow: 'hidden',
+
+        }}></textarea>
+          ${document.queryCommandSupported('copy') && html`<button
             class="btn TPbtn TPmargin-5"
-          >Insert Band Component</button>
+            onClick=${handleClick}
+          >Copy Styles</button>`}
         </div>
       `)
     }
 
     const CustomizeWidget = (props) => {
+      const [state, setState] = useState({ styles: processedStyles, theme: '0' });
       return (html`
         <div 
           class="CustomizeWidget"
@@ -528,10 +550,10 @@
           boxShadow: '4px 4px 14px rgba(0,0,0,.5)'
         }}
         >
-          <${ColorSwapWidget} />
+          <${ColorSwapWidget} state=${state} setState=${setState} />
           <${LogoUpload} />
           <${LogoUpload} mobile />
-          <${InsertBandComponent} />
+          <${CopyStylesToClipboard} state=${state} />
         </div>
       `)
     }
