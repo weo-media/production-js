@@ -464,7 +464,7 @@
         const fileSrc = URL.createObjectURL(fileElem.current.files[0]);
         const img = document.createElement("img");
         img.src = fileSrc;
-        img.style = { width: '0', height: '0', overflow: 'hidden' };
+        img.style = 'width: 0; height: 0; overflow: hidden;';
         img.onload = function () {
           URL.revokeObjectURL(fileSrc);
         }
@@ -510,22 +510,19 @@ ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 
         e.target.classList.add('btn-success');
         setTimeout(() => {
           e.target.classList.remove('btn-success');
-        }, 1500);
+        }, 3000);
       }
       return (html`
         <div class="CopyStylesToClipboard">
-          <textarea
-              ref=${copyElem}
-              type="text"
-              id="copyElem"
-              value=${colorsForCopy}
-              style=${{
+          <textarea            
+            ref=${copyElem}
+            type="text"
+            id="copyElem"
+            value=${colorsForCopy}
+            readonly
+            style=${{
           position: 'fixed',
           bottom: '-60px',
-          // height: '1px',
-          // width: '1px',
-          // overflow: 'hidden',
-
         }}></textarea>
           ${document.queryCommandSupported('copy') && html`<button
             class="btn TPbtn TPmargin-5"
