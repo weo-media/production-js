@@ -8,7 +8,7 @@
 
   function loadPreact(cb) {
     let s = document.createElement('script');
-    s.src = "http://www.online-dds.com/tpn/c/C777/docs/htm-preact-standalone.js";
+    s.src = "https://www.weo2.com/tpn/c/C777/docs/htm-preact-standalone.js";
     s.async = true;
     document.body.appendChild(s);
     if (s.readyState) {
@@ -357,7 +357,8 @@
 
       useEffect(() => {
         document.addEventListener("keydown", escFunction, false);
-
+        // listner added for each lifecycle event, returns removal to get rid of last one added.
+        // if you don't return the removal call back, then the listners stack up. 
         return () => {
           document.removeEventListener("keydown", escFunction, false);
         };
@@ -532,6 +533,100 @@ ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 
       `)
     }
 
+    const bandThumbnail = (props) => {
+      return (html`
+        <img 
+          src=${props.src} 
+          alt=${props.alt} 
+          id=${props.id}
+          draggable=${props.draggable}
+        />
+      `)
+    }
+
+    const InsertBand = (props) => {
+      const escFunction = useCallback((event) => {
+        if (event.keyCode === 27) {
+          closeInsertBand();
+        }
+      }, []);
+
+      useEffect(() => {
+        document.addEventListener("keydown", escFunction, false);
+
+        return () => {
+          document.removeEventListener("keydown", escFunction, false);
+        };
+      }, []);
+      const closeInsertBand = () => {
+        document.querySelector('.insert-band-widget').style.display = 'none';
+        document.querySelector('.insert-band-pop-button').style.display = 'inline-block';
+      }
+      const popInsertBand = () => {
+        document.querySelector('.insert-band-widget').style.display = 'block';
+        document.querySelector('.insert-band-pop-button').style.display = 'none';
+      }
+
+      const bandThumbnails = '';
+      return (html`
+        <div>
+          <button
+              onClick=${popInsertBand}
+              class="insert-band-pop-button btn TPbtn TPmargin-5"
+            >
+              Insert a new band
+            </button>
+            <div
+              class="insert-band-widget"
+              style=${{
+          display: 'none',
+          minWidth: '200px',
+          maxHeight: '80vh',
+          background: '#fff',
+          border: 'solid 3px #ddd',
+          padding: '0',
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          overflowY: 'auto',
+          zIndex: '1000'
+        }}
+            >
+              <div class="widget-top-bar" style=${{
+          minHeight: '18px',
+          background: '#ddd',
+          position: 'relative'
+        }}>
+                <a 
+                  class="close-insert-band" 
+                  onClick=${closeInsertBand} 
+                  style=${{
+          position: 'absolute',
+          top: '7px',
+          right: '18px',
+          zIndex: '1'
+        }}>
+                <div style=${{
+          transform: 'rotate(45deg)',
+          position: 'absolute',
+          border: 'solid 1px #000',
+          width: '12px'
+        }}></div>
+                <div style=${{
+          transform: 'rotate(-45deg)',
+          position: 'absolute',
+          border: 'solid 1px #333',
+          width: '12px'
+        }}></div>
+              </a>
+                </div>
+              ${bandThumbnails}
+            </div>
+        </div>
+      `)
+    }
+
     const CustomizeWidget = (props) => {
       const [state, setState] = useState({ styles: processedStyles, theme: '0' });
       return (html`
@@ -555,6 +650,7 @@ ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 
           <${LogoUpload} />
           <${LogoUpload} mobile />
           <${CopyStylesToClipboard} state=${state} />
+          <${InsertBand} />
         </div>
       `)
     }
