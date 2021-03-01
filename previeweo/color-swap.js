@@ -132,6 +132,7 @@
     let processedStyles = {};
     themeColors.forEach(color => { processedStyles[color.id] = color });
 
+
     // start the components
     // make a color box
     const ColorSelectorBox = (props) => {
@@ -289,8 +290,10 @@
             </${ColorStyle}>`)
         });
       });
+      const bandDropInStylesMain = `.drop-in > * { transform: scale(0.1); transform-origin: top left; } .drop-in { width: calc(1170px * 0.1); overflow: hidden; margin: 15px auto; border: 3px solid #dddddd; cursor: pointer;} .drop-in:hover, .drop-in:focus, .drop-in:active {background: #eeeeee} .drop-in>*:before { content: ''; display: block; position: absolute; width: 100%; z-index: 1; }`;
       return (html`
         <style>
+          ${bandDropInStylesMain}
           ${allStyles}
         </style>
       `)
@@ -430,20 +433,23 @@
                   onClick=${closeColorSwap} 
                   style=${{
             position: 'absolute',
-            top: '7px',
-            right: '18px',
-            zIndex: '1'
+            top: '-6px',
+            right: '0px',
+            padding: '1em',
+            zIndex: '1',
+            cursor: 'pointer'
           }}>
                 <div style=${{
-            transform: 'rotate(45deg)',
+            transform: 'rotate(45deg) translate(-5px, 2px)',
             position: 'absolute',
             border: 'solid 1px #000',
-            width: '12px'
+            width: '12px',
+
           }}></div>
                 <div style=${{
-            transform: 'rotate(-45deg)',
+            transform: 'rotate(-45deg) translate(-2px, -5px)',
             position: 'absolute',
-            border: 'solid 1px #333',
+            border: 'solid 1px #000',
             width: '12px'
           }}></div>
               </a>
@@ -533,14 +539,16 @@ ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 
       `)
     }
 
-    const bandThumbnail = (props) => {
+    // InsertBand components
+    const DroppableThumbnail = (props) => {
+      const theHeightStyle = `.${props.name}.drop-in { height: calc(${props.height}px * 0.1); } .${props.name}.drop-in>*:before { height: ${props.height}px; }`;
       return (html`
-        <img 
-          src=${props.src} 
-          alt=${props.alt} 
-          id=${props.id}
-          draggable=${props.draggable}
-        />
+        <div class="TPBand ${props.name} drop-in" draggable=${props.draggable} >
+          <style>
+            ${theHeightStyle}
+          </style>
+          ${props.children}
+        </div>
       `)
     }
 
@@ -566,8 +574,6 @@ ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 
         document.querySelector('.insert-band-widget').style.display = 'block';
         document.querySelector('.insert-band-pop-button').style.display = 'none';
       }
-
-      const bandThumbnails = '';
       return (html`
         <div>
           <button
@@ -603,32 +609,272 @@ ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 
                   onClick=${closeInsertBand} 
                   style=${{
           position: 'absolute',
-          top: '7px',
-          right: '18px',
-          zIndex: '1'
+          top: '-6px',
+          right: '0px',
+          padding: '1em',
+          zIndex: '1',
+          cursor: 'pointer'
         }}>
                 <div style=${{
-          transform: 'rotate(45deg)',
+          transform: 'rotate(45deg) translate(-5px, 2px)',
+          position: 'absolute',
+          border: 'solid 1px #000',
+          width: '12px',
+
+        }}></div>
+                <div style=${{
+          transform: 'rotate(-45deg) translate(-2px, -5px)',
           position: 'absolute',
           border: 'solid 1px #000',
           width: '12px'
         }}></div>
-                <div style=${{
-          transform: 'rotate(-45deg)',
-          position: 'absolute',
-          border: 'solid 1px #333',
-          width: '12px'
-        }}></div>
               </a>
-                </div>
-              ${bandThumbnails}
             </div>
+            <div style=${{padding: '0 1em'}}>
+              <h5>
+                To add a component:<br />
+                <strong>Click</strong> and <strong>Drag</strong> one onto the design,<br />between two main sections.
+              </h5>
+            </div>
+            <${DroppableThumbnail} name="smile-gallery1" height="302" draggable>
+              <div class="TPbw TPBandCol">
+                <div style=${{padding: '50px 0'}}>
+                  <div class="TProw TParticle">
+                    <div class="TPcol-md-6">
+                      <img
+                        class="TPimgLeft TPimg-responsive"
+                        src="http://fpoimg.com/555x185?text=Before and After Photo"
+                        border="0"
+                        alt="Before after smile"
+                        title="Before after smile"
+                        width="100%"
+                        align="left"
+                      />
+                    </div>
+                    <div class="TPcol-md-6 TPtext-center">
+                      <div
+                        data-aos="fade-right"
+                        data-aos-duration="900"
+                        class="aos-init aos-animate"
+                      >
+                        <h2 class="TPline">Smile Gallery</h2>
+                      </div>
+                      <div
+                        data-aos="fade-right"
+                        data-aos-duration="900"
+                        data-aos-delay="200"
+                        class="aos-init aos-animate"
+                      >
+                        Our mission is to create great looking, healthy smiles that enable our
+                        patients to project the image they desire for themselves with the
+                        utmost pride and confidence. We believe in listening first, and then
+                        delivering individualized, uncompromised care.<br title="b11" />
+                        <br title="b11" /><a
+                          class="TPbtn TPbtn-primary TPbtn-2 TPbtn-2left"
+                          href="#"
+                          title="Photo Gallery D.D.S."
+                          >View our smile results</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <//>
+            <${DroppableThumbnail} name="specials1" height="585" draggable>
+              <div class="TPbw TPBandCol">
+                <div style=${{padding: '84px 0'}}>
+                  <div class="TProw">
+                    <div class="TPcol-xs-12 TPtext-center">
+                      <div
+                        data-aos="fade-up"
+                        data-aos-delay="600"
+                        data-aos-duration="800"
+                        class="aos-init aos-animate"
+                      >
+                        <h2>Now Offering New Patient Specials!</h2>
+                        <br title="b11" />
+                        <hr />
+                        <span class="TParticle"
+                          >We want your visits to be efficient and gentle.<br title="b11" />We
+                          are dedicated to being your dentist.</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <br title="b11" />
+                  <div class="TProw">
+                    <div class="TPcol-md-4 TPtext-center">
+                      <div
+                        data-aos="fade-up"
+                        data-aos-delay="800"
+                        data-aos-duration="800"
+                        class="aos-init aos-animate"
+                      >
+                        <div class="TPcard">
+                          <div class="TPcard-border">
+                            <h3 class="TPtext-color2">
+                              Adult's<br title="b11" />Complete Checkup
+                            </h3>
+                            <br title="b11" />
+                            <hr />
+                            <div class="TPamount">
+                              <span class="TPdollar">$</span> <span>88</span>
+                            </div>
+                            <br title="b11" />
+                            <div class="TPtext-sub">
+                              Includes exam and cleaning for healthy patients.
+                            </div>
+                            <br title="b11" /><a class="TPbtn TPbtn-primary"
+                              >Request an appointment</a
+                            >
+                            <br title="b11" />
+                          </div>
+                          <br title="b11" />
+                          <div class="TPvalid">
+                            Limited time offer.<br title="b11" />For new patients only.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="TPcol-md-4 TPtext-center">
+                      <div
+                        data-aos="fade-up"
+                        data-aos-delay="1000"
+                        data-aos-duration="800"
+                        class="aos-init aos-animate"
+                      >
+                        <div class="TPcard">
+                          <div class="TPcard-border">
+                            <h3 class="TPtext-color2">Emergency<br title="b11" />Exam</h3>
+                            <br title="b11" />
+                            <hr />
+                            <div class="TPamount">
+                              <span class="TPdollar">$</span> <span>29</span>
+                            </div>
+                            <br title="b11" />
+                            <div class="TPtext-sub">Includes exam with complete X-rays.</div>
+                            <br title="b11" /><a class="TPbtn TPbtn-primary"
+                              >Request an appointment</a>
+                            <br title="b11" />
+                          </div>
+                          <br title="b11" />
+                          <div class="TPvalid">
+                            Cleaning not included. Limited time offer. For new patients only.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="TPcol-md-4 TPtext-center">
+                      <div
+                        data-aos="fade-up"
+                        data-aos-delay="1200"
+                        data-aos-duration="800"
+                        class="aos-init aos-animate"
+                      >
+                        <div class="TPcard">
+                          <div class="TPcard-border">
+                            <h3 class="TPtext-color2">
+                              Implant<br title="b11" />Consultation
+                            </h3>
+                            <br title="b11" />
+                            <hr />
+                            <div class="TPamount">
+                              <span class="TPdollar"></span> <span>FREE</span>
+                            </div>
+                            <br title="b11" />
+                            <div class="TPtext-sub">
+                              Includes consultation and panoramic radiograph.
+                            </div>
+                            <br title="b11" /><a class="TPbtn TPbtn-primary"
+                              >Request an appointment</a
+                            >
+                            <br title="b11" />
+                          </div>
+                          <br title="b11" />
+                          <div class="TPvalid">
+                            Limited time offer.<br title="b11" />For new patients only.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <//>
+            <${DroppableThumbnail} name="specials2" height="466" draggable>
+              <div class="TPbw TPBandCol">
+                <div style=${{padding:'40px 0'}}>
+                  <table
+                    width="100%"
+                    class="TPartBox"
+                    border="0"
+                    cellspacing="0"
+                    cellpadding="0"
+                  >
+                    <tbody>
+                      <tr valign="top">
+                        <td id="" class="TParticle">
+                          <div class="TProw">
+                            <div class="TPcol-md-6">
+                              <div
+                                data-aos="fade-right"
+                                data-aos-duration="1000"
+                                class="aos-init aos-animate"
+                              >
+                                <h1 class="H1">
+                                  Welcome to our Dental Office<br title="b11" /><span
+                                    class="TPsubtitle"
+                                    >Your Dentist, in your location
+                                  </span>
+                                </h1>
+                              </div>
+                              <br title="b11" />Lorem ipsum dolor sit amet, consectetur
+                              adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+                              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                              exercitation ullamco laboris nisi ut aliquip.Lorem ipsum dolor
+                              sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                              incididunt ut labore et dolore.
+                            </div>
+                            <div class="TPcol-md-6 TPtext-center">
+                              <div class="TPspecial-contain TPtext-center">
+                                <h2 class="H2">$79 Exam And Cone Beam Scan</h2>
+                                <hr />
+                                <h4 class="H4">Normally A $379 Value</h4>
+                                <br title="b11" />
+                                <br title="b11" /><a
+                                  class="TPbtn TPbtn-primary TPbtn-default TPbtn-5"
+                                  href="#"
+                                  title="Contact Us Bruce Gopin, DDS, MS Periodontics + Implant Surgery El Paso, TX"
+                                  >Contact Us</a
+                                >
+                                <br title="b11" />
+                                <h4 class="H4">or</h4>
+                                <br title="b11" /><a
+                                  class="TParticle"
+                                  href="tel:/${DroppableThumbnail}555-555-5555"
+                                  ><h3 class="H3">Call: 555-555-5555</h3></a
+                                >
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            <//>
+          </div>
         </div>
       `)
     }
 
     const CustomizeWidget = (props) => {
-      const [state, setState] = useState({ styles: processedStyles, theme: '0' });
+      const [state, setState] = useState({ 
+        styles: processedStyles, 
+        theme: '0' 
+      });
       return (html`
         <div 
           class="CustomizeWidget"
@@ -650,7 +896,7 @@ ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 
           <${LogoUpload} />
           <${LogoUpload} mobile />
           <${CopyStylesToClipboard} state=${state} />
-          <${InsertBand} />
+          <${InsertBand} state=${state} setState=${setState} />
         </div>
       `)
     }
