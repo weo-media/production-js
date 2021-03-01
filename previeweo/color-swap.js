@@ -647,7 +647,8 @@ ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 
                         border="0"
                         alt="Before after smile"
                         title="Before after smile"
-                        width="100%"
+                        width="555"
+                        height="185"
                         align="left"
                       />
                     </div>
