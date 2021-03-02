@@ -557,7 +557,6 @@
         console.log('dragged');
         e.dataTransfer.setData('text/plain', droppableRef.current.id.replace(/-thumb/,''));
         console.log(e.dataTransfer.getData('text/plain'));
-        
       }
       const theHeightStyle = `.${props.name}.drop-in { height: calc(${props.height}px * 0.1); } .${props.name}.drop-in>*:before { height: ${props.height}px; }`;
       return (
@@ -565,6 +564,7 @@
         <div id="${props.name}-thumb" ref=${droppableRef} class="TPBand ${props.name} ${props.dropped ? '' : 'drop-in'}" draggable=${props.draggable} onDragStart=${e => drag(e)}>
           <style>
             ${theHeightStyle}
+            ${`.TPcard { background: #fafafa; color: #616161; transition: box-shadow 135ms 0ms cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 1px 1px 0 rgba(66, 66, 66, 0.08), 0 1px 3px 1px rgba(66, 66, 66, 0.16); transition: width 235ms 0ms cubic-bezier(0.4, 0, 0.2, 1); border-radius: 3px; z-index: 1; padding: 10px; margin: 60px auto; border-radius: 20px; max-width: 300px; } .TPcard-border { border: 2px dotted #dbdbdb; padding: 20px; border-radius: 20px 20px 0 0; } .TPamount { height: 100px; width: 100px; margin: 10px auto 0; -webkit-border-radius: 50px; -moz-border-radius: 50px; border-radius: 50px; color: #fafafa; border: 2px solid #dbdbdb; background: #cacaca; padding: 30px 0; line-height: 1.2; font-weight: 700; font-size: 36px; position: relative; } .TPdollar { font-size: 20px; padding-top: 0px; position: absolute; left: 16px; } .TPtext-sub { font-size: 18px; } .TPvalid { font-size: 14px; line-height: 1.2; padding: 10px; }`}
           </style>
           <div class="TPbw TPBandCol">
                 <div style=${{padding: '50px 0'}}>
@@ -894,7 +894,7 @@
               </h5>
             </div>
             <${DroppableThumbnail} name="smile-gallery1" height="302" draggable />
-            <${DroppableThumbnail} name="specials1" height="585" draggable />
+            <${DroppableThumbnail} name="specials1" height="926" draggable />
             <${DroppableThumbnail} name="specials2" height="466" draggable />
           </div>
         </div>
