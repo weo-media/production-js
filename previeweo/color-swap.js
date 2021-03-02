@@ -162,6 +162,7 @@
         const colorId = e.target.id;
         const hexValue = e.target.value;
         props.setState(prevState => ({
+          ...prevState,
           styles: {
             ...prevState.styles,
             [colorId]: {
@@ -176,6 +177,7 @@
         const colorId = e.target.id;
         const hexValue = e.target.value;
         props.setState(prevState => ({
+          ...prevState,
           styles: {
             ...prevState.styles,
             [colorId]: {
@@ -187,9 +189,10 @@
         }));
       }
       const handleAlphaChange = e => {
-        const colorId = e.target.id;
+        const colorId = e.target.id.replace(/-alpha/, '');
         const alphaValue = e.target.value;
         props.setState(prevState => ({
+          ...prevState,
           styles: {
             ...prevState.styles,
             [colorId]: {
@@ -308,6 +311,7 @@
     const themeTrigger = (props) => {
       const trigger = useRef(null);
       const setNewTheme = () => {
+        // get the value from the theme attribute
         const theme = trigger.current.attributes.theme.nodeValue;
         props.setState(prevState => ({
           ...prevState,
@@ -315,6 +319,7 @@
         }));
         Object.values(props.state.styles).forEach(color => {
           props.setState(prevState => ({
+            ...prevState,
             styles: {
               ...prevState.styles,
               [color.id]: {
@@ -351,7 +356,7 @@
         }}
         >Theme ${props.theme}</button>
       `)
-    }
+    };
 
     // the panel that houses the color customizer, the image upload, and the component additions
     const ColorSwapWidget = (props) => {
@@ -374,13 +379,15 @@
       const closeColorSwap = () => {
         document.querySelector('.color-swap-widget').style.display = 'none';
         document.querySelector('.color-swap-pop-button').style.display = 'inline-block';
-      }
+      };
       const popColorSwap = () => {
         document.querySelector('.color-swap-widget').style.display = 'block';
         document.querySelector('.color-swap-pop-button').style.display = 'none';
-      }
+      };
+      console.log('values:', Object.values(state.styles));
       const boxes = Object.values(state.styles).map((color) => {
-        return html`
+        console.log('id:', state.styles[color.id].id);
+        return (html`
         <${ColorSelectorBox} 
           state=${state} 
           setState=${setState} 
@@ -388,18 +395,20 @@
           id=${state.styles[color.id].id}
         >
           ${state.styles[color.id].id.toString().replace(/-rgba?.*$/, '')}
-        </${ColorSelectorBox}>
-        `
+        <//>
+        `)
       });
+      // doesn't matter which style color id, just need the number of themes there are and to make a theme button for each one.
+      console.log(Object.values(state.styles)[0]);
       const themeTriggers = Object.values(state.styles)[0].preSelectedColors.map((color, idx) => {
-        return html`
+        return (html`
         <${themeTrigger} 
           state=${state} 
           setState=${setState} 
           key='theme-${idx}'
           theme=${idx}
         ><//>
-        `
+        `)
       });
       // color swap pop up widget
       return (
@@ -465,13 +474,13 @@
             <${ReColorStyles} state=${state}/>
           </div>
     `)
-    }
+    };
 
     const LogoUpload = (props) => {
       const fileElem = useRef(null);
       const handleClick = () => {
         fileElem.current.click();
-      }
+      };
       const handleUpload = () => {
         const fileSrc = URL.createObjectURL(fileElem.current.files[0]);
         const img = document.createElement("img");
@@ -479,7 +488,7 @@
         img.style = 'width: 0; height: 0; overflow: hidden;';
         img.onload = function () {
           URL.revokeObjectURL(fileSrc);
-        }
+        };
         document.body.appendChild(img);
         props.mobile
           ? document.querySelector('.TPnavbar-brand-alt img').src = fileSrc
@@ -508,14 +517,11 @@
            >Upload ${props.mobile ? 'Mobile' : 'Desktop'} Logo</button>
         </div>
       `)
-    }
+    };
 
     const CopyStylesToClipboard = (props) => {
       const copyElem = useRef(null);
-      const colorsForCopy = Object.values(props.state.styles).map(colorObj => `
-${colorObj.id.toString().replace(/-rgba?.*$/, '')} non text: ${colorObj.alpha < 100 ? colorAndAlpha2rgba(colorObj.hexColor, colorObj.alpha) : colorObj.hexColor}
-${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 ? colorAndAlpha2rgba(colorObj.textHexColor, colorObj.alpha) : colorObj.textHexColor}
-`).join('');
+      const colorsForCopy = Object.values(props.state.styles).map(colorObj => `\n ${colorObj.id.toString().replace(/-rgba?.*$/, '')} non text: ${colorObj.alpha < 100 ? colorAndAlpha2rgba(colorObj.hexColor, colorObj.alpha) : colorObj.hexColor}\n ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 ? colorAndAlpha2rgba(colorObj.textHexColor, colorObj.alpha) : colorObj.textHexColor}\n `).join('');
       const handleClick = (e) => {
         copyElem.current.select();
         document.execCommand("copy");
@@ -546,11 +552,9 @@ ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 
 
     // InsertBand components
     const DroppableThumbnail = (props) => {
-      const [dropping, setDropping] = useState('');
       const droppableRef = useRef(null);
       const drag = (e) => {
         console.log('dragged');
-        setDropping(droppableRef.current.id.replace(/-thumb/,''));
         e.dataTransfer.setData('text/plain', droppableRef.current.id.replace(/-thumb/,''));
         console.log(e.dataTransfer.getData('text/plain'));
         
@@ -935,6 +939,7 @@ ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 
     }
 
     const CustomizeWidget = (props) => {
+      console.log({processedStyles});
       const [state, setState] = useState({ 
         styles: processedStyles, 
         theme: '0' 
@@ -960,7 +965,7 @@ ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 
           <${LogoUpload} />
           <${LogoUpload} mobile />
           <${CopyStylesToClipboard} state=${state} />
-          <${InsertBand} state=${state} setState=${setState} />
+          <${InsertBand} />
         </div>
       `)
     }
