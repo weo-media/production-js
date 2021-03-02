@@ -33,6 +33,11 @@
     const colorSwap = document.querySelector('#color-swap') ? document.querySelector('#color-swap') : document.createElement('div');
     colorSwap.id = 'color-swap';
     document.querySelector('body').insertAdjacentElement("beforeend", colorSwap);
+    const dropRecieveDivs = [...document.querySelectorAll('.TPBand ~ .TPBand')];
+    dropRecieveDivs.forEach((tpband, idx) => {
+      const dropRecieve = `<div id="drop-recieve-${idx}" class="drop-recieve"></div>`; 
+      tpband.insertAdjacentHTML('beforebegin',dropRecieve);
+    });
 
     // get preact functions
     const html = preact.html,
@@ -541,103 +546,23 @@ ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 
 
     // InsertBand components
     const DroppableThumbnail = (props) => {
+      const [dropping, setDropping] = useState('');
+      const droppableRef = useRef(null);
+      const drag = (e) => {
+        console.log('dragged');
+        setDropping(droppableRef.current.id.replace(/-thumb/,''));
+        e.dataTransfer.setData('text/plain', droppableRef.current.id.replace(/-thumb/,''));
+        console.log(e.dataTransfer.getData('text/plain'));
+        
+      }
       const theHeightStyle = `.${props.name}.drop-in { height: calc(${props.height}px * 0.1); } .${props.name}.drop-in>*:before { height: ${props.height}px; }`;
-      return (html`
-        <div class="TPBand ${props.name} drop-in" draggable=${props.draggable} >
+      return (
+        props.name === 'smile-gallery1' && html`
+        <div id="${props.name}-thumb" ref=${droppableRef} class="TPBand ${props.name} ${props.dropped ? '' : 'drop-in'}" draggable=${props.draggable} onDragStart=${e => drag(e)}>
           <style>
             ${theHeightStyle}
           </style>
-          ${props.children}
-        </div>
-      `)
-    }
-
-    const InsertBand = (props) => {
-      const escFunction = useCallback((event) => {
-        if (event.keyCode === 27) {
-          closeInsertBand();
-        }
-      }, []);
-
-      useEffect(() => {
-        document.addEventListener("keydown", escFunction, false);
-
-        return () => {
-          document.removeEventListener("keydown", escFunction, false);
-        };
-      }, []);
-      const closeInsertBand = () => {
-        document.querySelector('.insert-band-widget').style.display = 'none';
-        document.querySelector('.insert-band-pop-button').style.display = 'inline-block';
-      }
-      const popInsertBand = () => {
-        document.querySelector('.insert-band-widget').style.display = 'block';
-        document.querySelector('.insert-band-pop-button').style.display = 'none';
-      }
-      return (html`
-        <div>
-          <button
-              onClick=${popInsertBand}
-              class="insert-band-pop-button btn TPbtn TPmargin-5"
-            >
-              Insert a new band
-            </button>
-            <div
-              class="insert-band-widget"
-              style=${{
-          display: 'none',
-          minWidth: '200px',
-          maxHeight: '80vh',
-          background: '#fff',
-          border: 'solid 3px #ddd',
-          padding: '0',
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          overflowY: 'auto',
-          zIndex: '1000'
-        }}
-            >
-              <div class="widget-top-bar" style=${{
-          minHeight: '18px',
-          background: '#ddd',
-          position: 'relative'
-        }}>
-                <a 
-                  class="close-insert-band" 
-                  onClick=${closeInsertBand} 
-                  style=${{
-          position: 'absolute',
-          top: '-6px',
-          right: '0px',
-          padding: '1em',
-          zIndex: '1',
-          cursor: 'pointer'
-        }}>
-                <div style=${{
-          transform: 'rotate(45deg) translate(-5px, 2px)',
-          position: 'absolute',
-          border: 'solid 1px #000',
-          width: '12px',
-
-        }}></div>
-                <div style=${{
-          transform: 'rotate(-45deg) translate(-2px, -5px)',
-          position: 'absolute',
-          border: 'solid 1px #000',
-          width: '12px'
-        }}></div>
-              </a>
-            </div>
-            <div style=${{padding: '0 1em'}}>
-              <h5>
-                To add a component:<br />
-                <strong>Click</strong> and <strong>Drag</strong> one onto the design,<br />between two main sections.
-              </h5>
-            </div>
-            <${DroppableThumbnail} name="smile-gallery1" height="302" draggable>
-              <div class="TPbw TPBandCol">
+          <div class="TPbw TPBandCol">
                 <div style=${{padding: '50px 0'}}>
                   <div class="TProw TParticle">
                     <div class="TPcol-md-6">
@@ -681,9 +606,14 @@ ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 
                   </div>
                 </div>
               </div>
-            <//>
-            <${DroppableThumbnail} name="specials1" height="585" draggable>
-              <div class="TPbw TPBandCol">
+          ${props.children}
+        </div>`
+      ||
+        props.name === 'specials1' && html`<div id="${props.name}-thumb" ref=${droppableRef} class="TPBand ${props.name} ${props.dropped ? '' : 'drop-in'}" draggable=${props.draggable} onDragStart=${e => drag(e)}>
+          <style>
+            ${theHeightStyle}
+          </style>
+          <div class="TPbw TPBandCol">
                 <div style=${{padding: '84px 0'}}>
                   <div class="TProw">
                     <div class="TPcol-xs-12 TPtext-center">
@@ -802,71 +732,204 @@ ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 
                   </div>
                 </div>
               </div>
-            <//>
-            <${DroppableThumbnail} name="specials2" height="466" draggable>
-              <div class="TPbw TPBandCol">
-                <div style=${{padding:'40px 0'}}>
-                  <table
-                    width="100%"
-                    class="TPartBox"
-                    border="0"
-                    cellspacing="0"
-                    cellpadding="0"
-                  >
-                    <tbody>
-                      <tr valign="top">
-                        <td id="" class="TParticle">
-                          <div class="TProw">
-                            <div class="TPcol-md-6">
-                              <div
-                                data-aos="fade-right"
-                                data-aos-duration="1000"
-                                class="aos-init aos-animate"
-                              >
-                                <h1 class="H1">
-                                  Welcome to our Dental Office<br title="b11" /><span
-                                    class="TPsubtitle"
-                                    >Your Dentist, in your location
-                                  </span>
-                                </h1>
-                              </div>
-                              <br title="b11" />Lorem ipsum dolor sit amet, consectetur
-                              adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                              exercitation ullamco laboris nisi ut aliquip.Lorem ipsum dolor
-                              sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                              incididunt ut labore et dolore.
-                            </div>
-                            <div class="TPcol-md-6 TPtext-center">
-                              <div class="TPspecial-contain TPtext-center">
-                                <h2 class="H2">$79 Exam And Cone Beam Scan</h2>
-                                <hr />
-                                <h4 class="H4">Normally A $379 Value</h4>
-                                <br title="b11" />
-                                <br title="b11" /><a
-                                  class="TPbtn TPbtn-primary TPbtn-default TPbtn-5"
-                                  href="#"
-                                  title="Contact Us Bruce Gopin, DDS, MS Periodontics + Implant Surgery El Paso, TX"
-                                  >Contact Us</a
-                                >
-                                <br title="b11" />
-                                <h4 class="H4">or</h4>
-                                <br title="b11" /><a
-                                  class="TParticle"
-                                  href="tel:/${DroppableThumbnail}555-555-5555"
-                                  ><h3 class="H3">Call: 555-555-5555</h3></a
-                                >
-                              </div>
-                            </div>
+          ${props.children}
+        </div>`
+      ||
+        props.name === 'specials2' && html`<div id="${props.name}-thumb" ref=${droppableRef} class="TPBand ${props.name} ${props.dropped ? '' : 'drop-in'}" draggable=${props.draggable} onDragStart=${e => drag(e)}>
+          <style>
+            ${theHeightStyle}
+          </style>
+          <div class="TPbw TPBandCol">
+            <div style=${{padding:'40px 0'}}>
+              <table
+                width="100%"
+                class="TPartBox"
+                border="0"
+                cellspacing="0"
+                cellpadding="0"
+              >
+                <tbody>
+                  <tr valign="top">
+                    <td id="" class="TParticle">
+                      <div class="TProw">
+                        <div class="TPcol-md-6">
+                          <div
+                            data-aos="fade-right"
+                            data-aos-duration="1000"
+                            class="aos-init aos-animate"
+                          >
+                            <h1 class="H1">
+                              Welcome to our Dental Office<br title="b11" /><span
+                                class="TPsubtitle"
+                                >Your Dentist, in your location
+                              </span>
+                            </h1>
                           </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            <//>
+                          <br title="b11" />Lorem ipsum dolor sit amet, consectetur
+                          adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+                          dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                          exercitation ullamco laboris nisi ut aliquip.Lorem ipsum dolor
+                          sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                          incididunt ut labore et dolore.
+                        </div>
+                        <div class="TPcol-md-6 TPtext-center">
+                          <div class="TPspecial-contain TPtext-center">
+                            <h2 class="H2">$79 Exam And Cone Beam Scan</h2>
+                            <hr />
+                            <h4 class="H4">Normally A $379 Value</h4>
+                            <br title="b11" />
+                            <br title="b11" /><a
+                              class="TPbtn TPbtn-primary TPbtn-default TPbtn-5"
+                              href="#"
+                              title="Contact Us Bruce Gopin, DDS, MS Periodontics + Implant Surgery El Paso, TX"
+                              >Contact Us</a
+                            >
+                            <br title="b11" />
+                            <h4 class="H4">or</h4>
+                            <br title="b11" /><a
+                              class="TParticle"
+                              href="tel:/${DroppableThumbnail}555-555-5555"
+                              ><h3 class="H3">Call: 555-555-5555</h3></a
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
+          ${props.children}
+        </div>`
+      )
+    }
+
+    const InsertBand = (props) => {
+      const escFunction = useCallback((event) => {
+        if (event.keyCode === 27) {
+          closeInsertBand();
+        }
+      }, []);
+
+      useEffect(() => {
+        document.addEventListener("keydown", escFunction, false);
+
+        return () => {
+          document.removeEventListener("keydown", escFunction, false);
+        };
+      }, []);
+      const closeInsertBand = () => {
+        document.querySelector('.insert-band-widget').style.display = 'none';
+        document.querySelector('.insert-band-pop-button').style.display = 'inline-block';
+      }
+      const popInsertBand = () => {
+        document.querySelector('.insert-band-widget').style.display = 'block';
+        document.querySelector('.insert-band-pop-button').style.display = 'none';
+      }
+      return (html`
+        <div>
+          <button
+              onClick=${popInsertBand}
+              class="insert-band-pop-button btn TPbtn TPmargin-5"
+            >
+              Insert a new band
+            </button>
+            <div
+              class="insert-band-widget"
+              style=${{
+          display: 'none',
+          minWidth: '200px',
+          maxHeight: '80vh',
+          background: '#fff',
+          border: 'solid 3px #ddd',
+          padding: '0',
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          overflowY: 'auto',
+          zIndex: '1000'
+        }}
+            >
+              <div class="widget-top-bar" style=${{
+          minHeight: '18px',
+          background: '#ddd',
+          position: 'relative'
+        }}>
+                <a 
+                  class="close-insert-band" 
+                  onClick=${closeInsertBand} 
+                  style=${{
+          position: 'absolute',
+          top: '-6px',
+          right: '0px',
+          padding: '1em',
+          zIndex: '1',
+          cursor: 'pointer'
+        }}>
+                <div style=${{
+          transform: 'rotate(45deg) translate(-5px, 2px)',
+          position: 'absolute',
+          border: 'solid 1px #000',
+          width: '12px',
+
+        }}></div>
+                <div style=${{
+          transform: 'rotate(-45deg) translate(-2px, -5px)',
+          position: 'absolute',
+          border: 'solid 1px #000',
+          width: '12px'
+        }}></div>
+              </a>
+            </div>
+            <div style=${{padding: '0 1em'}}>
+              <h5>
+                To add a component:<br />
+                <strong>Click</strong> and <strong>Drag</strong> one onto the design,<br />between two main sections.
+              </h5>
+            </div>
+            <${DroppableThumbnail} name="smile-gallery1" height="302" draggable />
+            <${DroppableThumbnail} name="specials1" height="585" draggable />
+            <${DroppableThumbnail} name="specials2" height="466" draggable />
+          </div>
+        </div>
+      `)
+    }
+
+    const DropReciever = (props) => {
+      const recieverRef = useRef(null);
+      const [data, setData] = useState('');
+      const allowDrop = (e) => {
+        console.log('allowDrop');
+        recieverRef.current.style.width = '100%';
+        // recieverRef.current.style.height = '50px';
+        recieverRef.current.style.padding = '.25em';
+        recieverRef.current.style.background = '#eeeeee';
+        e.preventDefault();
+      }
+      const cancelEvent = (e) => {
+        e.preventDefault();
+      }
+      const endDrop = () => {
+        recieverRef.current.style= 'padding: .1em';
+      }
+      const doDrop = (e) => {
+        console.log('congratulations it dropped!');
+        setData(e.dataTransfer.getData('text/plain'));
+        recieverRef.current.style= '';
+        e.preventDefault();
+      }
+      // useEffect(() => {
+      //   document.addEventListener("drop", (e) => doDrop(e), false);
+
+      //   return () => {
+      //     document.removeEventListener("drop", (e) => doDrop(e), false);
+      //   };
+      // }, []);
+      return (html`
+        <div onDrop="${(e) => doDrop(e)}" onDragEnter=${e => allowDrop(e)} onDragOver=${e => cancelEvent(e)} onDragLeave=${endDrop} ref=${recieverRef} class="TPBand drop-recieve" style=${{padding: '.1em'}} >
+          <${DroppableThumbnail} name=${data} dropped/> 
         </div>
       `)
     }
@@ -952,9 +1015,14 @@ ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 
       } : null;
     }
 
+
     // Renders html
     render(html`
     <${CustomizeWidget} />
     `, document.querySelector('#color-swap'));
+    
+    [...document.querySelectorAll('.drop-recieve')].forEach((dr) => render(html`
+      <${DropReciever}><//>
+    `, document.body, dr ));
   }
 })();
