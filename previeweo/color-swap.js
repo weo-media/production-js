@@ -139,6 +139,111 @@
 
 
     // start the components
+    // gear svg
+    const GearSVGBtn = (props) => {
+      return (html`
+        <button onClick=${props.onClick} style=${props.style}>
+          <svg id="TPsvg-gear" class="TPsvg" aria-labelledby="TPsvg-gear-title" aria-describedby="TPsvg-gear-description" role="img" fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="123.6" height="122.1" overflow="visible" viewBox="0 0 123.6 122.1" style="${{width: '100%', height: 'auto'}}"><title id="TPsvg-gear-title">gear</title> <desc id="TPsvg-gear-description">a single gear</desc><path d="M72.9,122.1H49.2l-1.4-15.5c-3.4-1-6.7-2.4-9.9-4.2l-11.6,9.8L9,95.2l10.1-12c-1.6-3-2.9-6.3-3.9-10L0,72.1v-24l15.8-1.4 c1.1-3.3,2.6-6.6,4.3-9.6l-9.8-11.5l17.3-17l12,10.1c3.1-1.6,6.3-2.8,9.9-3.7l1.2-15h24.2l1.4,15.5c3.4,1,6.7,2.4,9.8,4.2 l11.4-9.8l17.3,17l-10.2,12.1c1.7,3.2,3,6.6,3.8,9.9l15.1,1.2v24l-15.8,1.4c-1.1,3.3-2.6,6.6-4.3,9.6l9.8,11.5l-17.3,17l-12-10.1 c-3.1,1.6-6.3,2.8-9.9,3.7L72.9,122.1z M57.2,113.2h7.6l1-13.4l3.2-0.7c5-1.1,9.4-2.7,13.2-5l2.7-1.6l10.6,8.9l5.7-5.6l-8.8-10.3 l1.9-2.8c2.6-3.8,4.6-8.2,5.8-12.7l0.8-3l13.9-1.2v-7.8L101,57.1l-0.6-3.4c-0.7-4.4-2.4-8.8-4.9-13L93.9,38l8.9-10.5l-5.7-5.6 l-10.3,8.8L84,28.8c-4-2.7-8.3-4.6-12.8-5.5l-3.2-0.7L66.8,8.8h-8l-1,13.4l-3.2,0.7c-5,1.1-9.4,2.7-13.2,5l-2.7,1.6L28,20.5 l-5.7,5.6l8.8,10.3l-1.9,2.8c-2.6,3.8-4.6,8.2-5.8,12.7l-0.8,3L8.8,56.1v7.8l13.6,1l0.7,3.2c1.1,5.1,2.7,9.4,5.1,13.1L30,84 l-9,10.6l5.7,5.6l10.5-8.8l2.8,1.9c4,2.7,8.3,4.6,12.8,5.5l3.2,0.7L57.2,113.2z"></path><path d="M61.8,84.3c-12.9,0-23.4-10.4-23.4-23.2S48.9,38,61.8,38c12.9,0,23.4,10.4,23.4,23.2S74.7,84.3,61.8,84.3z M61.8,46.8 c-8,0-14.6,6.4-14.6,14.3c0,7.9,6.5,14.3,14.6,14.3c8,0,14.6-6.4,14.6-14.3C76.4,53.2,69.8,46.8,61.8,46.8z"></path></svg>
+        </button>
+      `)
+    }
+
+    const PopUpWidget = (props) => {
+      const escFunction = useCallback((event) => {
+        if (event.keyCode === 27) {
+          closePopWidget();
+        }
+      }, []);
+      const popBtnRef = useRef(null);
+      const widgetRef = useRef(null);
+      useEffect(() => {
+        document.addEventListener("keydown", escFunction, false);
+
+        return () => {
+          document.removeEventListener("keydown", escFunction, false);
+        };
+      }, []);
+      function closePopWidget () {
+        widgetRef.current.style.display = 'none';
+        popBtnRef.current.style.display = 'inline-block';
+      }
+      const popWidget = () => {
+        widgetRef.current.style.display = 'block';
+        popBtnRef.current.style.display = 'none';
+      }
+      return (html`
+        <div>
+          <button
+            onClick=${popWidget}
+            class="btn TPbtn TPmargin-5"
+            ref=${popBtnRef}
+          >
+            ${props.buttonContent}
+          </button>
+          <div
+            ref=${widgetRef}
+            style=${{
+              display: 'none',
+              minWidth: '200px',
+              maxHeight: '80vh',
+              background: '#fff',
+              border: 'solid 3px #ddd',
+              padding: '0',
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              overflowY: 'auto',
+              zIndex: '1000'
+            }}
+          >
+            <div 
+              class="widget-top-bar" 
+              style=${{
+                minHeight: '18px',
+                background: '#ddd',
+                position: 'relative'
+              }}
+            >
+              <a 
+                class="close-insert-band" 
+                onClick=${closePopWidget} 
+                style=${{
+                  position: 'absolute',
+                  top: '-6px',
+                  right: '0px',
+                  padding: '1em',
+                  zIndex: '1',
+                  cursor: 'pointer'
+                }}
+              >
+                <div 
+                  style=${{
+                    transform: 'rotate(45deg) translate(-5px, 2px)',
+                    position: 'absolute',
+                    border: 'solid 1px #000',
+                    width: '12px',
+                  }}
+                ></div>
+                <div 
+                  style=${{
+                    transform: 'rotate(-45deg) translate(-2px, -5px)',
+                    position: 'absolute',
+                    border: 'solid 1px #000',
+                    width: '12px'
+                  }}
+                ></div>
+              </a>
+            </div>
+            ${props.heading && html`<div style=${{padding: '0 1em'}}>
+              ${props.heading}
+            </div>`}
+            ${props.children}
+          </div>
+        </div>
+      `)
+    }
+
     // make a color box
     const ColorSelectorBox = (props) => {
       const theColorObj = props.state.styles[props.id];
@@ -203,8 +308,7 @@
           }
         }));
       }
-      return (
-        html`
+      return (html`
           <div>
             <label
               style=${{
@@ -362,31 +466,7 @@
     const ColorSwapWidget = (props) => {
       const state = props.state;
       const setState = props.setState;
-      const escFunction = useCallback((event) => {
-        if (event.keyCode === 27) {
-          closeColorSwap();
-        }
-      }, []);
-
-      useEffect(() => {
-        document.addEventListener("keydown", escFunction, false);
-        // listner added for each lifecycle event, returns removal to get rid of last one added.
-        // if you don't return the removal call back, then the listners stack up. 
-        return () => {
-          document.removeEventListener("keydown", escFunction, false);
-        };
-      }, []);
-      const closeColorSwap = () => {
-        document.querySelector('.color-swap-widget').style.display = 'none';
-        document.querySelector('.color-swap-pop-button').style.display = 'inline-block';
-      };
-      const popColorSwap = () => {
-        document.querySelector('.color-swap-widget').style.display = 'block';
-        document.querySelector('.color-swap-pop-button').style.display = 'none';
-      };
-      console.log('values:', Object.values(state.styles));
       const boxes = Object.values(state.styles).map((color) => {
-        console.log('id:', state.styles[color.id].id);
         return (html`
         <${ColorSelectorBox} 
           state=${state} 
@@ -399,7 +479,6 @@
         `)
       });
       // doesn't matter which style color id, just need the number of themes there are and to make a theme button for each one.
-      console.log(Object.values(state.styles)[0]);
       const themeTriggers = Object.values(state.styles)[0].preSelectedColors.map((color, idx) => {
         return (html`
         <${themeTrigger} 
@@ -411,69 +490,13 @@
         `)
       });
       // color swap pop up widget
-      return (
-        html`
-          <div>
-            <button 
-              onClick=${popColorSwap}
-              class="color-swap-pop-button btn TPbtn TPmargin-5"
-            >
-              Customize Color
-            </button>
-            <div
-              class="color-swap-widget"
-              style=${{
-            display: 'none',
-            minWidth: '200px',
-            maxHeight: '80vh',
-            background: '#fff',
-            border: 'solid 3px #ddd',
-            padding: '0',
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            overflowY: 'auto',
-            zIndex: '1000'
-          }}
-            >
-              <div class="widget-top-bar" style=${{
-            minHeight: '18px',
-            background: '#ddd',
-            position: 'relative'
-          }}>
-                <a 
-                  class="close-color-swap" 
-                  onClick=${closeColorSwap} 
-                  style=${{
-            position: 'absolute',
-            top: '-6px',
-            right: '0px',
-            padding: '1em',
-            zIndex: '1',
-            cursor: 'pointer'
-          }}>
-                <div style=${{
-            transform: 'rotate(45deg) translate(-5px, 2px)',
-            position: 'absolute',
-            border: 'solid 1px #000',
-            width: '12px',
-
-          }}></div>
-                <div style=${{
-            transform: 'rotate(-45deg) translate(-2px, -5px)',
-            position: 'absolute',
-            border: 'solid 1px #000',
-            width: '12px'
-          }}></div>
-              </a>
-                </div>
-              ${themeTriggers}
-              ${boxes}
-            </div>
-            <${ReColorStyles} state=${state}/>
-          </div>
-    `)
+      return (html`
+        <${PopUpWidget} buttonContent="Customize Color" >
+          ${themeTriggers}
+          ${boxes}
+          <${ReColorStyles} state=${state}/>
+        <//>
+      `)
     };
 
     const LogoUpload = (props) => {
@@ -554,14 +577,12 @@
     const DroppableThumbnail = (props) => {
       const droppableRef = useRef(null);
       const drag = (e) => {
-        console.log('dragged');
         e.dataTransfer.setData('text/plain', droppableRef.current.id.replace(/-thumb/,''));
-        console.log(e.dataTransfer.getData('text/plain'));
       }
       const theHeightStyle = `.${props.name}.drop-in { height: calc(${props.height}px * 0.1); } .${props.name}.drop-in>*:before { height: ${props.height}px; }`;
       return (
         props.name === 'smile-gallery1' && html`
-        <div id="${props.name}-thumb" ref=${droppableRef} class="TPBand ${props.name} ${props.dropped ? '' : 'drop-in'}" draggable=${props.draggable} onDragStart=${e => drag(e)}>
+        <div id="${props.name}-thumb" ref=${droppableRef} class="TPBand ${props.name} ${props.dropped ? '' : 'drop-in'}" draggable=${props.draggable} onDragStart=${e => drag(e)} >
           <style>
             ${theHeightStyle}
             ${`.TPcard { background: #fafafa; color: #616161; transition: box-shadow 135ms 0ms cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 1px 1px 0 rgba(66, 66, 66, 0.08), 0 1px 3px 1px rgba(66, 66, 66, 0.16); transition: width 235ms 0ms cubic-bezier(0.4, 0, 0.2, 1); border-radius: 3px; z-index: 1; padding: 10px; margin: 60px auto; border-radius: 20px; max-width: 300px; } .TPcard-border { border: 2px dotted #dbdbdb; padding: 20px; border-radius: 20px 20px 0 0; } .TPamount { height: 100px; width: 100px; margin: 10px auto 0; -webkit-border-radius: 50px; -moz-border-radius: 50px; border-radius: 50px; color: #fafafa; border: 2px solid #dbdbdb; background: #cacaca; padding: 30px 0; line-height: 1.2; font-weight: 700; font-size: 36px; position: relative; } .TPdollar { font-size: 20px; padding-top: 0px; position: absolute; left: 16px; } .TPtext-sub { font-size: 18px; } .TPvalid { font-size: 14px; line-height: 1.2; padding: 10px; }`}
@@ -810,94 +831,13 @@
     }
 
     const InsertBand = (props) => {
-      const escFunction = useCallback((event) => {
-        if (event.keyCode === 27) {
-          closeInsertBand();
-        }
-      }, []);
-
-      useEffect(() => {
-        document.addEventListener("keydown", escFunction, false);
-
-        return () => {
-          document.removeEventListener("keydown", escFunction, false);
-        };
-      }, []);
-      const closeInsertBand = () => {
-        document.querySelector('.insert-band-widget').style.display = 'none';
-        document.querySelector('.insert-band-pop-button').style.display = 'inline-block';
-      }
-      const popInsertBand = () => {
-        document.querySelector('.insert-band-widget').style.display = 'block';
-        document.querySelector('.insert-band-pop-button').style.display = 'none';
-      }
+      const insertBandHeading = () => html`<h5> To add a component:<br /> <strong>Click</strong> and <strong>Drag</strong> one onto the design,<br />between two main sections. </h5>`;
       return (html`
-        <div>
-          <button
-              onClick=${popInsertBand}
-              class="insert-band-pop-button btn TPbtn TPmargin-5"
-            >
-              Insert a new band
-            </button>
-            <div
-              class="insert-band-widget"
-              style=${{
-          display: 'none',
-          minWidth: '200px',
-          maxHeight: '80vh',
-          background: '#fff',
-          border: 'solid 3px #ddd',
-          padding: '0',
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          overflowY: 'auto',
-          zIndex: '1000'
-        }}
-            >
-              <div class="widget-top-bar" style=${{
-          minHeight: '18px',
-          background: '#ddd',
-          position: 'relative'
-        }}>
-                <a 
-                  class="close-insert-band" 
-                  onClick=${closeInsertBand} 
-                  style=${{
-          position: 'absolute',
-          top: '-6px',
-          right: '0px',
-          padding: '1em',
-          zIndex: '1',
-          cursor: 'pointer'
-        }}>
-                <div style=${{
-          transform: 'rotate(45deg) translate(-5px, 2px)',
-          position: 'absolute',
-          border: 'solid 1px #000',
-          width: '12px',
-
-        }}></div>
-                <div style=${{
-          transform: 'rotate(-45deg) translate(-2px, -5px)',
-          position: 'absolute',
-          border: 'solid 1px #000',
-          width: '12px'
-        }}></div>
-              </a>
-            </div>
-            <div style=${{padding: '0 1em'}}>
-              <h5>
-                To add a component:<br />
-                <strong>Click</strong> and <strong>Drag</strong> one onto the design,<br />between two main sections.
-              </h5>
-            </div>
-            <${DroppableThumbnail} name="smile-gallery1" height="302" draggable />
-            <${DroppableThumbnail} name="specials1" height="926" draggable />
-            <${DroppableThumbnail} name="specials2" height="466" draggable />
-          </div>
-        </div>
+        <${PopUpWidget} buttonContent="Insert a new band" heading=${insertBandHeading}>
+          <${DroppableThumbnail} name="smile-gallery1" height="302" draggable />
+          <${DroppableThumbnail} name="specials1" height="926" draggable />
+          <${DroppableThumbnail} name="specials2" height="466" draggable />
+        <//>
       `)
     }
 
@@ -905,10 +845,7 @@
       const recieverRef = useRef(null);
       const [data, setData] = useState('');
       const allowDrop = (e) => {
-        console.log('allowDrop');
-        recieverRef.current.style.width = '100%';
-        // recieverRef.current.style.height = '50px';
-        recieverRef.current.style.padding = '.25em';
+        recieverRef.current.style.padding = '2em';
         recieverRef.current.style.background = '#eeeeee';
         e.preventDefault();
       }
@@ -939,33 +876,56 @@
     }
 
     const CustomizeWidget = (props) => {
-      console.log({processedStyles});
       const [state, setState] = useState({ 
         styles: processedStyles, 
         theme: '0' 
       });
+      // toggle for gear button sets CustomizeWidget div to display none so that the styles that live in the component still render if you toggle the widget closed. That way the drag and drop elements still have access to the styles they need.
+      const [toggle, setToggle] = useState(false);
+      const toggleWidget = () => {
+        setToggle(() => !toggle);
+      }
       return (html`
         <div 
-          class="CustomizeWidget"
-          style=${{
-          display: 'flex',
-          flexFlow: 'column nowrap',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '20px',
+        style=${{
           position: 'fixed',
           bottom: '15px',
           right: '15px',
           zIndex: '1000',
-          background: 'rgba(255,255,255,.8)',
-          boxShadow: '4px 4px 14px rgba(0,0,0,.5)'
+          display: 'flex',
+          flexFlow: 'row nowrap',
+          alignItems: 'flex-end'
         }}
         >
-          <${ColorSwapWidget} state=${state} setState=${setState} />
-          <${LogoUpload} />
-          <${LogoUpload} mobile />
-          <${CopyStylesToClipboard} state=${state} />
-          <${InsertBand} />
+          <${GearSVGBtn} 
+            onClick=${toggleWidget}
+            style=${{
+              width: '50px',
+              height: '50px',
+              lineHeight: '0',
+              border: '0',
+              backgroundColor: 'rgba(255,255,255,.7)',
+              boxShadow: '2px 2px 2px rgb(0 0 0 / 25%)'
+            }}
+          />
+          <div 
+            class="CustomizeWidget"
+            style=${{
+            display: toggle ? 'flex' : 'none',
+            flexFlow: 'column nowrap',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px',
+            background: 'rgba(255,255,255,.8)',
+            boxShadow: '4px 4px 14px rgba(0,0,0,.5)'
+          }}
+          >
+            <${ColorSwapWidget} state=${state} setState=${setState} />
+            <${LogoUpload} />
+            <${LogoUpload} mobile />
+            <${CopyStylesToClipboard} state=${state} />
+            <${InsertBand} />
+          </div>
         </div>
       `)
     }
