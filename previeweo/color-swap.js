@@ -402,7 +402,7 @@
             </${ColorStyle}>`)
         });
       });
-      const bandDropInStylesMain = `.drop-in > * { transform: scale(0.1); transform-origin: top left; } .drop-in { width: calc(1230px * 0.1); overflow: hidden; margin: 15px auto; border: 3px solid #dddddd; cursor: pointer;} .drop-in:hover, .drop-in:focus, .drop-in:active {background: #eeeeee} .drop-in>*:before { content: ''; display: block; position: absolute; width: 100%; z-index: 1; }`;
+      const bandDropInStylesMain = `.drop-in > * { transform: scale(0.1); transform-origin: top left; } .drop-in { width: calc(1230px * 0.1); overflow: hidden; margin: 15px auto; border: 3px solid #dddddd; cursor: pointer;} .drop-in:hover, .drop-in:focus, .drop-in:active {background: #eeeeee} .drop-in>*:before { content: ''; display: block; position: absolute; width: 100%; z-index: 1; } .TPBand.drop-recieve .TPBand { padding: 60px 0; }`;
       return (html`
         <style>
           ${bandDropInStylesMain}
@@ -588,49 +588,49 @@
             ${`.TPcard { background: #fafafa; color: #616161; transition: box-shadow 135ms 0ms cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 1px 1px 0 rgba(66, 66, 66, 0.08), 0 1px 3px 1px rgba(66, 66, 66, 0.16); transition: width 235ms 0ms cubic-bezier(0.4, 0, 0.2, 1); border-radius: 3px; z-index: 1; padding: 10px; margin: 60px auto; border-radius: 20px; max-width: 300px; } .TPcard-border { border: 2px dotted #dbdbdb; padding: 20px; border-radius: 20px 20px 0 0; } .TPamount { height: 100px; width: 100px; margin: 10px auto 0; -webkit-border-radius: 50px; -moz-border-radius: 50px; border-radius: 50px; color: #fafafa; border: 2px solid #dbdbdb; background: #cacaca; padding: 30px 0; line-height: 1.2; font-weight: 700; font-size: 36px; position: relative; } .TPdollar { font-size: 20px; padding-top: 0px; position: absolute; left: 16px; } .TPtext-sub { font-size: 18px; } .TPvalid { font-size: 14px; line-height: 1.2; padding: 10px; }`}
           </style>
           <div class="TPbw TPBandCol">
-                <div style=${{ padding: '50px 0' }}>
-                  <div class="TProw TParticle">
-                    <div class="TPcol-md-6">
-                      <img
-                        class="TPimgLeft TPimg-responsive"
-                        src="http://fpoimg.com/555x185?text=Before and After Photo"
-                        border="0"
-                        alt="Before after smile"
-                        title="Before after smile"
-                        width="555"
-                        height="185"
-                        align="left"
-                      />
-                    </div>
-                    <div class="TPcol-md-6 TPtext-center">
-                      <div
-                        data-aos="fade-right"
-                        data-aos-duration="900"
-                        class="aos-init aos-animate"
-                      >
-                        <h2 class="TPline">Smile Gallery</h2>
-                      </div>
-                      <div
-                        data-aos="fade-right"
-                        data-aos-duration="900"
-                        data-aos-delay="200"
-                        class="aos-init aos-animate"
-                      >
-                        Our mission is to create great looking, healthy smiles that enable our
-                        patients to project the image they desire for themselves with the
-                        utmost pride and confidence. We believe in listening first, and then
-                        delivering individualized, uncompromised care.<br title="b11" />
-                        <br title="b11" /><a
-                          class="TPbtn TPbtn-primary TPbtn-2 TPbtn-2left"
-                          href="#"
-                          title="Photo Gallery D.D.S."
-                          >View our smile results</a
-                        >
-                      </div>
-                    </div>
+            <div>
+              <div class="TProw TParticle">
+                <div class="TPcol-md-6">
+                  <img
+                    class="TPimgLeft TPimg-responsive"
+                    src="http://fpoimg.com/555x185?text=Before and After Photo"
+                    border="0"
+                    alt="Before after smile"
+                    title="Before after smile"
+                    width="555"
+                    height="185"
+                    align="left"
+                  />
+                </div>
+                <div class="TPcol-md-6 TPtext-center">
+                  <div
+                    data-aos="fade-right"
+                    data-aos-duration="900"
+                    class="aos-init aos-animate"
+                  >
+                    <h2 class="TPline">Smile Gallery</h2>
+                  </div>
+                  <div
+                    data-aos="fade-right"
+                    data-aos-duration="900"
+                    data-aos-delay="200"
+                    class="aos-init aos-animate"
+                  >
+                    Our mission is to create great looking, healthy smiles that enable our
+                    patients to project the image they desire for themselves with the
+                    utmost pride and confidence. We believe in listening first, and then
+                    delivering individualized, uncompromised care.<br title="b11" />
+                    <br title="b11" /><a
+                      class="TPbtn TPbtn-primary TPbtn-2 TPbtn-2left"
+                      href="#"
+                      title="Photo Gallery D.D.S."
+                      >View our smile results</a
+                    >
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
           ${props.children}
         </div>`
         ||
@@ -640,15 +640,15 @@
             ${`.socials1 .TPfooter-logo { max-width: 350px; max-height: 100px; margin:0 auto; } .socials1 .TPsocial-media { text-align: center; padding-top:25px; } @media (max-width:767px){ .socials1 .TPsocial-media { padding-top:0 ;} } .socials1 .TPsm-fill .fa { background: #e8e8e8; color: #aaa; }`}
           </style>
           <div class="TPbw TPBandCol">
-            <div style=${{ padding: '84px 0' }}>
+            <div>
               <div class="TProw">
                 <div
                   class="TPcol-sm-7 TPcol-md-6 TPcol-md-offset-1 TPcol-lg-4 TPcol-lg-offset-2"
                 >
-                  <a href="/p/dentist-Redwood-City-CA-Home-p49034.asp" target="_blank"
+                  <a href="#" target="_blank"
                     ><img
                       class="TPimg-responsive TPfooter-logo"
-                      src="/tpn/c/C1717/img/LGO-footer-c1717.png"
+                      src="http://fpoimg.com/337x98?text=Large Logo Image"
                       border="0"
                       alt="Smile Craft Dental in Redwood City, CA"
                       title="Smile Craft Dental in Redwood City, CA"
@@ -658,31 +658,31 @@
                 <div class="TPcol-sm-5 TPcol-md-4 TPcol-lg-4 TPsocial-media">
                   <a
                     class="TPsm TPsm-circle TPsm-fill TPsm-color-hover"
-                    href="https://www.facebook.com/SmileCraftDentalCA"
+                    href="#"
                     target="_blank"
                     ><i class="fa fa-facebook-f"></i
                   ></a>
                   <a
                     class="TPsm TPsm-circle TPsm-fill TPsm-color-hover"
-                    href="https://www.google.com/maps/search/smile+craft+dental+ca/@37.4257919,-122.1808648,13z/data=!3m1!4b1"
+                    href="#"
                     target="_blank"
                     ><i class="fa fa-google"></i
                   ></a>
                   <a
                     class="TPsm TPsm-circle TPsm-fill TPsm-color-hover"
-                    href="https://www.instagram.com/smilecraftdentalinc/"
+                    href="#"
                     target="_blank"
                     ><i class="fa fa-instagram"></i
                   ></a>
                   <a
                     class="TPsm TPsm-circle TPsm-fill TPsm-color-hover"
-                    href="https://www.yelp.com/biz/smile-craft-dental-mountain-view"
+                    href="#"
                     target="_blank"
                     ><i class="fa fa-yelp"></i
                   ></a>
                   <a
                     class="TPsm TPsm-circle TPsm-fill TPsm-color-hover"
-                    href="https://www.yelp.com/biz/smile-craft-dental-redwood-city-2"
+                    href="#"
                     target="_blank"
                     ><i class="fa fa-yelp"></i
                   ></a>
@@ -699,124 +699,124 @@
             ${theHeightStyle}
           </style>
           <div class="TPbw TPBandCol">
-                <div style=${{ padding: '84px 0' }}>
-                  <div class="TProw">
-                    <div class="TPcol-xs-12 TPtext-center">
-                      <div
-                        data-aos="fade-up"
-                        data-aos-delay="600"
-                        data-aos-duration="800"
-                        class="aos-init aos-animate"
-                      >
-                        <h2>Now Offering New Patient Specials!</h2>
+            <div>
+              <div class="TProw">
+                <div class="TPcol-xs-12 TPtext-center">
+                  <div
+                    data-aos="fade-up"
+                    data-aos-delay="600"
+                    data-aos-duration="800"
+                    class="aos-init aos-animate"
+                  >
+                    <h2>Now Offering New Patient Specials!</h2>
+                    <br title="b11" />
+                    <hr />
+                    <span class="TParticle"
+                      >We want your visits to be efficient and gentle.<br title="b11" />We
+                      are dedicated to being your dentist.</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <br title="b11" />
+              <div class="TProw">
+                <div class="TPcol-md-4 TPtext-center">
+                  <div
+                    data-aos="fade-up"
+                    data-aos-delay="800"
+                    data-aos-duration="800"
+                    class="aos-init aos-animate"
+                  >
+                    <div class="TPcard">
+                      <div class="TPcard-border">
+                        <h3 class="TPtext-color2">
+                          Adult's<br title="b11" />Complete Checkup
+                        </h3>
                         <br title="b11" />
                         <hr />
-                        <span class="TParticle"
-                          >We want your visits to be efficient and gentle.<br title="b11" />We
-                          are dedicated to being your dentist.</span
+                        <div class="TPamount">
+                          <span class="TPdollar">$</span> <span>88</span>
+                        </div>
+                        <br title="b11" />
+                        <div class="TPtext-sub">
+                          Includes exam and cleaning for healthy patients.
+                        </div>
+                        <br title="b11" /><a class="TPbtn TPbtn-primary"
+                          >Request an appointment</a
                         >
+                        <br title="b11" />
+                      </div>
+                      <br title="b11" />
+                      <div class="TPvalid">
+                        Limited time offer.<br title="b11" />For new patients only.
                       </div>
                     </div>
                   </div>
-                  <br title="b11" />
-                  <div class="TProw">
-                    <div class="TPcol-md-4 TPtext-center">
-                      <div
-                        data-aos="fade-up"
-                        data-aos-delay="800"
-                        data-aos-duration="800"
-                        class="aos-init aos-animate"
-                      >
-                        <div class="TPcard">
-                          <div class="TPcard-border">
-                            <h3 class="TPtext-color2">
-                              Adult's<br title="b11" />Complete Checkup
-                            </h3>
-                            <br title="b11" />
-                            <hr />
-                            <div class="TPamount">
-                              <span class="TPdollar">$</span> <span>88</span>
-                            </div>
-                            <br title="b11" />
-                            <div class="TPtext-sub">
-                              Includes exam and cleaning for healthy patients.
-                            </div>
-                            <br title="b11" /><a class="TPbtn TPbtn-primary"
-                              >Request an appointment</a
-                            >
-                            <br title="b11" />
-                          </div>
-                          <br title="b11" />
-                          <div class="TPvalid">
-                            Limited time offer.<br title="b11" />For new patients only.
-                          </div>
+                </div>
+                <div class="TPcol-md-4 TPtext-center">
+                  <div
+                    data-aos="fade-up"
+                    data-aos-delay="1000"
+                    data-aos-duration="800"
+                    class="aos-init aos-animate"
+                  >
+                    <div class="TPcard">
+                      <div class="TPcard-border">
+                        <h3 class="TPtext-color2">Emergency<br title="b11" />Exam</h3>
+                        <br title="b11" />
+                        <hr />
+                        <div class="TPamount">
+                          <span class="TPdollar">$</span> <span>29</span>
                         </div>
+                        <br title="b11" />
+                        <div class="TPtext-sub">Includes exam with complete X-rays.</div>
+                        <br title="b11" /><a class="TPbtn TPbtn-primary"
+                          >Request an appointment</a>
+                        <br title="b11" />
+                      </div>
+                      <br title="b11" />
+                      <div class="TPvalid">
+                        Cleaning not included. Limited time offer. For new patients only.
                       </div>
                     </div>
-                    <div class="TPcol-md-4 TPtext-center">
-                      <div
-                        data-aos="fade-up"
-                        data-aos-delay="1000"
-                        data-aos-duration="800"
-                        class="aos-init aos-animate"
-                      >
-                        <div class="TPcard">
-                          <div class="TPcard-border">
-                            <h3 class="TPtext-color2">Emergency<br title="b11" />Exam</h3>
-                            <br title="b11" />
-                            <hr />
-                            <div class="TPamount">
-                              <span class="TPdollar">$</span> <span>29</span>
-                            </div>
-                            <br title="b11" />
-                            <div class="TPtext-sub">Includes exam with complete X-rays.</div>
-                            <br title="b11" /><a class="TPbtn TPbtn-primary"
-                              >Request an appointment</a>
-                            <br title="b11" />
-                          </div>
-                          <br title="b11" />
-                          <div class="TPvalid">
-                            Cleaning not included. Limited time offer. For new patients only.
-                          </div>
+                  </div>
+                </div>
+                <div class="TPcol-md-4 TPtext-center">
+                  <div
+                    data-aos="fade-up"
+                    data-aos-delay="1200"
+                    data-aos-duration="800"
+                    class="aos-init aos-animate"
+                  >
+                    <div class="TPcard">
+                      <div class="TPcard-border">
+                        <h3 class="TPtext-color2">
+                          Implant<br title="b11" />Consultation
+                        </h3>
+                        <br title="b11" />
+                        <hr />
+                        <div class="TPamount">
+                          <span class="TPdollar"></span> <span>FREE</span>
                         </div>
+                        <br title="b11" />
+                        <div class="TPtext-sub">
+                          Includes consultation and panoramic radiograph.
+                        </div>
+                        <br title="b11" /><a class="TPbtn TPbtn-primary"
+                          >Request an appointment</a
+                        >
+                        <br title="b11" />
                       </div>
-                    </div>
-                    <div class="TPcol-md-4 TPtext-center">
-                      <div
-                        data-aos="fade-up"
-                        data-aos-delay="1200"
-                        data-aos-duration="800"
-                        class="aos-init aos-animate"
-                      >
-                        <div class="TPcard">
-                          <div class="TPcard-border">
-                            <h3 class="TPtext-color2">
-                              Implant<br title="b11" />Consultation
-                            </h3>
-                            <br title="b11" />
-                            <hr />
-                            <div class="TPamount">
-                              <span class="TPdollar"></span> <span>FREE</span>
-                            </div>
-                            <br title="b11" />
-                            <div class="TPtext-sub">
-                              Includes consultation and panoramic radiograph.
-                            </div>
-                            <br title="b11" /><a class="TPbtn TPbtn-primary"
-                              >Request an appointment</a
-                            >
-                            <br title="b11" />
-                          </div>
-                          <br title="b11" />
-                          <div class="TPvalid">
-                            Limited time offer.<br title="b11" />For new patients only.
-                          </div>
-                        </div>
+                      <br title="b11" />
+                      <div class="TPvalid">
+                        Limited time offer.<br title="b11" />For new patients only.
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
           ${props.children}
         </div>`
         ||
@@ -825,7 +825,7 @@
             ${theHeightStyle}
           </style>
           <div class="TPbw TPBandCol">
-            <div style=${{ padding: '40px 0' }}>
+            <div>
               <table
                 width="100%"
                 class="TPartBox"
@@ -893,7 +893,7 @@
             ${theHeightStyle}
             ${`.TPassociations { text-align: center; margin-top: 25px; } .TPassociations svg { width: 150px; height: auto; vertical-align: middle; padding: 5px 15px; color: #68686b; }`}
           </style>
-          <div class="TPbw TPBandCol TPart4Col" style=${{ padding: "50px 0" }}>
+          <div class="TPbw TPBandCol TPart4Col">
             <table
               width="100%"
               class="TPartBox TPartBox4"
@@ -1402,6 +1402,269 @@
           </div>
           ${props.children}
         </div>`
+        ||
+        props.name === 'videoReviews1' && html`<div id="${props.name}-thumb" ref=${droppableRef} class="TPBand ${props.name} ${props.dropped ? '' : 'drop-in'}" draggable=${props.draggable} onDragStart=${e => drag(e)}>
+          <style>
+            ${theHeightStyle}
+            ${`.videoReviews1 #TPsvg-5-stars-rounded { width: 100%; max-width: 150px; height: auto; margin-bottom: 10px; color: gold; } .videoReviews1 #carousel-reviews { margin-bottom:25px; } .videoReviews1 .carousel-indicators { z-index:4; bottom:-50px!important; } .videoReviews1 .carousel-indicators li {border: 1px solid currentColor;} .videoReviews1 .carousel-indicators .active {background-color: currentColor;}`}
+          </style>
+          <div class="TPbw TPBandCol">
+            <table
+              width="100%"
+              class="TPartBox"
+              border="0"
+              cellspacing="0"
+              cellpadding="0"
+            >
+              <tbody>
+                <tr valign="top">
+                  <td id="" class="TParticle">
+                    <div class="container-fluid TPbs-carousel">
+                      <div
+                        class="carousel slide"
+                        id="carousel-reviews"
+                        data-ride="carousel"
+                        data-interval="false"
+                      >
+                        <ol class="carousel-indicators">
+                          <li
+                            data-target="#carousel-reviews"
+                            data-slide-to="0"
+                            class="active"
+                          ></li>
+                          <li
+                            data-target="#carousel-reviews"
+                            data-slide-to="1"
+                            class=""
+                          ></li>
+                          <li
+                            data-target="#carousel-reviews"
+                            data-slide-to="2"
+                            class=""
+                          ></li>
+                        </ol>
+                        <div class="carousel-inner" role="listbox">
+                          <div class="item active">
+                            <div class="TProw">
+                              <div class="TPcol-xs-12">
+                                <div
+                                  class="TPinline-block aos-init aos-animate"
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="0"
+                                >
+                                  <svg
+                                    id="TPsvg-5-stars-rounded"
+                                    class="TPsvg"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="480.1"
+                                    height="90.5"
+                                    fill="currentColor"
+                                    viewBox="0 0 480.1 90.5"
+                                  >
+                                    <path
+                                      d="M22.7 90.5c-1.6 0-3.1-.5-4.4-1.4-2.3-1.7-3.5-4.5-3-7.3l4-23.4-17-16.6c-2-2-2.8-5-1.9-7.7.9-2.7 3.2-4.7 6.1-5.1l23.5-3.4L40.4 4.2C41.7 1.6 44.3 0 47.2 0l0 0c2.9 0 5.5 1.6 6.7 4.2l10.5 21.3 23.5 3.4c2.8.4 5.2 2.4 6.1 5.1.9 2.7.1 5.7-1.9 7.7l-17 16.6 4 23.4c.5 2.8-.7 5.7-3 7.3-2.3 1.7-5.4 1.9-7.9.6l-21-11.1-21 11.1C25 90.2 23.8 90.5 22.7 90.5zM168.1 90.5c-1.2 0-2.4-.3-3.5-.9l-21-11.1-21 11.1c-2.5 1.3-5.6 1.1-7.9-.6-2.3-1.7-3.5-4.5-3-7.3l4-23.4-17-16.6c-2-2-2.8-5-1.9-7.7.9-2.7 3.2-4.7 6.1-5.1l23.5-3.4 10.5-21.3c1.3-2.6 3.9-4.2 6.7-4.2 2.9 0 5.5 1.6 6.7 4.2l10.5 21.3 23.5 3.4c2.8.4 5.2 2.4 6.1 5.1.9 2.7.1 5.7-1.9 7.7l-17 16.6 4 23.4c.5 2.8-.7 5.7-3 7.3C171.2 90 169.7 90.5 168.1 90.5zM264.6 90.5c-1.2 0-2.4-.3-3.5-.9l-21-11.1-21 11.1c-2.5 1.3-5.6 1.1-7.9-.6-2.3-1.7-3.5-4.5-3-7.3l4-23.4-17-16.6c-2-2-2.8-5-1.9-7.7.9-2.7 3.2-4.7 6.1-5.1l23.5-3.4 10.5-21.3c1.3-2.6 3.9-4.2 6.7-4.2 2.9 0 5.5 1.6 6.7 4.2l10.5 21.3 23.5 3.4c2.8.4 5.2 2.4 6.1 5.1.9 2.7.1 5.7-1.9 7.7l-17 16.6 4 23.4c.5 2.8-.7 5.7-3 7.3C267.7 90 266.1 90.5 264.6 90.5zM361 90.5c-1.2 0-2.4-.3-3.5-.9l-21-11.1-21 11.1c-2.5 1.3-5.6 1.1-7.9-.6-2.3-1.7-3.5-4.5-3-7.3l4-23.4-17-16.6c-2-2-2.8-5-1.9-7.7.9-2.7 3.2-4.7 6.1-5.1l23.5-3.4 10.5-21.3c1.3-2.6 3.9-4.2 6.7-4.2s5.5 1.6 6.7 4.2l10.5 21.3 23.5 3.4c2.8.4 5.2 2.4 6.1 5.1.9 2.7.1 5.7-1.9 7.7l-17 16.6 4 23.4c.5 2.8-.7 5.7-3 7.3C364.1 90 362.6 90.5 361 90.5zM457.4 90.5c-1.2 0-2.4-.3-3.5-.9l-21-11.1-21 11.1c-2.5 1.3-5.6 1.1-7.9-.6-2.3-1.7-3.5-4.5-3-7.3l4-23.4-17-16.6c-2-2-2.8-5-1.9-7.7.9-2.7 3.2-4.7 6.1-5.1l23.5-3.4 10.5-21.3c1.3-2.6 3.9-4.2 6.7-4.2s5.5 1.6 6.7 4.2l10.5 21.3 23.5 3.4c2.8.4 5.2 2.4 6.1 5.1.9 2.7.1 5.7-1.9 7.7l-17 16.6 4 23.4c.5 2.8-.7 5.7-3 7.3C460.6 90 459 90.5 457.4 90.5z"
+                                    ></path>
+                                  </svg>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="TProw">
+                              <div class="TPcol-xs-12">
+                                <div
+                                  class="TPinline-block aos-init aos-animate"
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="100"
+                                >
+                                  <h2 class="H2">"Feeling Relaxed and Confident"</h2>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="TProw">
+                              <div class="TPcol-md-4 TPcol-md-push-8">
+                                <div class="TPvideo-container">
+                                  <div
+                                    class="TPembed-responsive TPembed-responsive-16by9"
+                                  >
+                                    <iframe
+                                      class="TPembed-responsive-item"
+                                      src="https://www.youtube.com/embed/NpEaa2P7qZI?rel=0"
+                                    ></iframe>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="TPcol-md-8 TPcol-md-pull-4">
+                                Lorem ipsum dolor sit amet, consectetur
+                                adipisicing elit. Iste, cumque vero? Id, fugit illum
+                                veniam voluptates placeat voluptatem quae harum sapiente
+                                quia soluta odio maiores error, iure minus explicabo
+                                libero! Lorem ipsum dolor sit amet, consectetur
+                                adipisicing elit. Voluptatem voluptatum quisquam
+                                distinctio harum beatae, sapiente officiis temporibus,
+                                eligendi architecto asperiores ad molestiae nesciunt
+                                voluptas esse quod minima saepe omnis nobis?
+                              </div>
+                            </div>
+                          </div>
+                          <div class="item">
+                            <div class="TProw">
+                              <div class="TPcol-xs-12">
+                                <div
+                                  class="TPinline-block aos-init aos-animate"
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="0"
+                                >
+                                  <svg
+                                    id="TPsvg-5-stars-rounded"
+                                    class="TPsvg"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="480.1"
+                                    height="90.5"
+                                    fill="currentColor"
+                                    viewBox="0 0 480.1 90.5"
+                                  >
+                                    <path
+                                      d="M22.7 90.5c-1.6 0-3.1-.5-4.4-1.4-2.3-1.7-3.5-4.5-3-7.3l4-23.4-17-16.6c-2-2-2.8-5-1.9-7.7.9-2.7 3.2-4.7 6.1-5.1l23.5-3.4L40.4 4.2C41.7 1.6 44.3 0 47.2 0l0 0c2.9 0 5.5 1.6 6.7 4.2l10.5 21.3 23.5 3.4c2.8.4 5.2 2.4 6.1 5.1.9 2.7.1 5.7-1.9 7.7l-17 16.6 4 23.4c.5 2.8-.7 5.7-3 7.3-2.3 1.7-5.4 1.9-7.9.6l-21-11.1-21 11.1C25 90.2 23.8 90.5 22.7 90.5zM168.1 90.5c-1.2 0-2.4-.3-3.5-.9l-21-11.1-21 11.1c-2.5 1.3-5.6 1.1-7.9-.6-2.3-1.7-3.5-4.5-3-7.3l4-23.4-17-16.6c-2-2-2.8-5-1.9-7.7.9-2.7 3.2-4.7 6.1-5.1l23.5-3.4 10.5-21.3c1.3-2.6 3.9-4.2 6.7-4.2 2.9 0 5.5 1.6 6.7 4.2l10.5 21.3 23.5 3.4c2.8.4 5.2 2.4 6.1 5.1.9 2.7.1 5.7-1.9 7.7l-17 16.6 4 23.4c.5 2.8-.7 5.7-3 7.3C171.2 90 169.7 90.5 168.1 90.5zM264.6 90.5c-1.2 0-2.4-.3-3.5-.9l-21-11.1-21 11.1c-2.5 1.3-5.6 1.1-7.9-.6-2.3-1.7-3.5-4.5-3-7.3l4-23.4-17-16.6c-2-2-2.8-5-1.9-7.7.9-2.7 3.2-4.7 6.1-5.1l23.5-3.4 10.5-21.3c1.3-2.6 3.9-4.2 6.7-4.2 2.9 0 5.5 1.6 6.7 4.2l10.5 21.3 23.5 3.4c2.8.4 5.2 2.4 6.1 5.1.9 2.7.1 5.7-1.9 7.7l-17 16.6 4 23.4c.5 2.8-.7 5.7-3 7.3C267.7 90 266.1 90.5 264.6 90.5zM361 90.5c-1.2 0-2.4-.3-3.5-.9l-21-11.1-21 11.1c-2.5 1.3-5.6 1.1-7.9-.6-2.3-1.7-3.5-4.5-3-7.3l4-23.4-17-16.6c-2-2-2.8-5-1.9-7.7.9-2.7 3.2-4.7 6.1-5.1l23.5-3.4 10.5-21.3c1.3-2.6 3.9-4.2 6.7-4.2s5.5 1.6 6.7 4.2l10.5 21.3 23.5 3.4c2.8.4 5.2 2.4 6.1 5.1.9 2.7.1 5.7-1.9 7.7l-17 16.6 4 23.4c.5 2.8-.7 5.7-3 7.3C364.1 90 362.6 90.5 361 90.5zM457.4 90.5c-1.2 0-2.4-.3-3.5-.9l-21-11.1-21 11.1c-2.5 1.3-5.6 1.1-7.9-.6-2.3-1.7-3.5-4.5-3-7.3l4-23.4-17-16.6c-2-2-2.8-5-1.9-7.7.9-2.7 3.2-4.7 6.1-5.1l23.5-3.4 10.5-21.3c1.3-2.6 3.9-4.2 6.7-4.2s5.5 1.6 6.7 4.2l10.5 21.3 23.5 3.4c2.8.4 5.2 2.4 6.1 5.1.9 2.7.1 5.7-1.9 7.7l-17 16.6 4 23.4c.5 2.8-.7 5.7-3 7.3C460.6 90 459 90.5 457.4 90.5z"
+                                    ></path>
+                                  </svg>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="TProw">
+                              <div class="TPcol-xs-12">
+                                <div
+                                  class="TPinline-block aos-init aos-animate"
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="100"
+                                >
+                                  <h2 class="H2">"Feeling Relaxed and Confident"</h2>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="TProw">
+                              <div class="TPcol-md-4 TPcol-md-push-8">
+                                <div class="TPvideo-container">
+                                  <div
+                                    class="TPembed-responsive TPembed-responsive-16by9"
+                                  >
+                                    <iframe
+                                      class="TPembed-responsive-item"
+                                      src="https://www.youtube.com/embed/NpEaa2P7qZI?rel=0"
+                                    ></iframe>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="TPcol-md-8 TPcol-md-pull-4">
+                                Lorem, ipsum dolor sit amet consectetur
+                                adipisicing elit. Minima non earum voluptas. Amet
+                                reiciendis voluptates soluta aperiam eius, dolores numquam
+                                corrupti perspiciatis totam nihil veritatis repellendus
+                                quaerat tempore accusamus suscipit. Lorem ipsum dolor sit
+                                amet consectetur, adipisicing elit. Atque odit, numquam
+                                omnis nisi laborum incidunt impedit dolores, quam maxime
+                                obcaecati ratione vitae repellendus quis ipsam perferendis
+                                molestiae saepe ad molestias.
+                              </div>
+                            </div>
+                          </div>
+                          <div class="item">
+                            <div class="TProw">
+                              <div class="TPcol-xs-12">
+                                <div
+                                  class="TPinline-block aos-init aos-animate"
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="0"
+                                >
+                                  <svg
+                                    id="TPsvg-5-stars-rounded"
+                                    class="TPsvg"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="480.1"
+                                    height="90.5"
+                                    fill="currentColor"
+                                    viewBox="0 0 480.1 90.5"
+                                  >
+                                    <path
+                                      d="M22.7 90.5c-1.6 0-3.1-.5-4.4-1.4-2.3-1.7-3.5-4.5-3-7.3l4-23.4-17-16.6c-2-2-2.8-5-1.9-7.7.9-2.7 3.2-4.7 6.1-5.1l23.5-3.4L40.4 4.2C41.7 1.6 44.3 0 47.2 0l0 0c2.9 0 5.5 1.6 6.7 4.2l10.5 21.3 23.5 3.4c2.8.4 5.2 2.4 6.1 5.1.9 2.7.1 5.7-1.9 7.7l-17 16.6 4 23.4c.5 2.8-.7 5.7-3 7.3-2.3 1.7-5.4 1.9-7.9.6l-21-11.1-21 11.1C25 90.2 23.8 90.5 22.7 90.5zM168.1 90.5c-1.2 0-2.4-.3-3.5-.9l-21-11.1-21 11.1c-2.5 1.3-5.6 1.1-7.9-.6-2.3-1.7-3.5-4.5-3-7.3l4-23.4-17-16.6c-2-2-2.8-5-1.9-7.7.9-2.7 3.2-4.7 6.1-5.1l23.5-3.4 10.5-21.3c1.3-2.6 3.9-4.2 6.7-4.2 2.9 0 5.5 1.6 6.7 4.2l10.5 21.3 23.5 3.4c2.8.4 5.2 2.4 6.1 5.1.9 2.7.1 5.7-1.9 7.7l-17 16.6 4 23.4c.5 2.8-.7 5.7-3 7.3C171.2 90 169.7 90.5 168.1 90.5zM264.6 90.5c-1.2 0-2.4-.3-3.5-.9l-21-11.1-21 11.1c-2.5 1.3-5.6 1.1-7.9-.6-2.3-1.7-3.5-4.5-3-7.3l4-23.4-17-16.6c-2-2-2.8-5-1.9-7.7.9-2.7 3.2-4.7 6.1-5.1l23.5-3.4 10.5-21.3c1.3-2.6 3.9-4.2 6.7-4.2 2.9 0 5.5 1.6 6.7 4.2l10.5 21.3 23.5 3.4c2.8.4 5.2 2.4 6.1 5.1.9 2.7.1 5.7-1.9 7.7l-17 16.6 4 23.4c.5 2.8-.7 5.7-3 7.3C267.7 90 266.1 90.5 264.6 90.5zM361 90.5c-1.2 0-2.4-.3-3.5-.9l-21-11.1-21 11.1c-2.5 1.3-5.6 1.1-7.9-.6-2.3-1.7-3.5-4.5-3-7.3l4-23.4-17-16.6c-2-2-2.8-5-1.9-7.7.9-2.7 3.2-4.7 6.1-5.1l23.5-3.4 10.5-21.3c1.3-2.6 3.9-4.2 6.7-4.2s5.5 1.6 6.7 4.2l10.5 21.3 23.5 3.4c2.8.4 5.2 2.4 6.1 5.1.9 2.7.1 5.7-1.9 7.7l-17 16.6 4 23.4c.5 2.8-.7 5.7-3 7.3C364.1 90 362.6 90.5 361 90.5zM457.4 90.5c-1.2 0-2.4-.3-3.5-.9l-21-11.1-21 11.1c-2.5 1.3-5.6 1.1-7.9-.6-2.3-1.7-3.5-4.5-3-7.3l4-23.4-17-16.6c-2-2-2.8-5-1.9-7.7.9-2.7 3.2-4.7 6.1-5.1l23.5-3.4 10.5-21.3c1.3-2.6 3.9-4.2 6.7-4.2s5.5 1.6 6.7 4.2l10.5 21.3 23.5 3.4c2.8.4 5.2 2.4 6.1 5.1.9 2.7.1 5.7-1.9 7.7l-17 16.6 4 23.4c.5 2.8-.7 5.7-3 7.3C460.6 90 459 90.5 457.4 90.5z"
+                                    ></path>
+                                  </svg>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="TProw">
+                              <div class="TPcol-xs-12">
+                                <div
+                                  class="TPinline-block aos-init aos-animate"
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="100"
+                                >
+                                  <h2 class="H2">"Feeling Relaxed and Confident"</h2>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="TProw">
+                              <div class="TPcol-md-4 TPcol-md-push-8">
+                                <div class="TPvideo-container">
+                                  <div
+                                    class="TPembed-responsive TPembed-responsive-16by9"
+                                  >
+                                    <iframe
+                                      class="TPembed-responsive-item"
+                                      src="https://www.youtube.com/embed/NpEaa2P7qZI?rel=0"
+                                    ></iframe>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="TPcol-md-8 TPcol-md-pull-4">
+                                Lorem ipsum dolor sit amet consectetur
+                                adipisicing elit. Harum recusandae sed ullam architecto,
+                                dolorum eum inventore voluptate! Voluptatum ipsum
+                                similique ea, labore ratione earum cumque vel, culpa vero,
+                                animi unde! Lorem ipsum, dolor sit amet consectetur
+                                adipisicing elit. Corporis ipsa repudiandae ex voluptatum
+                                illo rerum est id vitae minus, porro at soluta ad, error
+                                accusantium sapiente quas minima neque distinctio.
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br title="b11" />
+                    <center>
+                      <div
+                        class="TPinline-block aos-init aos-animate"
+                        data-aos="fade-up"
+                        data-aos-duration="800"
+                        data-aos-delay="600"
+                      >
+                        <a
+                          class="TPbtn TPbtn-default"
+                          href="#"
+                          title="Patient Testimonials New York Oral, Maxillofacial, and Implant Surgery Scarsdale, NY dental implants Scarsdale NY"
+                          >Read more reviews</a
+                        >
+                        <br />
+                        <br title="b11" /><a
+                          class="TPbtn TPbtn-default"
+                          href="#"
+                          target="_blank"
+                          >Leave a Review</a
+                        >
+                      </div>
+                    </center>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          ${props.children}
+        </div>`
       )
     }
 
@@ -1414,6 +1677,7 @@
           <${DroppableThumbnail} name="specials1" height="926" draggable />
           <${DroppableThumbnail} name="specials2" height="466" draggable />
           <${DroppableThumbnail} name="associations1" height="337" draggable />
+          <${DroppableThumbnail} name="videoReviews1" height="612" draggable />
         <//>
       `)
     }
