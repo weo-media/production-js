@@ -604,7 +604,7 @@
                     <div class="TPcol-md-6">
                       <img
                         class="TPimgLeft TPimg-responsive"
-                        src="http://fpoimg.com/555x185?text=Before and After Photo"
+                        src="https://fpoimg.com/555x185?text=Before and After Photo"
                         border="0"
                         alt="Before after smile"
                         title="Before after smile"
@@ -656,7 +656,7 @@
                           <a href="#" target="_blank"
                             ><img
                               class="TPimg-responsive TPfooter-logo"
-                              src="http://fpoimg.com/337x98?text=Large Logo Image"
+                              src="https://fpoimg.com/337x98?text=Large Logo Image"
                               border="0"
                               alt="Smile Craft Dental in Redwood City, CA"
                               title="Smile Craft Dental in Redwood City, CA"
@@ -2507,10 +2507,586 @@
                   </div>
                 `
         || props.name === 'technology-1' && html`
-                
+                <div class="TPbw TPBandCol ">
+                    <table
+                      width="100%"
+                      class="TPartBox "
+                      border="0"
+                      cellspacing="0"
+                      cellpadding="0"
+                    >
+                      <tbody>
+                        <tr valign="top">
+                          <td id="" class="TParticle">
+                            <div class="TProw">
+                              <div class="TPcol-sm-7 TPtext-center">
+                                <div
+                                  data-aos="fade-right"
+                                  data-aos-duration="1200"
+                                  data-aos-delay="0"
+                                  class="aos-init aos-animate"
+                                >
+                                  <h2 class="TPsubtitle TPtext-uppercase">
+                                    Advanced Technology <br title="b11" /><span
+                                      class="TPtitle TPtext-lowercase"
+                                      >for high quality care</span
+                                    >
+                                  </h2>
+                                </div>
+                                <br title="b11" />
+                                <div
+                                  data-aos="fade-right"
+                                  data-aos-duration="1200"
+                                  data-aos-delay="200"
+                                  class="aos-init aos-animate"
+                                >
+                                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                  eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                                  enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                                  nisi ut aliquip.
+                                </div>
+                                <br title="b11" />
+                                <br title="b11" />
+                                <div
+                                  data-aos="fade-right"
+                                  data-aos-duration="1200"
+                                  data-aos-delay="400"
+                                  class="aos-init aos-animate"
+                                >
+                                  <a
+                                    class="TPbtn TPbtn-lg TPbtn-primary"
+                                    href="#"
+                                    title="Subpage Double Boxes Dental Implants Beaverton, OR dentist"
+                                    >Learn More About Our Technology</a
+                                  >
+                                </div>
+                              </div>
+                              <div class="TPcol-sm-5">
+                                <div
+                                  data-aos="fade-up"
+                                  data-aos-duration="1200"
+                                  data-aos-delay="0"
+                                  class="aos-init aos-animate"
+                                >
+                                  <img
+                                    class="TPimg-responsive TPimg-circle"
+                                    src="https://fpoimg.com/458x458?text=detail photo"
+                                    border="0"
+                                    alt="image of art3"
+                                    title="image of art3"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 `
         || props.name === 'call-to-action-1' && html`
-
+                  <style>
+                    ${!props.draggable && `.drop-recieve .${props.name} > .TPBandCol {
+                      width: 100%;
+                      padding: 0;
+                    }`}
+                    ${`.${props.name} .TPcta-row {
+                      margin: 0;
+                    }
+                    .${props.name} .TPcta,
+                    .${props.name} .TPcta-col {
+                      padding: 0;
+                      text-align: center;
+                    }
+                    .${props.name} .TPcta img {
+                      width: 100%;
+                      transition: 0.25s all;
+                    }
+                    .${props.name} .TPcta:hover img,
+                    .${props.name} .TPcta:focus img,
+                    .${props.name} .TPcta:active img {
+                      opacity: 0.7;
+                    }
+                    .${props.name} .TPcta .TPthumbnail {
+                      padding: 0;
+                      text-decoration: none !important;
+                    }
+                    .${props.name} .TPcta .TPtoken {
+                      margin-top: -70px;
+                    }
+                    .${props.name} .TPcta .TPcaption {
+                      padding: 9px 7.5%;
+                    }
+                    `}
+                    ${`.${props.name} .TPline:after {
+                      content: '';
+                      display: block;
+                      height: 1px;
+                      width: 20%;
+                      background: #68686b;
+                      margin: 10px auto 15px;
+                    }
+                    .${props.name} .TPtoken {
+                      position: relative;
+                      margin: 0 auto 20px;
+                      z-index: 1;
+                      width: 100px;
+                      height: 100px;
+                      -webkit-border-radius: 5000px;
+                      -moz-border-radius: 5000px;
+                      border-radius: 5000px;
+                    }
+                    .${props.name} .TPtoken:before {
+                      display: block;
+                      content: '';
+                      height: 100%;
+                      width: 100%;
+                      position: absolute;
+                      -webkit-border-radius: 5000px;
+                      -moz-border-radius: 5000px;
+                      border-radius: 5000px;
+                      border: 2.5px solid #d7d9db;
+                    }
+                    .${props.name} .TPtoken-color1 {
+                      background: #333333;
+                      border: 3px solid #aaaaaa;
+                    }
+                    .${props.name} .TPtoken-color2 {
+                      background: #aaaaaa;
+                      border: 3px solid #aaaaaa;
+                    }
+                    .${props.name} .TPtoken svg {
+                      width: 100%;
+                      height: 100%;
+                      padding: 15px 20px;
+                      color: #fff;
+                    }
+                    .${props.name} .TPtoken .st0,
+                    .${props.name} .TPtoken .st1 { stroke-width: 3.5px !important; }
+                    .${props.name} .TPsm .fa { color: #68686b; }
+                    .${props.name} .TPsm:hover .fa { color: #aaaaaa; }
+                  `}
+                  </style>
+                  <div class="TPbw TPBandCol ">
+                    <table
+                      width="100%"
+                      class="TPartBox "
+                      border="0"
+                      cellspacing="0"
+                      cellpadding="0"
+                    >
+                      <tbody>
+                        <tr valign="top">
+                          <td id="" class="TParticle">
+                            <div class="TProw TPcta-row">
+                              <div class="TPcol-lg-6 TPcta-col">
+                                <div class="TProw TPcta-row">
+                                  <div class="TPcol-sm-6 TPcta">
+                                    <a
+                                      class="TPthumbnail"
+                                      href="#"
+                                      title="Subpage - Enhanced Client 27 - Beaverton, OR"
+                                      ><img
+                                        class="TPimg-responsive"
+                                        src="https://fpoimg.com/480x480?text=CTA photo"
+                                        border="0"
+                                        alt="Invisalign Clear Aligners"
+                                        title="Invisalign Clear Aligners"
+                                      />
+                                      <div
+                                        data-aos="fade-down"
+                                        data-aos-duration="900"
+                                        class="aos-init aos-animate"
+                                      >
+                                        <div class="TPtoken TPtoken-color1">
+                                          <svg
+                                            id="TPsvg-clear-aligner-2"
+                                            class="TPsvg"
+                                            height="32.7"
+                                            width="100"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 100 32.7"
+                                            fill="currentColor"
+                                            aria-labelledby="TPsvg-clear-aligner-2-title"
+                                            aria-describedby="TPsvg-clear-aligner-2-description"
+                                            role="img"
+                                          >
+                                            <title id="TPsvg-clear-aligner-2-title">
+                                              Clear aligner icon
+                                            </title>
+                                            <desc id="TPsvg-clear-aligner-2-description">
+                                              Frontal view of an upper tooth clear aligner
+                                            </desc>
+                                            <path
+                                              d="M87 27.2c1.4.9 3 1.6 4.8 1.6h.1c1.6 0 3-.6 4.1-1.7 3.5-3.5 5.3-18 2.9-23.8C97.7.4 95.7 0 94.6 0c-4.1 0-7.7 3.8-10 7.1-1.5-3.4-3.6-5.2-6.4-5.2-4.1 0-6.8 4.6-8.4 9.4-1.6-5.1-4.8-9.4-10.4-9.4-5 0-7.9 3.9-9.4 8.7-1.6-4.8-4.4-8.7-9.4-8.7-5.6 0-8.8 4.3-10.5 9.4-1.6-4.8-4.3-9.4-8.4-9.4-2.7 0-4.9 1.7-6.4 5.2C13.1 3.8 9.5 0 5.4 0 4.3 0 2.3.4 1.1 3.4-1.3 9.2.5 23.6 4 27.1a5.7 5.7 0 004.1 1.7h.1c1.7 0 3.4-.8 4.8-1.6 1.4 3 7.4 3 9.8 3 2.8 0 5.1-.2 5.2-.2l.9-.1.3-.5c1 1.3 2.6 2.2 4.4 2.4 4.3.5 10.8 1.4 14.5.6.7-.2 1.3-.5 1.9-.9.5.4 1.2.7 1.9.9 1.1.2 2.4.3 3.9.3 3.4 0 7.6-.5 10.7-.9a6.7 6.7 0 004.3-2.4l.3.5.9.1c.1 0 2.4.2 5.2.2 2.4-.1 8.5-.1 9.8-3zM8.1 25c-.6.1-1-.2-1.4-.6-2.1-2.1-4.1-14.6-2-19.6l.7-1c2.7 0 6.3 4.1 8.5 8.1-.6 2.9-1 6.5-1.1 10.6-1.1.9-3 2.5-4.7 2.5zm14.7 1.3c-4.3 0-5.8-.6-6.3-.8v-2.1c.1-4.6.5-8.4 1.2-11.4.5-2.4 1.8-6.3 3.9-6.3 3.1 0 6.2 9.3 6.2 14.6 0 2.7-.8 4.8-1.2 5.8l-3.8.2zM48 27.8c0 .4-.3.8-.7.9a51 51 0 01-13.3-.6c-1.2-.2-2.3-1.2-2.3-2.3 0-3.3.7-19.9 8.8-19.9 7.1 0 7.5 16 7.5 19.2v2.7zm46.6-24c.2 0 .4.3.7 1 2 4.9 0 17.5-2.1 19.6-.4.4-.9.7-1.4.6-1.6 0-3.6-1.5-4.6-2.5-.1-4.1-.5-7.6-1.1-10.5 2.3-4 5.8-8.2 8.5-8.2zM65.8 28c-3.8.5-10.1 1.3-13.1.6a1 1 0 01-.7-.9V25.9 25c0-3.2.4-19.2 7.5-19.2 8.2 0 8.8 16.6 8.8 19.9 0 1-1.1 2.1-2.5 2.3zm11.4-1.7l-3.8-.1c-.5-1.1-1.2-3.2-1.2-5.8 0-5.2 3.1-14.6 6.2-14.6 2.2 0 3.4 3.9 3.9 6.3.7 3 1.1 6.8 1.2 11.4v2c-.5.2-2 .8-6.3.8z"
+                                            ></path>
+                                          </svg>
+                                        </div>
+                                      </div>
+                                      <div class="TPcaption">
+                                        <h2 class="TPline">Invisalign</h2>
+                                        <p>
+                                          Lorem ipsum dolor sit amet, consectetur adipisicing
+                                          elit, sed do eiusmod tempor incididunt ut labore et
+                                          dolore magna aliqua. Ut enim ad minim veniam, quis
+                                          nostrud exercitation ullamco laboris nisi ut aliquip ex
+                                          ea commodo consequat.
+                                        </p>
+                                      </div>
+                                      <div class="TPthumbnail-footer">Read More ${'>'}</div></a
+                                    >
+                                  </div>
+                                  <div class="TPcol-sm-6 TPcta">
+                                    <a
+                                      class="TPthumbnail"
+                                      href="#"
+                                      title="Subpage - Enhanced Client 27 - Beaverton, OR"
+                                      ><img
+                                        class="TPimg-responsive"
+                                        src="https://fpoimg.com/480x480?text=CTA photo"
+                                        border="0"
+                                        alt="Orthodontic Services"
+                                        title="Orthodontic Services"
+                                      />
+                                      <div
+                                        data-aos="fade-down"
+                                        data-aos-duration="900"
+                                        data-aos-delay="200"
+                                        class="aos-init aos-animate"
+                                      >
+                                        <div class="TPtoken TPtoken-color1">
+                                          <svg
+                                            version="1.1"
+                                            id="TPsvg-braces-teeth"
+                                            class="TPsvg"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            x="0"
+                                            y="0"
+                                            width="99.6"
+                                            height="54.5"
+                                            viewBox="0 0 99.6 54.5"
+                                            xml:space="preserve"
+                                            enable-background="new 0 0 99.6 54.5"
+                                            aria-labelledby="TPsvg-braces-teeth-title"
+                                            aria-describedby="TPsvg-braces-teeth-description"
+                                            role="img"
+                                          >
+                                            <title id="TPsvg-braces-teeth-title">
+                                              Teeth with braces icon
+                                            </title>
+                                            <desc id="TPsvg-braces-teeth-description">
+                                              Two side by side teeth with roots held together with
+                                              braces
+                                            </desc>
+                                            <style type="text/css">
+                                              ${`#TPsvg-braces-teeth .st0 {
+                                                fill: none;
+                                                stroke: currentColor;
+                                                stroke-width: 4.5;
+                                                stroke-linecap: round;
+                                                stroke-linejoin: round;
+                                                stroke-miterlimit: 10;
+                                              }`}
+                                            </style>
+                                            <path
+                                              class="st0"
+                                              d="M34.2,36.6c1.2,4,1.5,8.1,1.3,11.3c-0.4,4.4,2.2,4.4,2.3,4.4c1.4,0,2-0.3,3.4-2.6c1.4-2.3,2.6-6.6,2.6-14 c0-6.4,1.7-9.8,3.3-12.5c1.5-2.7,2.7-4.7,2.8-10.1c0-0.3,0-0.6,0-0.9c-0.1-3.8-1.6-6.1-3.9-7.6C43.5,3,40.2,2.2,37,2.3 c-3,0-6,0.6-8,1.5l-0.8,0.4l-0.8-0.4c-1.6-0.7-3.8-1.3-6.2-1.5l-4.1,0c-2.4,0.3-4.7,1-6.5,2.2c-2.3,1.6-3.8,3.8-3.9,7.6 c0,0.3,0,0.6,0,0.9c0,5.4,1.3,7.4,2.8,10.1c1.6,2.7,3.3,6.1,3.3,12.5c0,7.4,1.2,11.7,2.6,14c1.4,2.3,1.8,2.6,3.4,2.6 c1.6,0,2.2-1.6,2.2-2.5c0.3-3.1-0.2-8,1.3-13.2c0,0,1.1-4.2,6-4C32.9,32.8,34.2,36.6,34.2,36.6z"
+                                            ></path>
+                                            <line
+                                              class="st0"
+                                              x1="28.2"
+                                              y1="4.1"
+                                              x2="33.7"
+                                              y2="7"
+                                            ></line>
+                                            <path
+                                              class="st0"
+                                              d="M77.3,36.6c1.2,4,1.5,8.1,1.3,11.3c-0.4,4.4,2.2,4.4,2.3,4.4c1.4,0,2-0.3,3.4-2.6c1.4-2.3,2.6-6.6,2.6-14 c0-6.4,1.7-9.8,3.3-12.5c1.5-2.7,2.7-4.7,2.8-10.1c0-0.3,0-0.6,0-0.9c-0.1-3.8-1.6-6.1-3.9-7.6c-2.3-1.6-5.6-2.3-8.8-2.3 c-3,0-6,0.6-8,1.5l-0.8,0.4l-0.8-0.4C69,3,66.7,2.5,64.3,2.3l-4.1,0c-2.4,0.3-4.7,1-6.5,2.2c-2.3,1.6-3.8,3.8-3.9,7.6 c0,0.3,0,0.6,0,0.9c0,5.4,1.3,7.4,2.8,10.1c1.6,2.7,3.3,6.1,3.3,12.5c0,7.4,1.2,11.7,2.6,14c1.4,2.3,1.8,2.6,3.4,2.6 c1.6,0,2.2-1.6,2.2-2.5c0.3-3.1-0.2-8,1.3-13.2c0,0,1.1-4.2,6-4C76.1,32.8,77.3,36.6,77.3,36.6z"
+                                            ></path>
+                                            <line
+                                              class="st0"
+                                              x1="71.4"
+                                              y1="4.1"
+                                              x2="76.9"
+                                              y2="7"
+                                            ></line>
+                                            <rect
+                                              x="22.5"
+                                              y="14.7"
+                                              class="st0"
+                                              width="11.6"
+                                              height="11.5"
+                                            ></rect>
+                                            <rect
+                                              x="65.6"
+                                              y="14.7"
+                                              class="st0"
+                                              width="11.6"
+                                              height="11.5"
+                                            ></rect>
+                                            <line
+                                              class="st0"
+                                              x1="22.5"
+                                              y1="20.5"
+                                              x2="2.2"
+                                              y2="20.5"
+                                            ></line>
+                                            <line
+                                              class="st0"
+                                              x1="34"
+                                              y1="20.5"
+                                              x2="65.6"
+                                              y2="20.5"
+                                            ></line>
+                                            <line
+                                              class="st0"
+                                              x1="77.2"
+                                              y1="20.5"
+                                              x2="97.3"
+                                              y2="20.5"
+                                            ></line>
+                                          </svg>
+                                        </div>
+                                      </div>
+                                      <div class="TPcaption">
+                                        <h2 class="TPline">Orthodontics</h2>
+                                        <p>
+                                          Lorem ipsum dolor sit amet, consectetur adipisicing
+                                          elit, sed do eiusmod tempor incididunt ut labore et
+                                          dolore magna aliqua. Ut enim ad minim veniam, quis
+                                          nostrud exercitation ullamco laboris nisi ut aliquip ex
+                                          ea commodo consequat.
+                                        </p>
+                                      </div>
+                                      <div class="TPthumbnail-footer">Read More ${'>'}</div></a
+                                    >
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="TPcol-lg-6 TPcta-col">
+                                <div class="TProw TPcta-row">
+                                  <div class="TPcol-sm-6 TPcta">
+                                    <a
+                                      class="TPthumbnail"
+                                      href="#"
+                                      title="Subpage - Enhanced Client 27 - Beaverton, OR"
+                                      ><img
+                                        class="TPimg-responsive"
+                                        src="https://fpoimg.com/480x480?text=CTA photo"
+                                        border="0"
+                                        alt="Our Advanced Dental Technology"
+                                        title="Our Advanced Dental Technology"
+                                      />
+                                      <div
+                                        data-aos="fade-down"
+                                        data-aos-duration="900"
+                                        data-aos-delay="400"
+                                        class="aos-init aos-animate"
+                                      >
+                                        <div class="TPtoken TPtoken-color1">
+                                          <svg
+                                            version="1.1"
+                                            id="TPsvg-teeth-xray-2"
+                                            class="TPsvg"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            x="0"
+                                            y="0"
+                                            width="91.3"
+                                            height="67.3"
+                                            viewBox="0 0 91.3 67.3"
+                                            xml:space="preserve"
+                                            enable-background="new 0 0 91.3 67.3"
+                                          >
+                                            <style type="text/css">
+                                              ${`#TPsvg-teeth-xray-2 .st0 {
+                                                fill: none;
+                                                stroke: currentColor;
+                                                stroke-width: 4.5;
+                                                stroke-miterlimit: 10;
+                                              }
+                                              #TPsvg-teeth-xray-2 .st1 {
+                                                stroke-linecap: round;
+                                              }
+                                              #TPsvg-teeth-xray-2 .st1,
+                                              #TPsvg-teeth-xray-2 .st2 {
+                                                fill: none;
+                                                stroke: currentColor;
+                                                stroke-width: 4.5;
+                                                stroke-linejoin: round;
+                                                stroke-miterlimit: 10;
+                                              }`}
+                                            </style>
+                                            <g>
+                                              <path
+                                                class="st0"
+                                                d="M2.2,2.2v62.8h81.2c3.1,0,5.6-2.5,5.6-5.6V2.2H2.2z"
+                                              ></path>
+                                              <path
+                                                class="st1"
+                                                d="M49.1,45.6c0.9,3,1.2,6.1,0.9,8.5c-0.3,3.3,1.7,3.3,1.7,3.3c1,0,1.5-0.3,2.5-2c1-1.7,2-5,2-10.6 c0-4.8,1.3-7.4,2.5-9.5c1.1-2.1,2.1-3.5,2.1-7.6c0-0.2,0-0.4,0-0.6c-0.1-2.9-1.2-4.6-3-5.8c-1.8-1.2-4.2-1.7-6.7-1.7 c-2.3,0-4.5,0.5-6,1.2l-0.6,0.3L44,20.8c-1.2-0.5-2.9-1-4.7-1.1l-3.1,0c-1.8,0.2-3.6,0.7-4.9,1.6c-1.7,1.2-2.9,2.9-3,5.8 c0,0.2,0,0.4,0,0.6c0,4.1,1,5.6,2.1,7.6c1.2,2,2.5,4.6,2.5,9.5c0,5.6,0.9,8.9,2,10.6c1,1.7,1.4,2,2.5,2c1.2,0,1.6-1.2,1.7-1.9 c0.2-2.4-0.2-6.1,1-10c0,0,0.8-3.2,4.5-3C48.1,42.7,49.1,45.6,49.1,45.6z"
+                                              ></path>
+                                              <line
+                                                class="st1"
+                                                x1="44.6"
+                                                y1="21.1"
+                                                x2="48.7"
+                                                y2="23.3"
+                                              ></line>
+                                              <path
+                                                class="st1"
+                                                d="M8.6,43.6c0.7-0.6,1.7-1.1,3.2-1c3.6,0.2,4.5,3,4.5,3c0.9,3,1.2,6.1,0.9,8.5c-0.3,3.3,1.7,3.3,1.7,3.3 c1,0,1.5-0.3,2.5-2c1-1.7,2-5,2-10.6c0-4.8,1.3-7.4,2.5-9.5c1.1-2.1,2.1-3.5,2.1-7.6c0-0.2,0-0.4,0-0.6c-0.1-2.9-1.2-4.6-3-5.8 c-1.8-1.2-4.2-1.7-6.7-1.7c-2.3,0-4.5,0.5-6.1,1.2l-0.6,0.3l-0.6-0.3c-0.7-0.3-1.6-0.6-2.6-0.8"
+                                              ></path>
+                                              <line
+                                                class="st1"
+                                                x1="11.9"
+                                                y1="21.1"
+                                                x2="16"
+                                                y2="23.3"
+                                              ></line>
+                                              <path
+                                                class="st1"
+                                                d="M82.7,19.7c-1.8,0.1-3.6,0.6-4.8,1.1l-0.6,0.3l-0.6-0.3c-1.2-0.5-2.9-1-4.7-1.1l-3.1,0 c-1.8,0.2-3.6,0.7-4.9,1.6c-1.7,1.2-2.9,2.9-3,5.8c0,0.2,0,0.4,0,0.6c0,4.1,1,5.6,2.1,7.6c1.2,2,2.5,4.6,2.5,9.5 c0,5.6,0.9,8.9,2,10.6c1,1.7,1.4,2,2.5,2c1.2,0,1.6-1.2,1.7-1.9c0.2-2.4-0.2-6.1,1-10c0,0,0.8-3.2,4.5-3c3.6,0.2,4.5,3,4.5,3 c0.9,3,1.2,6.1,0.9,8.5"
+                                              ></path>
+                                              <line
+                                                class="st1"
+                                                x1="77.3"
+                                                y1="21.1"
+                                                x2="81.4"
+                                                y2="23.3"
+                                              ></line>
+                                              <line
+                                                class="st2"
+                                                x1="13.6"
+                                                y1="10.1"
+                                                x2="33.4"
+                                                y2="10.1"
+                                              ></line>
+                                            </g>
+                                          </svg>
+                                        </div>
+                                      </div>
+                                      <div class="TPcaption">
+                                        <h2 class="TPline">Our Technology</h2>
+                                        <p>
+                                          Lorem ipsum dolor sit amet, consectetur adipisicing
+                                          elit, sed do eiusmod tempor incididunt ut labore et
+                                          dolore magna aliqua. Ut enim ad minim veniam, quis
+                                          nostrud exercitation ullamco laboris nisi ut aliquip ex
+                                          ea commodo consequat.
+                                        </p>
+                                      </div>
+                                      <div class="TPthumbnail-footer">Read More ${'>'}</div></a
+                                    >
+                                  </div>
+                                  <div class="TPcol-sm-6 TPcta">
+                                    <a
+                                      class="TPthumbnail"
+                                      href="#"
+                                      title="Subpage - Enhanced Client 27 - Beaverton, OR"
+                                      ><img
+                                        class="TPimg-responsive"
+                                        src="https://fpoimg.com/480x480?text=CTA photo"
+                                        border="0"
+                                        alt="The World Class Orthodontics Difference"
+                                        title="The World Class Orthodontics Difference"
+                                      />
+                                      <div
+                                        data-aos="fade-down"
+                                        data-aos-duration="900"
+                                        data-aos-delay="600"
+                                        class="aos-init aos-animate"
+                                      >
+                                        <div class="TPtoken TPtoken-color1">
+                                          <svg
+                                            version="1.1"
+                                            id="TPsvg-tooth-hands-2"
+                                            class="TPsvg"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            x="0"
+                                            y="0"
+                                            width="92.9"
+                                            height="85.2"
+                                            viewBox="0 0 92.9 85.2"
+                                            xml:space="preserve"
+                                            enable-background="new 0 0 92.9 85.2"
+                                          >
+                                            <style type="text/css">
+                                              ${`#TPsvg-tooth-hands-2 .st0,
+                                              #TPsvg-tooth-hands-2 .st1 {
+                                                fill: none;
+                                                stroke: currentColor;
+                                                stroke-width: 4.5;
+                                                stroke-miterlimit: 10;
+                                              }
+                                              #TPsvg-tooth-hands-2 .st1 {
+                                                stroke-linecap: round;
+                                                stroke-linejoin: round;
+                                              }`}
+                                            </style>
+                                            <g>
+                                              <path
+                                                class="st0"
+                                                d="M76.3,58.6l3.6-13.3c0,0,0.4-2.8-2.1-4.1c-2.5-1.3-4.8,1-4.8,1l-7.7,15.3v19.1v8.8"
+                                              ></path>
+                                              <path
+                                                class="st0"
+                                                d="M78.5,50.4l2.9-8.8l-1.7-17.1c0,0-0.8-3,2.5-3.8c3.3-0.8,4.5,2.2,4.5,2.2l2.9,12.2c2.9,12.2,0,21.6,0,21.6 L82,76.4v8.8"
+                                              ></path>
+                                              <path
+                                                class="st0"
+                                                d="M77.2,41.2l-3.4-11.9c-0.5-1.7,0.5-3.5,2.2-4c1.7-0.5,3.5,0.5,4,2.2"
+                                              ></path>
+                                              <path
+                                                class="st0"
+                                                d="M16.6,58.6L13,45.2c0,0-0.4-2.8,2.1-4.1c2.4-1.3,4.8,1,4.8,1l7.7,15.3v19.1v8.8"
+                                              ></path>
+                                              <path
+                                                class="st0"
+                                                d="M14.4,50.4l-2.8-8.8l1.7-17.1c0,0,0.8-3-2.4-3.8c-3.3-0.8-4.5,2.2-4.5,2.2L3.5,35.3c-2.9,12.2,0,21.6,0,21.6 L11,76.4v8.8"
+                                              ></path>
+                                              <path
+                                                class="st0"
+                                                d="M15.8,41.2l3.4-11.9c0.5-1.7-0.5-3.5-2.2-4s-3.5,0.5-4,2.2"
+                                              ></path>
+                                              <path
+                                                class="st1"
+                                                d="M66.2,11.3c-0.1-3.5-1.5-5.5-3.6-7c-2.1-1.4-5.1-2.1-8.1-2.1c-2.8,0-5.5,0.6-7.3,1.4L46.5,4l-0.7-0.3 C44.3,3,42.2,2.5,40,2.3l-3.8,0c-2.2,0.2-4.3,0.9-5.9,2c-2.1,1.5-3.5,3.5-3.6,7c0,0.3,0,0.5,0,0.8c0,5,1.2,6.7,2.6,9.3 c1.4,2.5,3.1,5.6,3,11.4c0,6.8,1.1,10.7,2.4,12.8c1.3,2.1,1.7,2.4,3.1,2.4c1.5,0,2-1.5,2-2.3c0.3-2.9-0.2-7.3,1.2-12.1 c0.4-1.3,0.9-3,1.9-4.5c1.3-2,4.9-3.6,7.2,0c0.9,1.5,1.5,3.1,1.9,4.5c1.1,3.6,1.4,7.4,1.1,10.3c-0.4,4,2,4,2.1,4 c1.3,0,1.8-0.3,3.1-2.4c1.3-2.1,2.4-6.1,2.4-12.8c0-5.8,1.6-9,3-11.4c1.4-2.5,2.5-4.3,2.6-9.2C66.2,11.9,66.2,11.6,66.2,11.3z"
+                                              ></path>
+                                              <line
+                                                class="st1"
+                                                x1="46.5"
+                                                y1="4"
+                                                x2="51.5"
+                                                y2="6.6"
+                                              ></line>
+                                            </g>
+                                          </svg>
+                                        </div>
+                                      </div>
+                                      <div class="TPcaption">
+                                        <h2 class="TPline">Our Difference</h2>
+                                        <p>
+                                          Lorem ipsum dolor sit amet, consectetur adipisicing
+                                          elit, sed do eiusmod tempor incididunt ut labore et
+                                          dolore magna aliqua. Ut enim ad minim veniam, quis
+                                          nostrud exercitation ullamco laboris nisi ut aliquip ex
+                                          ea commodo consequat.
+                                        </p>
+                                      </div>
+                                      <div class="TPthumbnail-footer">Read More ${'>'}</div></a
+                                    >
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 `
         || props.name === 'photos-1' && html`
 
@@ -2537,8 +3113,8 @@
           <${DroppableThumbnail} name="associations-1" height="337" draggable />
           <${DroppableThumbnail} name="video-reviews-1" height="612" draggable />
           <${DroppableThumbnail} name="services-1" height="543" draggable />
-          <${DroppableThumbnail} name="technology-1" height="100" draggable />
-          <${DroppableThumbnail} name="call-to-action-1" height="100" draggable />
+          <${DroppableThumbnail} name="technology-1" height="578" draggable />
+          <${DroppableThumbnail} name="call-to-action-1" height="723" draggable />
           <${DroppableThumbnail} name="photos-1" height="100" draggable />
           <${DroppableThumbnail} name="multi-doctors-1" height="100" draggable />
           <${DroppableThumbnail} name="multi-locations-1" height="100" draggable />
