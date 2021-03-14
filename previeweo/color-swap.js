@@ -3615,7 +3615,7 @@
       }
       // when dragging out of dropzone, reset padding and color of dropzone
       const endDrop = () => {
-        recieverRef.current.style = recieverRef.current.childElementCount > 0 ? 'padding: .1em' : 'padding: 60px 0';
+        recieverRef.current.style = recieverRef.current.childElementCount > 0 ? 'padding: 60px 0' : 'padding: .1em';
       }
       // finish drop event and set padding
       const doDrop = (e) => {
