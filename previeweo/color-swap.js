@@ -577,9 +577,14 @@
     const DroppableThumbnail = (props) => {
       const droppableRef = useRef(null);
       const drag = (e) => {
-        e.dataTransfer.setData('text/plain', droppableRef.current.id.replace(/-thumb/, ''));
+        e.dataTransfer.setData('text/plain', JSON.stringify({
+          name: droppableRef.current.id.replace(/-thumb/, ''),
+          fullWidth: droppableRef.current.dataset.fullwidth,
+          bkgImg: droppableRef.current.dataset.bkgimg
+        }));
       }
       return (props.name && html`
+        ${props.fullWidth && !props.draggable && html`<style>${`.drop-recieve .${props.name} > .TPBandCol { width: 100%; padding: 0; }`}</style>`}
         ${props.draggable && html`
             <style>
               ${`.${props.name}.draggable { height: calc(${props.height}px * 0.1); } .${props.name}.draggable>*:before { height: ${props.height}px; }`}
@@ -593,6 +598,8 @@
           class="${props.name} ${props.dropped ? 'TPBand' : 'draggable'}"
           draggable=${props.draggable} 
           onDragStart=${e => drag(e)}
+          data-fullWidth=${props.fullWidth}
+          data-bkgImg=${props.bkgImg}
         >
           ${props.name === 'smile-gallery-1' && html`
               <style>
@@ -2586,10 +2593,6 @@
                 `
         || props.name === 'call-to-action-1' && html`
                   <style>
-                    ${!props.draggable && `.drop-recieve .${props.name} > .TPBandCol {
-                      width: 100%;
-                      padding: 0;
-                    }`}
                     ${`.${props.name} .TPcta-row {
                       margin: 0;
                     }
@@ -3089,13 +3092,487 @@
                   </div>
                 `
         || props.name === 'photos-1' && html`
-
+                  <div class="TPbw TPBandCol ">
+                    <table
+                      width="100%"
+                      class="TPartBox "
+                      border="0"
+                      cellspacing="0"
+                      cellpadding="0"
+                    >
+                      <tbody>
+                        <tr valign="top">
+                          <td id="" class="TParticle">
+                            <div class="TProw">
+                              <div class="TPcol-md-3 TPcol-xs-6 TPpadding-0">
+                                <div
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="200"
+                                  class="aos-init aos-animate"
+                                >
+                                  <img
+                                    class="TPimg-responsive TPcenter-block"
+                                    src="https://fpoimg.com/376x376?text=Office Detail Photo"
+                                    border="0"
+                                    alt="Alt Tag"
+                                    title="Alt Tag"
+                                  />
+                                </div>
+                              </div>
+                              <div class="TPcol-md-3 TPcol-xs-6 TPpadding-0">
+                                <div
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="400"
+                                  class="aos-init aos-animate"
+                                >
+                                  <img
+                                    class="TPimg-responsive TPcenter-block"
+                                    src="https://fpoimg.com/376x376?text=Office Detail Photo"
+                                    border="0"
+                                    alt="Alt Tag"
+                                    title="Alt Tag"
+                                  />
+                                </div>
+                              </div>
+                              <div class="TPcol-md-3 TPcol-xs-6 TPpadding-0">
+                                <div
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="600"
+                                  class="aos-init aos-animate"
+                                >
+                                  <img
+                                    class="TPimg-responsive TPcenter-block"
+                                    src="https://fpoimg.com/376x376?text=Office Detail Photo"
+                                    border="0"
+                                    alt="Alt Tag"
+                                    title="Alt Tag"
+                                  />
+                                </div>
+                              </div>
+                              <div class="TPcol-md-3 TPcol-xs-6 TPpadding-0">
+                                <div
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="800"
+                                  class="aos-init aos-animate"
+                                >
+                                  <img
+                                    class="TPimg-responsive TPcenter-block"
+                                    src="https://fpoimg.com/376x376?text=Office Detail Photo"
+                                    border="0"
+                                    alt="Alt Tag"
+                                    title="Alt Tag"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 `
         || props.name === 'multi-doctors-1' && html`
-
+                  <style>
+                    ${`
+                      .${props.name} .TPthumbnail {
+                        padding: 0;
+                        position:relative;
+                      }
+                      .${props.name} .TPcaption.TPoverlay{
+                        position: absolute;
+                        bottom: 10px;
+                        right: 0;
+                        background-color: #ffffff;
+                        width: 80%;
+                        padding: 5px 10px;
+                        border-top: 4px solid #00acee;
+                        text-align: right;
+                      }
+                      .${props.name} .TPcaption h2 small { font-size:85% }
+                    `}
+                  </style>
+                  <div class="TPbw TPBandCol ">
+                    <table
+                      width="100%"
+                      class="TPartBox "
+                      border="0"
+                      cellspacing="0"
+                      cellpadding="0"
+                    >
+                      <tbody>
+                        <tr valign="top">
+                          <td id="" class="TParticle">
+                            <div class="TProw">
+                              <div class="TPcol-sm-6 TPcol-md-3">
+                                <div
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="0"
+                                  class="aos-init aos-animate"
+                                >
+                                  <div class="TPthumbnail">
+                                    <img
+                                      class="TPimg-responsive"
+                                      src="https://fpoimg.com/263x378?text=Doctor Portrait Photo"
+                                      border="0"
+                                      alt="Dr. Lorem Ipsum at your dental practice "
+                                      title="Dr. Lorem Ipsum at your dental practice "
+                                    />
+                                    <div class="TPcaption TPoverlay TPstyle3">
+                                      <b>Dr. Lorem Ipsum</b>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="TPcol-sm-6 TPcol-md-3">
+                                <div
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="200"
+                                  class="aos-init aos-animate"
+                                >
+                                  <div class="TPthumbnail">
+                                    <img
+                                      class="TPimg-responsive"
+                                      src="https://fpoimg.com/263x378?text=Doctor Portrait Photo"
+                                      border="0"
+                                      alt="Dr. Lorem Ipsum at your dental practice "
+                                      title="Dr. Lorem Ipsum at your dental practice "
+                                    />
+                                    <div class="TPcaption TPoverlay TPstyle3">
+                                      <b>Dr. Lorem Ipsum</b>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="TPcol-sm-6 TPcol-md-3">
+                                <div
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="400"
+                                  class="aos-init aos-animate"
+                                >
+                                  <div class="TPthumbnail">
+                                    <img
+                                      class="TPimg-responsive"
+                                      src="https://fpoimg.com/263x378?text=Doctor Portrait Photo"
+                                      border="0"
+                                      alt="Dr. Lorem Ipsum at your dental practice "
+                                      title="Dr. Lorem Ipsum at your dental practice "
+                                    />
+                                    <div class="TPcaption TPoverlay TPstyle3">
+                                      <b>Dr. Lorem Ipsum</b>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="TPcol-sm-6 TPcol-md-3">
+                                <div
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="600"
+                                  class="aos-init aos-animate"
+                                >
+                                  <div class="TPthumbnail">
+                                    <img
+                                      class="TPimg-responsive"
+                                      src="https://fpoimg.com/263x378?text=Doctor Portrait Photo"
+                                      border="0"
+                                        alt="Dr. Lorem Ipsum at your dental practice "
+                                        title="Dr. Lorem Ipsum at your dental practice "
+                                    />
+                                    <div class="TPcaption TPoverlay TPstyle3">
+                                        <b>Dr. Lorem Ipsum</b>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="TPcol-sm-6 TPcol-md-3">
+                                <div
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="800"
+                                  class="aos-init aos-animate"
+                                >
+                                  <div class="TPthumbnail">
+                                    <img
+                                      class="TPimg-responsive"
+                                      src="https://fpoimg.com/263x378?text=Doctor Portrait Photo"
+                                      border="0"
+                                      alt="Dr. Lorem Ipsum at your dental practice "
+                                      title="Dr. Lorem Ipsum at your dental practice "
+                                    />
+                                    <div class="TPcaption TPoverlay TPstyle3">
+                                      <b>Dr. Lorem Ipsum</b>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="TPcol-sm-6 TPcol-md-3">
+                                <div
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="1000"
+                                  class="aos-init aos-animate"
+                                >
+                                  <div class="TPthumbnail">
+                                    <img
+                                      class="TPimg-responsive"
+                                      src="https://fpoimg.com/263x378?text=Doctor Portrait Photo"
+                                      border="0"
+                                      alt="Dr. Lorem Ipsum at your dental practice "
+                                      title="Dr. Lorem Ipsum at your dental practice "
+                                    />
+                                    <div class="TPcaption TPoverlay TPstyle3">
+                                      <b>Dr. Lorem Ipsum</b>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="TPcol-sm-6 TPcol-md-3">
+                                <div
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="1200"
+                                  class="aos-init aos-animate"
+                                >
+                                  <div class="TPthumbnail">
+                                    <img
+                                      class="TPimg-responsive"
+                                      src="https://fpoimg.com/263x378?text=Doctor Portrait Photo"
+                                      border="0"
+                                      alt="Dr. Lorem Ipsum at your dental practice "
+                                      title="Dr. Lorem Ipsum at your dental practice "
+                                    />
+                                    <div class="TPcaption TPoverlay TPstyle3">
+                                      <b>Dr. Lorem Ipsum</b>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="TPcol-sm-6 TPcol-md-3">
+                                <div
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="1400"
+                                  class="aos-init aos-animate"
+                                >
+                                  <div class="TPthumbnail">
+                                    <img
+                                      class="TPimg-responsive"
+                                      src="https://fpoimg.com/263x378?text=Doctor Portrait Photo"
+                                      border="0"
+                                      alt="Dr. Lorem Ipsum your dental practice "
+                                      title="Dr. Lorem Ipsum your dental practice "
+                                    />
+                                    <div class="TPcaption TPoverlay TPstyle3">
+                                      <b>Dr. Lorem Ipsum</b>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="TPcol-sm-6 TPcol-md-3">
+                                <div
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="1600"
+                                  class="aos-init aos-animate"
+                                >
+                                  <div class="TPthumbnail">
+                                    <img
+                                      class="TPimg-responsive"
+                                      src="https://fpoimg.com/263x378?text=Doctor Portrait Photo"
+                                      border="0"
+                                      alt="Dr. Lorem Ipsum	at your dental practice "
+                                      title="Dr. Lorem Ipsum	at your dental practice "
+                                    />
+                                    <div class="TPcaption TPoverlay TPstyle3">
+                                      <b>Dr. Lorem Ipsum </b>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <br title="b11" />
+                              <br title="b11" />
+                              <div class="TPcol-sm-6 TPcol-md-3">
+                                <div
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="1800"
+                                  class="aos-init aos-animate"
+                                >
+                                  <div class="TPthumbnail">
+                                    <img
+                                      class="TPimg-responsive"
+                                      src="https://fpoimg.com/263x378?text=Doctor Portrait Photo"
+                                      border="0"
+                                      alt="Dr. Lorem Ipsum  at your dental practice "
+                                      title="Dr. Lorem Ipsum  at your dental practice "
+                                    />
+                                    <div class="TPcaption TPoverlay TPstyle3">
+                                      <b>Dr. Lorem Ipsum </b>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <br title="b11" />
+                            <br title="b11" />
+                            <br title="b11" />
+                            <br title="b11" />
+                            <div class="TProw">
+                              <div class="TPcol-md-12">
+                                <div
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="2000"
+                                  class="aos-init"
+                                >
+                                  <h2 class="H2">Meet Our Doctors</h2>
+                                  <br title="b11" />
+                                  <hr />
+                                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                                  Nesciunt laborum soluta obcaecati dolor quae eaque debitis
+                                  ullam, beatae id dicta praesentium perferendis repudiandae
+                                  maxime libero, minima eius? Assumenda, architecto officiis.
+                                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                                  Quibusdam labore sunt mollitia facere expedita corporis
+                                  cupiditate eaque minus quis ipsam, eveniet laboriosam doloribus.
+                                  Dignissimos quam dolorum possimus ducimus, iure alias. Lorem
+                                  ipsum dolor sit amet consectetur adipisicing elit. Enim dolores
+                                  nesciunt aut sint doloremque, quaerat ipsam odit quos id
+                                  repellat voluptatem voluptas dolorum. Tenetur dolor nobis ab
+                                  nulla quam rerum.
+                                </div>
+                              </div>
+                            </div>
+                            <br title="b11" />
+                            <div class="TProw">
+                              <div class="TPcol-md-12 TPtext-center">
+                                <a
+                                  class="TPbtn TPbtn-primary"
+                                  href="#"
+                                  title="Meet Our Doctors your dental practice Tuscumbia, AL dentist Tuscumbia AL"
+                                  >Learn More About Our Doctors</a
+                                >
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 `
         || props.name === 'multi-locations-1' && html`
-
+                  <style>
+                    ${`
+                      .${props.name} .TPdrop-shadow{
+                        text-shadow:4px 4px 4px rgba(0,0,0,.3);
+                      }
+                    `}
+                  </style>
+                  <div class="TPbw TPBandCol ">
+                    <table
+                      width="100%"
+                      class="TPartBox "
+                      border="0"
+                      cellspacing="0"
+                      cellpadding="0"
+                    >
+                      <tbody>
+                        <tr valign="top">
+                          <td id="" class="TParticle">
+                            <div class="TProw">
+                              <div class="TPcol-md-8 TPcol-md-offset-2">
+                                <div
+                                  data-aos="fade-up"
+                                  data-aos-duration="800"
+                                  data-aos-delay="0"
+                                  class="aos-init aos-animate"
+                                >
+                                  <center>
+                                    <h2 class="TPtext-white TPdrop-shadow">
+                                      Multiple Locations to Serve You
+                                    </h2>
+                                    <center></center>
+                                  </center>
+                                </div>
+                                <br title="b11" />
+                                <div class="TProw">
+                                  <div
+                                    data-aos="fade-up"
+                                    data-aos-duration="800"
+                                    data-aos-delay="250"
+                                    class="aos-init aos-animate"
+                                  >
+                                    <div class="TPcol-md-6">
+                                      <div class="TPwell"
+                                        ><h2 class="H2">SW Portland</h2>
+                                        <br title="b11" />1234 SW Multnomah blvd, suite 120,
+                                        Portland Or, 97123</div
+                                      >
+                                    </div>
+                                  </div>
+                                  <br class="TPvisible-sm TPvisible-xs" />
+                                  <div
+                                    data-aos="fade-up"
+                                    data-aos-duration="800"
+                                    data-aos-delay="500"
+                                    class="aos-init aos-animate"
+                                  >
+                                    <div class="TPcol-md-6">
+                                      <div class="TPwell"
+                                        ><h2 class="H2">pearl district</h2>
+                                        <br title="b11" />1234 NW 16th, suite 120, Portland Or,
+                                        97123</div
+                                      >
+                                    </div>
+                                  </div>
+                                </div>
+                                <br title="b11" />
+                                <div class="TProw">
+                                  <div
+                                    data-aos="fade-up"
+                                    data-aos-duration="800"
+                                    data-aos-delay="750"
+                                    class="aos-init aos-animate"
+                                  >
+                                    <div class="TPcol-md-6">
+                                      <div class="TPwell"
+                                        ><h2 class="H2">Hawthorn</h2>
+                                        <br title="b11" />111 SE Hawthorn st suite 1, Portland, Or
+                                        97123</div
+                                      >
+                                    </div>
+                                  </div>
+                                  <br class="TPvisible-sm TPvisible-xs" />
+                                  <div
+                                    data-aos="fade-up"
+                                    data-aos-duration="800"
+                                    data-aos-delay="1000"
+                                    class="aos-init aos-animate"
+                                  >
+                                    <div class="TPcol-md-6">
+                                      <div class="TPwell"
+                                        ><h2 class="H2">Gresham</h2>
+                                        <br title="b11" />121 SE 181st Ave suite 2, Gresham, OR
+                                        97123</div
+                                      >
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <br title="b11" />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 `
         }
         </div>
@@ -3114,10 +3591,10 @@
           <${DroppableThumbnail} name="video-reviews-1" height="612" draggable />
           <${DroppableThumbnail} name="services-1" height="543" draggable />
           <${DroppableThumbnail} name="technology-1" height="578" draggable />
-          <${DroppableThumbnail} name="call-to-action-1" height="723" draggable />
-          <${DroppableThumbnail} name="photos-1" height="100" draggable />
-          <${DroppableThumbnail} name="multi-doctors-1" height="100" draggable />
-          <${DroppableThumbnail} name="multi-locations-1" height="100" draggable />
+          <${DroppableThumbnail} name="call-to-action-1" height="723" fullWidth draggable />
+          <${DroppableThumbnail} name="photos-1" height="376" fullWidth draggable />
+          <${DroppableThumbnail} name="multi-doctors-1" height="1696" draggable />
+          <${DroppableThumbnail} name="multi-locations-1" height="400" draggable />
         <//>
       `)
     }
@@ -3138,17 +3615,17 @@
       }
       // when dragging out of dropzone, reset padding and color of dropzone
       const endDrop = () => {
-        recieverRef.current.style = data ? 'padding: .1em' : 'padding: 60px 0';
+        recieverRef.current.style = recieverRef.current.childElementCount > 0 ? 'padding: .1em' : 'padding: 60px 0';
       }
       // finish drop event and set padding
       const doDrop = (e) => {
-        setData(e.dataTransfer.getData('text/plain'));
+        setData(JSON.parse(e.dataTransfer.getData('text/plain')));
         recieverRef.current.style = 'padding: 60px 0';
         e.preventDefault();
       }
       return (html`
         <div onDrop="${(e) => doDrop(e)}" onDragEnter=${e => allowDrop(e)} onDragOver=${e => cancelEvent(e)} onDragLeave=${endDrop} ref=${recieverRef} class="TPBand drop-recieve" style=${{ padding: '.1em' }} >
-          <${DroppableThumbnail} name=${data} dropped=${data ? true : false} /> 
+          <${DroppableThumbnail} name=${data.name} fullWidth=${data.fullWidth} bkgImg=${data.bkgImg} dropped=${data ? true : false} /> 
         </div>
       `)
     }
