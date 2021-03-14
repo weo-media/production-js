@@ -200,21 +200,25 @@
             <div 
               class="widget-top-bar" 
               style=${{
-          minHeight: '18px',
+          minHeight: '30px',
           background: '#ddd',
-          position: 'relative'
+          position: 'sticky',
+          top: '-1px',
+          zIndex: '1'
         }}
             >
-              <a 
+              <button 
                 class="close-insert-band" 
                 onClick=${closePopWidget} 
                 style=${{
           position: 'absolute',
-          top: '-6px',
-          right: '0px',
+          top: '0px',
+          right: '15px',
           padding: '1em',
           zIndex: '1',
-          cursor: 'pointer'
+          cursor: 'pointer',
+          border: 'none',
+          background: 'transparent'
         }}
               >
                 <div 
@@ -233,7 +237,7 @@
           width: '12px'
         }}
                 ></div>
-              </a>
+              </button>
             </div>
             ${props.heading && html`<div style=${{ padding: '0 1em' }}>
               ${props.heading}
