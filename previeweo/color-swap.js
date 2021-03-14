@@ -402,7 +402,7 @@
             </${ColorStyle}>`)
         });
       });
-      const bandDropInStylesMain = `.draggable > * { transform: scale(0.1); transform-origin: top left; } .draggable { width: calc(1230px * 0.1); overflow: hidden; margin: 15px auto; border: 3px solid #dddddd; cursor: pointer;} .draggable:hover, .draggable:focus, .draggable:active {background: #eeeeee} .draggable>*:before { content: ''; display: block; position: absolute; width: 100%; z-index: 1; }`;
+      const bandDropInStylesMain = `.draggable > * { transform: scale(0.1); transform-origin: top left; } .draggable { width: calc(1230px * 0.1); overflow: hidden; margin: 15px auto; border: 3px solid #dddddd; cursor: pointer;} .draggable:hover, .draggable:focus, .draggable:active {background: #eeeeee} .draggable>*:before { content: ''; display: block; position: absolute; width: 100%; z-index: 1; } .drop-recieve.bkgImg {background-image: url('https://fpoimg.com/600x400?text=Background Image'); background-size: cover; background-position: center; padding: 8% 0; -webkit-box-shadow: inset 0px 0px 0px 5000px rgb(0 90 125 / 50%); -moz-box-shadow: inset 0px 0px 0px 5000px rgba(90, 90, 90, 0.5); box-shadow: inset 0px 0px 0px 5000px rgb(90 90 90 / 50%);}`;
       return (html`
         <style>
           ${bandDropInStylesMain}
@@ -3588,13 +3588,13 @@
           <${DroppableThumbnail} name="specials-1" height="926" draggable />
           <${DroppableThumbnail} name="specials-2" height="466" draggable />
           <${DroppableThumbnail} name="associations-1" height="337" draggable />
-          <${DroppableThumbnail} name="video-reviews-1" height="612" draggable />
-          <${DroppableThumbnail} name="services-1" height="543" draggable />
-          <${DroppableThumbnail} name="technology-1" height="578" draggable />
+          <${DroppableThumbnail} name="video-reviews-1" height="612" bkgImg draggable />
+          <${DroppableThumbnail} name="services-1" height="543" bkgImg draggable />
+          <${DroppableThumbnail} name="technology-1" height="578" bkgImg draggable />
           <${DroppableThumbnail} name="call-to-action-1" height="723" fullWidth draggable />
           <${DroppableThumbnail} name="photos-1" height="376" fullWidth draggable />
           <${DroppableThumbnail} name="multi-doctors-1" height="1696" draggable />
-          <${DroppableThumbnail} name="multi-locations-1" height="400" draggable />
+          <${DroppableThumbnail} name="multi-locations-1" height="400" bkgImg draggable />
         <//>
       `)
     }
@@ -3620,11 +3620,11 @@
       // finish drop event and set padding
       const doDrop = (e) => {
         setData(JSON.parse(e.dataTransfer.getData('text/plain')));
-        recieverRef.current.style = 'padding: 60px 0';
+        recieverRef.current.style = 'padding: 60px 0;';
         e.preventDefault();
       }
       return (html`
-        <div onDrop="${(e) => doDrop(e)}" onDragEnter=${e => allowDrop(e)} onDragOver=${e => cancelEvent(e)} onDragLeave=${endDrop} ref=${recieverRef} class="TPBand drop-recieve" style=${{ padding: '.1em' }} >
+        <div onDrop="${(e) => doDrop(e)}" onDragEnter=${e => allowDrop(e)} onDragOver=${e => cancelEvent(e)} onDragLeave=${endDrop} ref=${recieverRef} class="TPBand drop-recieve ${data.bkgImg && 'bkgImg'}" style=${{ padding: '.1em' }} >
           <${DroppableThumbnail} name=${data.name} fullWidth=${data.fullWidth} bkgImg=${data.bkgImg} dropped=${data ? true : false} /> 
         </div>
       `)
