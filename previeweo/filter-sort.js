@@ -39,12 +39,15 @@
 
     // get tags from input and remove duplicates by creating a Set then converting it to an array
     const tags = [...new Set(input.map((site) => [...site.tags].map(tag => tag.trim())).reduce((acc, cur) => [...acc, ...cur]))];
-    console.log(tags);
 
     // filter button
     const FilterButton = (props) => {
       //       whenever a checkbox is toggled, the tag is either added or removed from state
       const toggle = (e) => {
+        [...document.querySelectorAll('.siteCard')].forEach(sc => sc.style = 'opacity: .5;');
+        setTimeout(() => {
+          [...document.querySelectorAll('.siteCard')].forEach(sc => sc.style = 'opacity: 1;');
+        }, 250);
         if (e.target.checked === true) {
           return !props.state.selectedTags.some(tag => tag === e.target.name) && props.setState({ selectedTags: [...props.state.selectedTags, e.target.name] });
         }
@@ -68,7 +71,7 @@
         || `https://${props.link}`;
 
       return (html`
-        <div class="TPcol-md-6">
+        <div class="TPcol-md-6 siteCardContainer ${props.show ? 'show' : 'noShow'}">
           <a href=${link} class="siteCard">
             <div class="TPcard-hover">
               <p><small>Explore</small><br /> ${props.explore}</p>
@@ -87,29 +90,27 @@
     const FilterSort = (props) => {
       const [state, setState] = useState({ selectedTags: [] });
 
-      // check state for array of selected tags for entries. if no tags, use "input" array to display all site cards else display only sites with matching tags
-      const selected = input.map(site => state.selectedTags.every(tag => site.tags.includes(tag)) ? site : null).filter(site => site !== null);
-      const sites = state.selectedTags === []
-        ? input.map((site) =>
-        (html`
-            <${SiteCard} 
-              img="${site.img}" 
-              key="${site.explore}" 
-              explore=${site.explore} 
-              detailsHeader=${site.detailsHeader} 
-              details=${site.details} 
-              link=${site.link}><//>
-          `))
-        : selected.length === 0 && (html`<div className="TPcol-xs-12"><div class="oops"><h4>Ooops. Try again.</h4><p>Couldn't find a match for that tag combination.</p></div></div>`) || selected.map((site) =>
-        (html`
-            <${SiteCard} 
-              img="${site.img}" 
-              key="${site.explore}" 
-              explore=${site.explore} 
-              detailsHeader=${site.detailsHeader} 
-              details=${site.details} 
-              link=${site.link}><//>
-          `));
+      // if no tags selected, selected is all sites with show returning false
+      // once tags are selected, show is set to true if site card matches all tags
+      const selected = input.map(site => {
+        if (state.selectedTags.length === 0) {
+          return site
+        }
+        return state.selectedTags.every(tag => site.tags.includes(tag)) ? { ...site, show: true } : site
+      });
+      const sites = selected.map((site) => (
+        html`
+          <${SiteCard} 
+            img="${site.img}" 
+            key="${site.explore}" 
+            explore=${site.explore} 
+            detailsHeader=${site.detailsHeader} 
+            details=${site.details} 
+            link=${site.link}
+            show=${state.selectedTags.length === 0 ? true : site.show}
+          />
+        `)
+      );
 
       // make a filter checkbox for each tag mentioned from across all sites
       const filterButtons = tags.map((tag) => html`<${FilterButton} name="${tag}" state=${state} setState=${setState}></${FilterButton}>`);
@@ -118,6 +119,14 @@
     <div class="filterSort">
       <div class="filterButtons">${filterButtons}</div>
       <div class="filteredSites TProw">
+        ${state.selectedTags.length > 0 && selected.filter(site => site.show === true).length === 0 && (html`
+          <div className="TPcol-xs-12">
+            <div class="oops">
+              <h4>Ooops. Try again.</h4>
+              <p>Couldn't find a match for that tag combination.</p>
+            </div>
+          </div>`)
+        }
         ${sites}
       </div>
     </div>
