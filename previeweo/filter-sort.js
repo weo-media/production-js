@@ -96,7 +96,7 @@
         if (state.selectedTags.length === 0) {
           return site
         }
-        return state.selectedTags.every(tag => site.tags.includes(tag)) ? { ...site, show: true } : site
+        return state.selectedTags.every(tag => site.tags.includes(tag)) ? { ...site, show: true } : { ...site, show: false }
       });
       const sites = selected.map((site) => (
         html`
