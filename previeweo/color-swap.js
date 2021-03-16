@@ -137,8 +137,9 @@
     let processedStyles = {};
     themeColors.forEach(color => { processedStyles[color.id] = color });
 
-
-    // start the components
+    // **********************************
+    // ****** start the components ******
+    // **********************************
     // gear svg
     const GearSVGBtn = (props) => {
       return (html`
@@ -148,6 +149,9 @@
       `)
     }
 
+    // reusable internal component. 
+    // this is used when a feature is selected and needs to display new information.
+    // like the colorswap or insert drag drop
     const PopUpWidget = (props) => {
       const escFunction = useCallback((event) => {
         if (event.keyCode === 27) {
@@ -166,10 +170,12 @@
       function closePopWidget() {
         widgetRef.current.style.display = 'none';
         popBtnRef.current.style.display = 'inline-block';
+        typeof props.closePopWidgetCallBack === 'function' && props.closePopWidgetCallBack();
       }
       const popWidget = () => {
         widgetRef.current.style.display = 'block';
         popBtnRef.current.style.display = 'none';
+        typeof props.popWidgetCallBack === 'function' && props.popWidgetCallBack();
       }
       return (html`
         <div>
@@ -222,7 +228,9 @@
         }}
               >
                 <div 
-                  style=${{
+                  style=${
+        /* this is the first line of the x for the close button on the PopUpWidget */
+        {
           transform: 'rotate(45deg) translate(-5px, 2px)',
           position: 'absolute',
           border: 'solid 1px #000',
@@ -230,7 +238,9 @@
         }}
                 ></div>
                 <div 
-                  style=${{
+                  style=${
+        /* this is the second line of the x for the close button on the PopUpWidget */
+        {
           transform: 'rotate(-45deg) translate(-2px, -5px)',
           position: 'absolute',
           border: 'solid 1px #000',
@@ -248,7 +258,8 @@
       `)
     }
 
-    // make a color box
+    // make a color box, a color box is a section that has color inputs for text and non text like backgrounds, as well as a range slider for transparency. 
+    // called "boxes" in ColorSwapWidget component
     const ColorSelectorBox = (props) => {
       const theColorObj = props.state.styles[props.id];
       const textColor = () => {
@@ -380,19 +391,26 @@
       )
     }
 
+    // component to handle adding new styles that are changed by the user.
+    // used in the ReColorStyles component
     const ColorStyle = (props) => {
       return (
         html`
             ${props.children}
             ${props.color}
-        ` )
+        `
+      )
     }
 
+    // collecting all the styles adjusted by the user - "allStyles"
+    // finding original color in original styles and updating to new color
+    // also adding styles for drag drop stuff - "bandDropInStylesMain"
     const ReColorStyles = (props) => {
       const allStyles = Object.values(props.state.styles).map(color => {
         const lines = color.colorRules.join(' ').split(color.originalColor);
         return lines.map((line, idx) => {
           // set either for css {color: ''} or everything besides css {color: ''}
+          // gives the user the option to change text color or bkg/border/etc. separately.
           const isTextOnly = line.match(/{\s?[^-]?color:/) !== null
             ? props.state.styles[color.id].textHexAndAlpha
             : props.state.styles[color.id].hexAndAlpha;
@@ -406,7 +424,7 @@
             </${ColorStyle}>`)
         });
       });
-      const bandDropInStylesMain = `.draggable > * { transform: scale(0.1); transform-origin: top left; } .draggable { width: calc(1230px * 0.1); overflow: hidden; margin: 15px auto; border: 3px solid #dddddd; cursor: pointer;} .draggable:hover, .draggable:focus, .draggable:active {background: #eeeeee} .draggable>*:before { content: ''; display: block; position: absolute; width: 100%; z-index: 1; } .drop-recieve.bkgImg {background-image: url('https://fpoimg.com/600x400?text=Background Image'); background-size: cover; background-position: center; padding: 8% 0; -webkit-box-shadow: inset 0px 0px 0px 5000px rgb(0 90 125 / 50%); -moz-box-shadow: inset 0px 0px 0px 5000px rgba(90, 90, 90, 0.5); box-shadow: inset 0px 0px 0px 5000px rgb(90 90 90 / 50%);}`;
+      const bandDropInStylesMain = `.draggable > * { transform: scale(0.1); transform-origin: top left; } .draggable { overflow: hidden; margin: 15px auto; border: 3px solid #dddddd; cursor: pointer;} .draggable:hover, .draggable:focus, .draggable:active {background: #eeeeee} .draggable>*:before { content: ''; display: block; position: absolute; width: 100%; z-index: 1; } .drop-recieve.bkgImg {background-image: url('https://fpoimg.com/600x400?text=Background Image'); background-size: cover; background-position: center; padding: 8% 0; -webkit-box-shadow: inset 0px 0px 0px 5000px rgb(0 90 125 / 50%); -moz-box-shadow: inset 0px 0px 0px 5000px rgba(90, 90, 90, 0.5); box-shadow: inset 0px 0px 0px 5000px rgb(90 90 90 / 50%);}`;
       return (html`
         <style>
           ${bandDropInStylesMain}
@@ -415,7 +433,7 @@
       `)
     }
 
-    // button at the top of color customizer that reset colors to theme colors
+    // buttons at the top of color customizer feature that resets colors to theme colors
     const themeTrigger = (props) => {
       const trigger = useRef(null);
       const setNewTheme = () => {
@@ -466,10 +484,11 @@
       `)
     };
 
-    // the panel that houses the color customizer, the image upload, and the component additions
+    // the panel that houses the color customizer features
     const ColorSwapWidget = (props) => {
       const state = props.state;
       const setState = props.setState;
+      // boxes are the individual theme colors. these are all the ColorSelectorBox components
       const boxes = Object.values(state.styles).map((color) => {
         return (html`
         <${ColorSelectorBox} 
@@ -482,7 +501,7 @@
         <//>
         `)
       });
-      // doesn't matter which style color id, just need the number of themes there are and to make a theme button for each one.
+      // getting the number of themes available and making a theme button for each one.
       const themeTriggers = Object.values(state.styles)[0].preSelectedColors.map((color, idx) => {
         return (html`
         <${themeTrigger} 
@@ -503,6 +522,8 @@
       `)
     };
 
+    // logo upload feature with support for whether its for mobile or desktop logo versions
+    // use the prop mobile for mobile version
     const LogoUpload = (props) => {
       const fileElem = useRef(null);
       const handleClick = () => {
@@ -545,7 +566,7 @@
         </div>
       `)
     };
-
+    // button to export the currently set css styles (the allStyles component) to the user clipboard
     const CopyStylesToClipboard = (props) => {
       const copyElem = useRef(null);
       const colorsForCopy = Object.values(props.state.styles).map(colorObj => `\n ${colorObj.id.toString().replace(/-rgba?.*$/, '')} non text: ${colorObj.alpha < 100 ? colorAndAlpha2rgba(colorObj.hexColor, colorObj.alpha) : colorObj.hexColor}\n ${colorObj.id.toString().replace(/-rgba?.*$/, '')} text: ${colorObj.alpha < 100 ? colorAndAlpha2rgba(colorObj.textHexColor, colorObj.alpha) : colorObj.textHexColor}\n `).join('');
@@ -578,9 +599,15 @@
     }
 
     // InsertBand components
+    // here be the drag drop stuff
+    // Droppable thumbnail houses the custom code from the weo designers from various websites and templates
+    // needs a prop.name in order to render anything.
+    // watch out for the props.name conditional statement
     const DroppableThumbnail = (props) => {
       const droppableRef = useRef(null);
       const drag = (e) => {
+        // putting react prop info into drag drop dataTransfer as stringified json obj
+        // see DropReciever for when info comes back into react
         e.dataTransfer.setData('text/plain', JSON.stringify({
           name: droppableRef.current.id.replace(/-thumb/, ''),
           fullWidth: droppableRef.current.dataset.fullwidth,
@@ -588,10 +615,12 @@
         }));
       }
       return (props.name && html`
-        ${props.fullWidth && !props.draggable && html`<style>${`.drop-recieve .${props.name} > .TPBandCol { width: 100%; padding: 0; }`}</style>`}
-        ${props.draggable && html`
+        ${// setting full width on container
+        props.fullWidth && !props.draggable && html`<style>${`.drop-recieve .${props.name} > .TPBandCol { width: 100%; padding: 0; }`}</style>`}
+        ${// setting height specific styles for minimized thumb as well as hr and h6 thumb title
+        props.draggable && html`
             <style>
-              ${`.${props.name}.draggable { height: calc(${props.height}px * 0.1); } .${props.name}.draggable>*:before { height: ${props.height}px; }`}
+              ${`.${props.name}.draggable { height: ${'calc(' + props.height + 'px * 0.1)'}; width: calc(1230px * 0.1); } .${props.name}.draggable>*:before { height: ${props.height}px; width: ${props.width}px; }`}
             </style>
             <hr />
             <h6 style=${{ textAlign: 'center' }}>${titleCaseAndRemoveDash(props.name)}</h6>`
@@ -605,7 +634,9 @@
           data-fullWidth=${props.fullWidth}
           data-bkgImg=${props.bkgImg}
         >
-          ${props.name === 'smile-gallery-1' && html`
+          ${// style tags inside these components need to be escaped and stringified. I used a nested template string.
+        // props.name conditional statement
+        props.name === 'smile-gallery-1' && html`
               <style>
                 ${`${props.name} .TPcard { background: #fafafa; color: #616161; transition: box-shadow 135ms 0ms cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 1px 1px 0 rgba(66, 66, 66, 0.08), 0 1px 3px 1px rgba(66, 66, 66, 0.16); transition: width 235ms 0ms cubic-bezier(0.4, 0, 0.2, 1); border-radius: 3px; z-index: 1; padding: 10px; margin: 60px auto; border-radius: 20px; max-width: 300px; } ${props.name} .TPcard-border { border: 2px dotted #dbdbdb; padding: 20px; border-radius: 20px 20px 0 0; } ${props.name} .TPamount { height: 100px; width: 100px; margin: 10px auto 0; -webkit-border-radius: 50px; -moz-border-radius: 50px; border-radius: 50px; color: #fafafa; border: 2px solid #dbdbdb; background: #cacaca; padding: 30px 0; line-height: 1.2; font-weight: 700; font-size: 36px; position: relative; } ${props.name} .TPdollar { font-size: 20px; padding-top: 0px; position: absolute; left: 16px; } ${props.name} .TPtext-sub { font-size: 18px; } ${props.name} .TPvalid { font-size: 14px; line-height: 1.2; padding: 10px; }`}
               </style >
@@ -3583,8 +3614,9 @@
       `)
     }
 
+    // PopUpWidget for drag drop stuff. holds the thumbnails
     const InsertBand = (props) => {
-      const insertBandHeading = () => html`<h5> To add a component:<br /> <strong>Click</strong> and <strong>Drag</strong> one onto the design,<br />between two main sections. </h5>`;
+      const insertBandHeading = html`<h5> To add a component:<br /> <strong>Click</strong> and <strong>Drag</strong> one onto the design,<br />between two main sections. </h5>`;
       return (html`
         <${PopUpWidget} buttonContent="Insert a new band" heading=${insertBandHeading}>
           <${DroppableThumbnail} name="smile-gallery-1" height="302" draggable />
@@ -3603,9 +3635,10 @@
       `)
     }
 
+    // empty
     const DropReciever = (props) => {
       const recieverRef = useRef(null);
-      const [data, setData] = useState('');
+      const [stateData, stateSetData] = useState('');
       // change style of dropzone when dragging component across it
       const allowDrop = (e) => {
         recieverRef.current.style.padding = '2em';
@@ -3622,18 +3655,21 @@
         recieverRef.current.style = recieverRef.current.childElementCount > 0 ? 'padding: 60px 0' : 'padding: .1em';
       }
       // finish drop event and set padding
+      // putting drag drop data transfer stuff back into react state
       const doDrop = (e) => {
-        setData(JSON.parse(e.dataTransfer.getData('text/plain')));
+        stateSetData(JSON.parse(e.dataTransfer.getData('text/plain')));
         recieverRef.current.style = 'padding: 60px 0;';
         e.preventDefault();
       }
+      // if dropped prop is true, all css for minimizing to thumbnail is discarded
       return (html`
-        <div onDrop="${(e) => doDrop(e)}" onDragEnter=${e => allowDrop(e)} onDragOver=${e => cancelEvent(e)} onDragLeave=${endDrop} ref=${recieverRef} class="TPBand drop-recieve ${data.bkgImg && 'bkgImg'}" style=${{ padding: '.1em' }} >
-          <${DroppableThumbnail} name=${data.name} fullWidth=${data.fullWidth} bkgImg=${data.bkgImg} dropped=${data ? true : false} /> 
+        <div onDrop="${(e) => doDrop(e)}" onDragEnter=${e => allowDrop(e)} onDragOver=${e => cancelEvent(e)} onDragLeave=${endDrop} ref=${recieverRef} class="TPBand drop-recieve ${stateData.bkgImg && 'bkgImg'}" style=${{ padding: '.1em' }} >
+          <${DroppableThumbnail} name=${stateData.name} fullWidth=${stateData.fullWidth} bkgImg=${stateData.bkgImg} dropped=${stateData ? true : false} /> 
         </div>
       `)
     }
 
+    // main widget that holds all the features as buttons. color swap feature button, drag drop feature button, etc.
     const CustomizeWidget = (props) => {
       const [state, setState] = useState({
         styles: processedStyles,
@@ -3689,7 +3725,9 @@
       `)
     }
 
-    // color functions
+    // ****************
+    // helper functions
+    // ****************
     function rgba(rgbColor) {
       const r = rgbColor && rgbColor.match(/rgba?\((\d{1,3}),\s?\d{1,3},\s?\d{1,3}(,\s?[\d\.]{1,})?\)/) !== null
         ? rgbColor.match(/rgba?\((\d{1,3}),\s?\d{1,3},\s?\d{1,3}(,\s?[\d\.]{1,})?\)/)[1]
