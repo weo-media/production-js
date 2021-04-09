@@ -133,7 +133,7 @@
     `)
     };
 
-    // Renders html
+    // Renders the html
     render(html`<${FilterSort} />`, document.querySelector('.TPfilter-sort-output'));
   }
 })();
