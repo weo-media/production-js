@@ -41,11 +41,11 @@
 
       const [data, setData] = useState('World');
       return (
-        // html`
-        // <div>
-        //   <p>Hello ${data}!</p>
-        // </div>
-        // `
+        html`
+        <div>
+          <p>Hello ${data}!</p>
+        </div>
+        `
       )
     }
 
