@@ -36,8 +36,10 @@
     // code goes here
     // ..............
     const MainComponent = (props) => {
-      const mobileIconBar = getElementsByClassName('TPicon-bar');
-      mobileIconBar.setAttribute('TPicon-bar', 'fas fa-times');
+      const mobileIconBar = document.getElementsByClassName('TPicon-bar');
+      // mobileIconBar.setAttribute('TPicon-bar', 'fas fa-times');
+      mobileIconBar.classList.add('fas', 'fa-times');
+      mobileIconBar.classList.remove('TPicon-bar');
 
       const [data, setData] = useState('World');
       return (
