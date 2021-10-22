@@ -36,7 +36,7 @@
     // code goes here
     // ..............
     const MainComponent = (props) => {
-      let mobileIconBar = document.getElementsByClassName('TPicon-bar');
+      let mobileIconBar = document.getElementsByClassName('TPicon-bar')[0];
       // mobileIconBar.setAttribute('TPicon-bar', 'fas fa-times');
       mobileIconBar.classList.add('fas', 'fa-times');
       mobileIconBar.classList.remove('TPicon-bar');
