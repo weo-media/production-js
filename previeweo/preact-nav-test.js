@@ -54,6 +54,6 @@
     // Renders html
     render(html`
     <${MainComponent} />
-    `, document.querySelector('#SA3'));
+    `, document.querySelector('#TestId'));
   }
 })();
